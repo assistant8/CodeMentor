@@ -59,12 +59,17 @@ const Menu = () => {
   );
 };
 
+const LogOut = () => {
+  return <p className="logout">로그아웃</p>;
+};
+
 const MyPage = () => {
   return (
     <div className="container">
       <User />
       <Grade />
       <Menu />
+      <LogOut />
     </div>
   );
 };
