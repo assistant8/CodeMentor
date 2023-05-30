@@ -1,0 +1,77 @@
+$border-color: #c2bcca;
+$violet-1: #e4d2fa;
+$violet-2: #c79aff;
+$violet-3: #a256ff;
+$violet-4: #6700e6;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.user-info {
+  height: 100px;
+  width: 100%;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  .profile-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: $border-color;
+    width: 51.67px;
+    height: 51.67px;
+    border-radius: 50%;
+  }
+  button {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    &:hover {
+      background: $border-color;
+    }
+  }
+}
+.grade-info {
+  height: 100px;
+  width: 100%;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  .grade-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: $border-color;
+    width: 51.67px;
+    height: 51.67px;
+    border-radius: 50%;
+  }
+  button {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    &:hover {
+      background: $border-color;
+    }
+  }
+}
