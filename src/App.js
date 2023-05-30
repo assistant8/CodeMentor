@@ -21,6 +21,7 @@ function App() {
         </Route>
         <Route path={PATH.LOGIN} element={<LoginLayout />}>
           <Route index element={<QuizList />} /> 
+          {/* 로그인 회원가입은 헤더 nav바 따로 없어서 레이아웃을 따로 만들었습니다 이쪽 구현 후  element에 넣어주시고 주석 지우시면 될것같습니다 */}
         </Route>
       </Routes>
     </Router>
