@@ -6,6 +6,7 @@ import LoginLayout from "./components/layout/loginLayout";
 import Quiz from "./pages/quiz";
 import QuizList from "./pages/quizList";
 import MyPage from "./pages/mypage";
+import ModifyUser from "./pages/mypage/ModifyUser";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         </Route>
         <Route path={PATH.MYPAGE} element={<MainLayout />}>
           <Route index element={<MyPage />} />
+          <Route path="modify" element={<ModifyUser />} />
         </Route>
       </Routes>
     </Router>
