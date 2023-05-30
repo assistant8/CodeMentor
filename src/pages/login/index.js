@@ -1,9 +1,10 @@
+import { useParams } from "react-router-dom";
 import "./index.scss";
 import { useEffect, useState } from "react";
 
 export default function Login() {
-  const [stage, setStage] = useState("selectWayToLogin");
   const [heading, setHeading] = useState("logo");
+  const { stage } = useParams();
 
   useEffect(() => {
     switch (stage) {
@@ -17,13 +18,13 @@ export default function Login() {
         setHeading("logo");
         break;
     }
-  }, [stage]);
+  }, []);
 
   return (
     <>
       <div className="container">
         <Heading heading={heading} />
-        <Stage stage={stage} setStage={setStage} />
+        <Stage stage={stage} />
       </div>
     </>
   );
@@ -35,20 +36,20 @@ function Heading({ heading }) {
   return <>{heading === "logo" ? <div>로고</div> : <div>{heading}</div>}</>;
 }
 
-function Stage({ stage, setStage }) {
+function Stage({ stage }) {
   switch (stage) {
-    case "selectWayToLogin":
-      return <SelectWayToLogin setStage={setStage} />;
+    case "":
+      return <SelectWayToLogin />;
     case "loginByEmail":
-      return <LoginByEmail setStage={setStage} />;
+      return <LoginByEmail />;
     case "findPassword":
-      return <FindPassword setStage={setStage} />;
+      return <FindPassword />;
     case "register":
-      return <Register setStage={setStage} />;
+      return <Register />;
   }
 }
 
-function SelectWayToLogin({ setStage }) {
+function SelectWayToLogin() {
   return (
     <>
       <div
@@ -76,7 +77,6 @@ function SelectWayToLogin({ setStage }) {
       <div
         onClick={() => {
           console.log("이메일로");
-          setStage("loginByEmail");
         }}
       >
         이메일로 로그인
@@ -85,7 +85,7 @@ function SelectWayToLogin({ setStage }) {
   );
 }
 
-function LoginByEmail({ setStage }) {
+function LoginByEmail() {
   return (
     <>
       <input type="text" name="email" placeholder="codeWhisper@gmail.com" />
@@ -93,14 +93,8 @@ function LoginByEmail({ setStage }) {
       <input type="password" name="password" placeholder="******" />
       <div>로그인</div>
       <div>
-        <div onClick={() => setStage("findPassword")}>비밀번호 찾기</div>
-        <div
-          onClick={() => {
-            setStage("register");
-          }}
-        >
-          회원 가입
-        </div>
+        <div onClick={() => {}}>비밀번호 찾기</div>
+        <div onClick={() => {}}>회원 가입</div>
       </div>
     </>
   );
@@ -111,5 +105,12 @@ function FindPassword() {
 }
 
 function Register() {
-  return <>회원 가입</>;
+  return (
+    <>
+      <input type="text" name="email" placeholder="codeWhisper@gmail.com" />
+      <br />
+      <input type="password" name="password" placeholder="******" />
+      <div>로그인</div>
+    </>
+  );
 }
