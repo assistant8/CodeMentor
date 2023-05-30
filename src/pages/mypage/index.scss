@@ -75,3 +75,25 @@ $violet-4: #6700e6;
     }
   }
 }
+.menu-container {
+  display: grid;
+  width: 100%;
+  height: 280px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 50% 50%;
+  .menu-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid $border-color;
+    svg,
+    path {
+      font-size: 50px;
+    }
+    p {
+      margin: 5px;
+      font-weight: bold;
+    }
+  }
+}

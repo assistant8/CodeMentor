@@ -1,6 +1,9 @@
 import { Routes, Route, Link } from "react-router-dom";
 import "./index.scss";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { BiBookmarks, BiCheck } from "react-icons/bi";
+import { IoStatsChartSharp } from "react-icons/io5";
+import { MdOutlineStickyNote2 } from "react-icons/md";
 
 const User = () => {
   return (
@@ -33,11 +36,35 @@ const Grade = () => {
   );
 };
 
+const Menu = () => {
+  return (
+    <div className="menu-container">
+      <div className="menu-content">
+        <BiBookmarks />
+        <p>내가 찜한 문제</p>
+      </div>
+      <div className="menu-content">
+        <BiCheck />
+        <p>내가 푼 문제</p>
+      </div>
+      <div className="menu-content">
+        <IoStatsChartSharp />
+        <p>통계</p>
+      </div>
+      <div className="menu-content">
+        <MdOutlineStickyNote2 />
+        <p>내가 작성한 글</p>
+      </div>
+    </div>
+  );
+};
+
 const MyPage = () => {
   return (
     <div className="container">
       <User />
       <Grade />
+      <Menu />
     </div>
   );
 };
