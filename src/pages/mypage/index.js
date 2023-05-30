@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { BiBookmarks, BiCheck } from "react-icons/bi";
@@ -6,6 +6,7 @@ import { IoStatsChartSharp } from "react-icons/io5";
 import { MdOutlineStickyNote2 } from "react-icons/md";
 
 const User = () => {
+  let navigate = useNavigate();
   return (
     <div className="user-info">
       <div className="profile-img">
@@ -16,7 +17,9 @@ const User = () => {
         <h3>낭니</h3>
       </div>
       <button>
-        <MdOutlineKeyboardArrowRight />
+        <MdOutlineKeyboardArrowRight
+          onClick={() => navigate("/mypage/modify")}
+        />
       </button>
     </div>
   );
