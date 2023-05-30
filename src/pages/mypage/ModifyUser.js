@@ -1,6 +1,8 @@
 import "./ModifyUser.scss";
+import { useNavigate } from "react-router-dom";
 
 const ModifyUser = () => {
+  let navigate = useNavigate();
   return (
     <div class="modify-container">
       <div class="modify-img">
@@ -12,7 +14,13 @@ const ModifyUser = () => {
       </div>
       <button>저장하기</button>
       <div className="btns">
-        <p>비밀번호 변경</p>
+        <p
+          onClick={() => {
+            navigate("/mypage/password");
+          }}
+        >
+          비밀번호 변경
+        </p>
         <p>회원 탈퇴</p>
       </div>
     </div>

@@ -7,6 +7,7 @@ import Quiz from "./pages/quiz";
 import QuizList from "./pages/quizList";
 import MyPage from "./pages/mypage";
 import ModifyUser from "./pages/mypage/ModifyUser";
+import PassWord from "./pages/mypage/Password";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path={PATH.MYPAGE} element={<MainLayout />}>
           <Route index element={<MyPage />} />
           <Route path="modify" element={<ModifyUser />} />
+          <Route path="password" element={<PassWord />} />
         </Route>
       </Routes>
     </Router>
