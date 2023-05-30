@@ -2,6 +2,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PATH from "./constants/path";
 import MainLayout from "./components/layout/mainLayout";
+import LoginLayout from "./components/layout/loginLayout";
 import Quiz from "./pages/quiz";
 import QuizList from "./pages/quizList";
 
@@ -17,6 +18,9 @@ function App() {
         </Route>
         <Route path={PATH.QUIZLIST} element={<MainLayout />}>
           <Route index element={<QuizList />} />
+        </Route>
+        <Route path={PATH.LOGIN} element={<LoginLayout />}>
+          <Route index element={<QuizList />} /> 
         </Route>
       </Routes>
     </Router>
