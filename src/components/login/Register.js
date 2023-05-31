@@ -5,13 +5,14 @@ export default function Register() {
 
   return (
     <>
+      <div>* 회원 가입 페이지 *</div>
       <div>회원 가입</div>
+      <label>이메일</label>
       <input type="text" name="email" placeholder="codeWhisper@gmail.com" />
-      <div>이메일 형식 검증 메세지</div>
+      <label>비밀번호</label>
       <input type="password" name="password" placeholder="******" />
-      <div>비밀번호 형식 검증 메세지</div>
+      <label>비밀번호 확인</label>
       <input type="password" name="password" placeholder="******" />
-      <div>비밀번호 일치 검증 메세지</div>
       <div
         onClick={() => {
           console.log("회원 가입 페이지");

@@ -5,12 +5,13 @@ export default function FindPassword() {
 
   return (
     <>
+      <div>* 비밀번호 찾기 페이지 *</div>
       <div>비밀번호 찾기</div>
+      <label>이메일</label>
       <input
         type="text"
         placeholder="가입 시 사용한 이메일을 입력해주세요"
       />{" "}
-      <div>이메일 형식 검증 메세지</div>
       <div
         onClick={() => {
           console.log("비밀번호 찾기 페이지");

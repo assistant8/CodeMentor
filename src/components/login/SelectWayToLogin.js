@@ -5,6 +5,7 @@ export default function SelectWayToLogin() {
 
   return (
     <>
+      <div>* 로그인 방식 선택 페이지 *</div>
       <div>로고</div>
       <div
         onClick={() => {

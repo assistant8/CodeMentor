@@ -5,8 +5,11 @@ export default function VerifyEmail() {
 
   return (
     <>
+      <div>* 이메일 인증 페이지 *</div>
+
       <div>이메일 인증</div>
       <div>'입력한 이메일 주소'로 인증 메일이 발송되었습니다.</div>
+      <label htmlFor="">인증 번호</label>
       <input type="text" placeholder="인증 번호 6자리를 입력해주세요." />
       <div
         onClick={() => {
