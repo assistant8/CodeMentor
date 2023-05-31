@@ -1,6 +1,6 @@
 import styles from "./ModifyUser.module.scss";
 import { useNavigate } from "react-router-dom";
-import { VioletButton } from "../../components/button";
+import { VioletButton } from "../../components/buttons/VioletButton";
 
 const ModifyUser = () => {
   let navigate = useNavigate();

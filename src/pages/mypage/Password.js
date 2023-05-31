@@ -1,5 +1,5 @@
 import styles from "./Password.module.scss";
-import { VioletButton } from "../../components/button";
+import { VioletButton } from "../../components/buttons/VioletButton";
 
 const PassWord = () => {
   return (
