@@ -7,13 +7,13 @@ $violet-4: #6700e6;
 * {
   box-sizing: border-box;
 }
-.modify-container {
+.modifyContainer {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  .modify-img {
+  .modifyImg {
     width: 171.67px;
     height: 171.67px;
     overflow: hidden;
@@ -23,7 +23,7 @@ $violet-4: #6700e6;
     background-color: $border-color;
     border-radius: 50%;
   }
-  .input-box {
+  .inputBox {
     input {
       width: 330px;
       height: 60px;

@@ -1,5 +1,5 @@
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import "./index.scss";
+import styles from "./index.module.scss";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { BiBookmarks, BiCheck } from "react-icons/bi";
 import { IoStatsChartSharp } from "react-icons/io5";
@@ -8,8 +8,8 @@ import { MdOutlineStickyNote2 } from "react-icons/md";
 const User = () => {
   let navigate = useNavigate();
   return (
-    <div className="user-info">
-      <div className="profile-img">
+    <div className={styles.userInfo}>
+      <div className={styles.profileImg}>
         <img src="" alt="프사" />
       </div>
       <div style={{ display: "flex" }}>
@@ -27,8 +27,8 @@ const User = () => {
 
 const Grade = () => {
   return (
-    <div className="grade-info">
-      <div className="grade-img">
+    <div className={styles.gradeInfo}>
+      <div className={styles.gradeImg}>
         <img src="" alt="등급 아이콘" />
       </div>
       <h3>등급별 혜택보기</h3>
@@ -41,20 +41,20 @@ const Grade = () => {
 
 const Menu = () => {
   return (
-    <div className="menu-container">
-      <div className="menu-content">
+    <div className={styles.menuContainer}>
+      <div className={styles.menuContent}>
         <BiBookmarks />
         <p>내가 찜한 문제</p>
       </div>
-      <div className="menu-content">
+      <div className={styles.menuContent}>
         <BiCheck />
         <p>내가 푼 문제</p>
       </div>
-      <div className="menu-content">
+      <div className={styles.menuContent}>
         <IoStatsChartSharp />
         <p>통계</p>
       </div>
-      <div className="menu-content">
+      <div className={styles.menuContent}>
         <MdOutlineStickyNote2 />
         <p>내가 작성한 글</p>
       </div>
@@ -63,12 +63,12 @@ const Menu = () => {
 };
 
 const LogOut = () => {
-  return <p className="logout">로그아웃</p>;
+  return <p className={styles.logout}>로그아웃</p>;
 };
 
 const MyPage = () => {
   return (
-    <div className="container">
+    <div className={styles.container}>
       <User />
       <Grade />
       <Menu />

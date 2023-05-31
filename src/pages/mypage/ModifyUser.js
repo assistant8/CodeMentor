@@ -1,19 +1,19 @@
-import "./ModifyUser.scss";
+import styles from "./ModifyUser.module.scss";
 import { useNavigate } from "react-router-dom";
 
 const ModifyUser = () => {
   let navigate = useNavigate();
   return (
-    <div class="modify-container">
-      <div class="modify-img">
+    <div class={styles.modifyContainer}>
+      <div class={styles.modifyImg}>
         <img src="" alt="프사" />
       </div>
-      <div className="input-box">
+      <div className={styles.inputBox}>
         <input placeholder="유저_1B789RS" />
         <p>중복된 유저명입니다</p>
       </div>
       <button>저장하기</button>
-      <div className="btns">
+      <div className={styles.btns}>
         <p
           onClick={() => {
             navigate("/mypage/password");
