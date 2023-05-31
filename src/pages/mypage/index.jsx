@@ -40,21 +40,34 @@ const Grade = () => {
 };
 
 const Menu = () => {
+  let navigate = useNavigate();
   return (
     <div className={styles.menuContainer}>
-      <div className={styles.menuContent}>
+      <div
+        className={styles.menuContent}
+        onClick={() => navigate("/mypage/bookmark")}
+      >
         <BiBookmarks />
         <p>내가 찜한 문제</p>
       </div>
-      <div className={styles.menuContent}>
+      <div
+        className={styles.menuContent}
+        onClick={() => navigate("/mypage/complete")}
+      >
         <BiCheck />
         <p>내가 푼 문제</p>
       </div>
-      <div className={styles.menuContent}>
+      <div
+        className={styles.menuContent}
+        onClick={() => navigate("/mypage/chart")}
+      >
         <IoStatsChartSharp />
         <p>통계</p>
       </div>
-      <div className={styles.menuContent}>
+      <div
+        className={styles.menuContent}
+        onClick={() => navigate("/mypage/mypost")}
+      >
         <MdOutlineStickyNote2 />
         <p>내가 작성한 글</p>
       </div>

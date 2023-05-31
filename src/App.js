@@ -8,6 +8,10 @@ import QuizList from "./pages/quizList";
 import MyPage from "./pages/mypage";
 import ModifyUser from "./pages/mypage/ModifyUser";
 import PassWord from "./pages/mypage/Password";
+import BookMark from "./pages/mypage/BookMark";
+import Complete from "./pages/mypage/Complete";
+import Chart from "./pages/mypage/Chart";
+import MyPost from "./pages/mypage/MyPost";
 
 function App() {
   return (
@@ -30,6 +34,10 @@ function App() {
           <Route index element={<MyPage />} />
           <Route path="modify" element={<ModifyUser />} />
           <Route path="password" element={<PassWord />} />
+          <Route path="bookmark" element={<BookMark />} />
+          <Route path="complete" element={<Complete />} />
+          <Route path="chart" element={<Chart />} />
+          <Route path="mypost" element={<MyPost />} />
         </Route>
       </Routes>
     </Router>
