@@ -44,7 +44,9 @@ function Stage({ stage, navigate }) {
     case "findPassword":
       return <FindPassword />;
     case "register":
-      return <Register />;
+      return <Register navigate={navigate} />;
+    case "verifyEmail":
+      return <VerifyEmail />;
     default:
       return <SelectWayToLogin navigate={navigate} />;
   }
@@ -122,6 +124,7 @@ function FindPassword() {
       <div
         onClick={() => {
           console.log("비밀번호 찾기 페이지");
+          console.log("이메일 형식 검사 통과 시 버튼 활성화");
           console.log("회원 db에 등록된 이메일인지 확인");
           console.log("등록되어 있을 시 -> 비밀번호 재설정 메일 발송");
           console.log("등록되어 있지 않을 시 -> 이메일 확인 메세지 띄우기");
@@ -133,13 +136,47 @@ function FindPassword() {
   );
 }
 
-function Register() {
+function Register({ navigate }) {
   return (
     <>
       <input type="text" name="email" placeholder="codeWhisper@gmail.com" />
-      <br />
+      <div>이메일 형식 검증 메세지</div>
       <input type="password" name="password" placeholder="******" />
-      <div onClick={() => console.log("회원 가입 페이지")}>확인</div>
+      <div>비밀번호 형식 검증 메세지</div>
+      <input type="password" name="password" placeholder="******" />
+      <div>비밀번호 일치 검증 메세지</div>
+      <div
+        onClick={() => {
+          console.log("회원 가입 페이지");
+          console.log(
+            "이메일, 패스워드 형식, 패스워드 일치 검사 통과 시 버튼 활성화"
+          );
+          console.log("본인 인증 메일 발송");
+          console.log("인증 번호 입력 페이지로 이동");
+
+          navigate("/login/verifyEmail");
+        }}
+      >
+        확인
+      </div>
+    </>
+  );
+}
+
+function VerifyEmail() {
+  return (
+    <>
+      <div>'입력한 이메일 주소'로 인증 메일이 발송되었습니다.</div>
+      <input type="text" placeholder="인증 번호 6자리를 입력해주세요." />
+      <div
+        onClick={() => {
+          console.log("인증 번호 확인 페이지");
+          console.log("인증 번호 일치 검사");
+          console.log("인증 번호 일치 검사 통과 시 프로필 설정 페이지로 이동");
+        }}
+      >
+        확인
+      </div>
     </>
   );
 }

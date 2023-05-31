@@ -5,9 +5,9 @@ import { Outlet } from "react-router-dom";
 const LoginLayout = () => {
   return (
     <div className="Full">
-        <div className="Inner">
-            <Outlet />
-        </div>
+      <div className="Inner">
+        <Outlet />
+      </div>
     </div>
   );
 };
