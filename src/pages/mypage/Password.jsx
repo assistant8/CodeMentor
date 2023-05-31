@@ -34,11 +34,20 @@ const PassWord = () => {
           <input placeholder="현재 비밀번호" />
         </div>
         <div className={styles.inputBox}>
-          <input placeholder="비밀번호" value={newPwd} onChange={handlePwd} />
+          <input
+            type="password"
+            placeholder="비밀번호"
+            value={newPwd}
+            onChange={handlePwd}
+          />
           {!checkPattern ? <p>영문 대소문자 포함 8~12자리</p> : null}
         </div>
         <div className={styles.inputBox}>
-          <input placeholder="비밀번호 확인" onChange={handleCheck} />
+          <input
+            type="password"
+            placeholder="비밀번호 확인"
+            onChange={handleCheck}
+          />
           {!checkPwd ? <p>비밀번호가 일치하지 않습니다</p> : null}
         </div>
         <VioletButton style={{ marginTop: "40px" }} onClick={onClick}>
