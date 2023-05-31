@@ -5,7 +5,7 @@ import { useState } from "react";
 const PassWord = () => {
   const [newPwd, setNewPwd] = useState("");
   const [checkPattern, setCheckPattern] = useState(false);
-  const [checkPwd, setCheckPwd] = useState(false);
+  const [checkPwd, setCheckPwd] = useState(true);
   const handlePwd = (e) => {
     setNewPwd(e.target.value);
     const pattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
