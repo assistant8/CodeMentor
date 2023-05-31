@@ -6,7 +6,7 @@ const PassWord = () => {
     <div className={styles.pwdContainer}>
       <p className={styles.pwdTitle}>비밀번호 변경</p>
       <div className={styles.inputsContainer}>
-        <div className={styles.inputBox} id={styles.presentPwd}>
+        <div className={styles.inputBox}>
           <input placeholder="현재 비밀번호" />
         </div>
         <div className={styles.inputBox}>
