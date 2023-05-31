@@ -4,13 +4,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: antiquewhite;
 }
 
 .Inner {
   width: 100%;
   display: flex;
-  background-color: aqua;
+  flex-direction: column;
   position: relative;
   // padding-top: 5.5rem;
 }
