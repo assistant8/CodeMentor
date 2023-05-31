@@ -6,6 +6,7 @@ import { FaPencilAlt } from "react-icons/fa";
 import { useRef } from "react";
 
 const ModifyUser = () => {
+  const [imgUrl, setImgUrl] = useState("");
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
@@ -15,16 +16,31 @@ const ModifyUser = () => {
   const modifyImg = () => {
     fileInputRef.current.click();
   };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]; // 선택한 파일 정보 가져오기
+    const reader = new FileReader();
+    reader.onload = () => {
+      const url = reader.result; // 파일을 URL 형태로 변환
+      setImgUrl(url); // imgUrl 업데이트
+    };
+    if (file) {
+      reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
+    }
+  };
   return (
     <div className={styles.modifyContainer}>
       <FaPencilAlt className={styles.pencilIcon} onClick={modifyImg} />
       <input
         ref={fileInputRef}
         type="file"
-        style={{ display: "none" }} // 파일 선택 창은 보이지 않도록 설정
+        style={{ display: "none" }}
+        onChange={handleFileChange} // 파일 선택 창은 보이지 않도록 설정
       />
-      <div className={styles.modifyImg}>
-        <img src="" alt="프사" />
+      <div
+        className={styles.modifyImg}
+        style={{ backgroundImage: `url(${imgUrl})` }}
+      >
+        <img src={imgUrl} alt="프사" />
       </div>
       <div className={styles.inputBox}>
         <input

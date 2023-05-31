@@ -37,6 +37,8 @@ $violet-4: #6700e6;
     align-items: center;
     background-color: $border-color;
     border-radius: 50%;
+    background-size: cover;
+    background-position: center;
   }
   .inputBox {
     margin-top: 30px;
