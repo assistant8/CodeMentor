@@ -1,5 +1,6 @@
 import styles from "./ModifyUser.module.scss";
 import { useNavigate } from "react-router-dom";
+import { VioletButton } from "../../components/button";
 
 const ModifyUser = () => {
   let navigate = useNavigate();
@@ -12,7 +13,7 @@ const ModifyUser = () => {
         <input placeholder="유저_1B789RS" />
         <p>중복된 유저명입니다</p>
       </div>
-      <button>저장하기</button>
+      <VioletButton>저장하기</VioletButton>
       <div className={styles.btns}>
         <p
           onClick={() => {

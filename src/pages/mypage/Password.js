@@ -1,4 +1,5 @@
 import styles from "./Password.module.scss";
+import { VioletButton } from "../../components/button";
 
 const PassWord = () => {
   return (
@@ -16,7 +17,7 @@ const PassWord = () => {
           <input placeholder="비밀번호 확인" />
           <p>비밀번호가 일치하지 않습니다</p>
         </div>
-        <button>변경하기</button>
+        <VioletButton style={{ marginTop: "40px" }}>변경하기</VioletButton>
       </div>
     </div>
   );
