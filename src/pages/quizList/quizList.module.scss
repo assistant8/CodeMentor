@@ -11,14 +11,16 @@
 .searchContainer {
   position: relative;
   display: inline-block;
+  margin-top: 3.7rem;
 }
 
 .inputField {
   width: 20.6rem;
   height: 3.75rem;
   border-radius: 2rem;
-  border: 1px solid #c2bcca;
+  border: 0.0625rem solid #c2bcca;
   outline: none;
+  padding: 1.5rem;
 
   &::placeholder {
     // width: 100%;
@@ -41,9 +43,9 @@
 .searchButton {
   position: absolute;
   top: 50%;
-  right: 5px;
+  right: 0.31rem;
   transform: translateY(-50%);
-  padding: 6px;
+  padding: 0.375;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -52,15 +54,58 @@
 .searchButton::before {
   content: "";
   display: block;
-  width: 23px;
-  height: 23px;
+  width: 1.43rem;
+  height: 1.43rem;
   background-image: url("../../image/Vector.png");
   background-size: cover;
 }
 
 .menuContainer {
-  width: 330px;
-  height: 34px;
+  width: 20.63rem;
+  height: 2.13rem;
+  display: flex;
+  flex-direction: row;
 
+  .categoryContainer {
+    ul {
+      display: flex;
+      flex-direction: row;
+      list-style: none;
+      padding: 0rem;
+      margin: 0.5rem;
+
+      li {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 0.94rem;
+        line-height: 1.25rem;
+        margin-right: 1rem;
+        color: #C2BCCA;
+      }
+    }
+  }
+
+  .imageContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 3rem;
+
+    img {
+      margin-right: 0.6rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
 }
-//메뉴 리스트로 구현
+
+.quizListContainer {
+  display: flex;
+  width: 20.63rem;
+  margin-top: 1.9rem;
+  background-color: beige;
+  flex-direction: column;
+
+  
+}
