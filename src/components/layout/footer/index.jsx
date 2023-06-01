@@ -6,7 +6,12 @@ const Footer = () => {
   const navigate = useNavigate();
   return (
     <div className="footer">
-      <div className="menu-quiz-list">
+      <div
+        className="menu-quiz-list"
+        onClick={() => {
+          navigate("/quizlist");
+        }}
+      >
         <svg
           width="21"
           height="17"
