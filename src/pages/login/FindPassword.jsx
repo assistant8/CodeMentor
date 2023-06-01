@@ -4,28 +4,28 @@ import { useNavigate } from "react-router-dom";
 export default function FindPassword() {
   const navigate = useNavigate();
 
+  const handleOnClick_emailInput = (e) => {
+    e.preventDefault();
+    navigate("/find-password/verify-email", {
+      state: { email: e.target.value },
+    });
+  };
   return (
-    <>
-      <div className={styles.container}>
-        <div>* 비밀번호 찾기 페이지 *</div>
-        <div>비밀번호 찾기</div>
+    <div className={styles.container}>
+      <div>* 비밀번호 찾기 페이지 *</div>
+      <div>비밀번호 찾기</div>
+      <form>
         <label>이메일</label>
         <input
           type="text"
           placeholder="가입 시 사용한 이메일을 입력해주세요"
         />{" "}
-        <div
-          onClick={() => {
-            console.log("비밀번호 찾기 페이지");
-            console.log("이메일 형식 검사 통과 시 버튼 활성화");
-            console.log("회원 db에 등록된 이메일인지 확인");
-            console.log("등록되어 있을 시 -> 비밀번호 재설정 메일 발송");
-            console.log("등록되어 있지 않을 시 -> 이메일 확인 메세지 띄우기");
-          }}
-        >
-          확인
-        </div>
-      </div>
-    </>
+        <input
+          type="submit"
+          value="확인"
+          onClick={handleOnClick_emailInput}
+        ></input>
+      </form>
+    </div>
   );
 }
