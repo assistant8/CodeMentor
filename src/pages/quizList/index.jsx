@@ -1,7 +1,6 @@
 import styles from "./quizList.module.scss";
-import bookmark from "../../image/bookmark.png"
-import check from "../../image/check.png"
-
+import bookmark from "../../image/bookmark.png";
+import check from "../../image/check.png";
 
 export default function QuizList() {
   return (
@@ -23,8 +22,24 @@ export default function QuizList() {
           </ul>
         </div>
         <div className={styles.imageContainer}>
-          <img src={bookmark} alt="1" />
-          <img src={check} alt="2" />
+          <img src={bookmark} alt="bookmark" />
+          <img src={check} alt="check" />
+        </div>
+      </div>
+      <div className={styles.quizListContainer}>
+        <div className={styles.quizList}>
+          <div className={styles.quizListTitle}>백준 7596번 - 토마토가 이렇게 되지 않았는</div>
+          <div className={styles.imageContainer}>
+            <img src={bookmark} alt="bookmark" />
+            <img src={check} alt="check" />
+          </div>
+        </div>
+        <div className={styles.quizList}>
+          <div className={styles.quizListTitle}>백준 7596번 - 토마토</div>
+          <div className={styles.imageContainer}>
+            <img src={bookmark} alt="bookmark" />
+            <img src={check} alt="check" />
+          </div>
         </div>
       </div>
     </div>

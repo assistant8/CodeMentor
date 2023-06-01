@@ -1,5 +1,5 @@
 .container {
-  background-color: aliceblue;
+  // background-color: aliceblue;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,7 +81,7 @@
         font-size: 0.94rem;
         line-height: 1.25rem;
         margin-right: 1rem;
-        color: #C2BCCA;
+        color: #c2bcca;
       }
     }
   }
@@ -90,7 +90,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-left: 3rem;
+    margin-left: auto;
+    margin-right: 0.3rem;
 
     img {
       margin-right: 0.6rem;
@@ -104,8 +105,42 @@
   display: flex;
   width: 20.63rem;
   margin-top: 1.9rem;
-  background-color: beige;
+  // background-color: beige;
   flex-direction: column;
 
-  
+  .quizList {
+    display: flex;
+    width: 20.63rem;
+    height: 3.13rem;
+    border: 1px solid #c2bcca;
+    padding: 0.96rem;
+    padding-left: 1.2rem;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    margin-bottom: 1rem;
+
+    .quizListTitle {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.3rem;
+      color: #3e3e3e;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .imageContainer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: auto;
+      margin-right: 0.3rem;
+
+      img {
+        margin-left: 0.6rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
 }
