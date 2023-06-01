@@ -12,6 +12,11 @@ import BookMark from "./pages/mypage/BookMark";
 import Complete from "./pages/mypage/Complete";
 import Chart from "./pages/mypage/Chart";
 import MyPost from "./pages/mypage/MyPost";
+import SelectWayToLogin from "./pages/login/SelectWayToLogin";
+import ByEmail from "./pages/login/ByEmail";
+import FindPassword from "./pages/login/FindPassword";
+import Register from "./pages/login/Register";
+import VerifyEmail from "./pages/login/VerifyEmail";
 
 function App() {
   return (
