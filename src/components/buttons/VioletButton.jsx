@@ -1,8 +1,8 @@
-import "./VioletButton.scss";
+import styles from "./VioletButton.module.scss";
 
 export const VioletButton = ({ children, style, onClick }) => {
   return (
-    <button className="violetButton" style={style} onClick={onClick}>
+    <button className={styles.violetButton} style={style} onClick={onClick}>
       {children}
     </button>
   );
