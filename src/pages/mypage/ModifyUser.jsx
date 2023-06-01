@@ -1,6 +1,7 @@
 import styles from "./ModifyUser.module.scss";
 import { useNavigate } from "react-router-dom";
 import { VioletButton } from "../../components/buttons/VioletButton";
+import { UserInput } from "../../components/inputs/UserInput";
 import { useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { useRef } from "react";
@@ -43,7 +44,7 @@ const ModifyUser = () => {
         <img src={imgUrl} alt="프사" />
       </div>
       <div className={styles.inputBox}>
-        <input
+        <UserInput
           placeholder="유저_1B789RS"
           value={userName}
           onChange={onChange}
