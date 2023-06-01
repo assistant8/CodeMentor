@@ -4,33 +4,38 @@ $violet-1: #e4d2fa;
 $violet-2: #c79aff;
 $violet-3: #a256ff;
 $violet-4: #6700e6;
+
 * {
   box-sizing: border-box;
 }
+
 .modifyContainer {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  position: relative; /* 위치 지정을 위해 relative로 설정 */
+  position: relative;
+
   .pencilIcon {
     position: absolute;
     background-color: white;
     border-radius: 50%;
-    padding: 5px;
-    font-size: 30px;
-    top: 10px;
-    right: 120px;
-    z-index: 1; /* 다른 요소보다 위에 표시되도록 설정 */
+    padding: 0.3125rem; /* 5px converted to rem */
+    font-size: 1.875rem; /* 30px converted to rem */
+    top: 0.625rem; /* 10px converted to rem */
+    right: 7.5rem; /* 120px converted to rem */
+    z-index: 1;
+
     &:hover {
       background-color: $border-color;
     }
   }
+
   .modifyImg {
     position: relative;
-    width: 171.67px;
-    height: 171.67px;
+    width: 10.730625rem; /* 171.67px converted to rem */
+    height: 10.730625rem; /* 171.67px converted to rem */
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -40,49 +45,55 @@ $violet-4: #6700e6;
     background-size: cover;
     background-position: center;
   }
+
   .inputBox {
-    margin-top: 30px;
-    margin-bottom: 15px;
-    height: 75px;
+    margin-top: 1.875rem; /* 30px converted to rem */
+    margin-bottom: 0.9375rem; /* 15px converted to rem */
+    height: 4.6875rem; /* 75px converted to rem */
+
     input {
-      width: 330px;
-      height: 60px;
-      border-radius: 30px;
+      width: 20.625rem; /* 330px converted to rem */
+      height: 3.75rem; /* 60px converted to rem */
+      border-radius: 1.875rem; /* 30px converted to rem */
       display: flex;
       align-items: center;
-      padding-left: 30px;
-      font-size: 20px;
-      border: 1px solid $border-color;
+      padding-left: 1.875rem; /* 30px converted to rem */
+      font-size: 1.25rem; /* 20px converted to rem */
+      border: 0.0625rem solid $border-color; /* 1px converted to rem */
     }
+
     p {
       margin-top: 0;
       margin-bottom: 0;
       text-align: left;
       color: red;
-      margin-left: 30px;
-      font-size: 15px;
+      margin-left: 1.875rem; /* 30px converted to rem */
+      font-size: 0.9375rem; /* 15px converted to rem */
     }
   }
+
   button {
-    width: 330px;
-    height: 60px;
-    border-radius: 30px;
+    width: 20.625rem; /* 330px converted to rem */
+    height: 3.75rem; /* 60px converted to rem */
+    border-radius: 1.875rem; /* 30px converted to rem */
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: $violet-4;
     color: white;
-    font-size: 20px;
+    font-size: 1.25rem; /* 20px converted to rem */
     border: none;
   }
+
   .btns {
     display: flex;
     flex-direction: row;
     margin-left: auto;
-    margin-right: 50px;
+    margin-right: 3.125rem; /* 50px converted to rem */
+
     p {
-      margin-left: 20px;
-      font-size: 15px;
+      margin-left: 1.25rem; /* 20px converted to rem */
+      font-size: 0.9375rem; /* 15px converted to rem */
       color: $font-color;
       font-weight: bold;
     }
