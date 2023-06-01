@@ -1,9 +1,6 @@
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { BiBookmarks, BiCheck } from "react-icons/bi";
-import { IoStatsChartSharp } from "react-icons/io5";
-import { MdOutlineStickyNote2 } from "react-icons/md";
 
 const User = () => {
   let navigate = useNavigate();
