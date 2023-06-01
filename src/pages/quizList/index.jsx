@@ -8,8 +8,10 @@ export default function QuizList() {
           type="text"
           className={styles.inputField}
           placeholder="문제 제목 검색"
-        />
+        /> 
         <button type="button" className={styles.searchButton}></button>
+      </div>
+      <div className={styles.menuContainer}>
       </div>
     </div>
   );

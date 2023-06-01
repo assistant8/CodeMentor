@@ -25,13 +25,13 @@
     // height: 100%;
     // left: calc(50% - 7.6rem / 2 - 4.6rem);
     // top: calc(50% - 1.25rem / 2 - 15.24rem);
-    // left: calc(50% - 122px / 2 - 75px);
+    left: calc(50% - 122px / 2 - 75px);
     // top: calc(50% - 20px / 2 - 243px);
     // color: #c2bcca;
     // font-family: "Inter";
     // font-style: normal;
     // font-weight: 400;
-    font-size: 1.25rem;
+    // font-size: 1.25rem;
     line-height: 3.75rem; // 입력창과 같은 높이로 설정
     padding-top: 1.5rem; // 위쪽 padding
     padding-bottom: 0.5rem; // 아래쪽 padding
@@ -57,3 +57,10 @@
   background-image: url("../../image/Vector.png");
   background-size: cover;
 }
+
+.menuContainer {
+  width: 330px;
+  height: 34px;
+
+}
+//메뉴 리스트로 구현
