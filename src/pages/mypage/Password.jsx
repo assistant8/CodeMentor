@@ -1,5 +1,6 @@
 import styles from "./Password.module.scss";
 import { VioletButton } from "../../components/buttons/VioletButton";
+import { UserInput } from "../../components/inputs/UserInput";
 import { useState } from "react";
 
 const PassWord = () => {
@@ -31,10 +32,10 @@ const PassWord = () => {
       <p className={styles.pwdTitle}>비밀번호 변경</p>
       <div className={styles.inputsContainer}>
         <div className={styles.inputBox}>
-          <input placeholder="현재 비밀번호" />
+          <UserInput placeholder="현재 비밀번호" />
         </div>
         <div className={styles.inputBox}>
-          <input
+          <UserInput
             type="password"
             placeholder="비밀번호"
             value={newPwd}
@@ -43,14 +44,14 @@ const PassWord = () => {
           {!checkPattern ? <p>영문 대소문자 포함 8~12자리</p> : null}
         </div>
         <div className={styles.inputBox}>
-          <input
+          <UserInput
             type="password"
             placeholder="비밀번호 확인"
             onChange={handleCheck}
           />
           {!checkPwd ? <p>비밀번호가 일치하지 않습니다</p> : null}
         </div>
-        <VioletButton style={{ marginTop: "40px" }} onClick={onClick}>
+        <VioletButton style={{ marginTop: "2.5rem" }} onClick={onClick}>
           변경하기
         </VioletButton>
       </div>
