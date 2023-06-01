@@ -1,7 +1,7 @@
 export default function Heading({ heading }) {
   return (
     <>
-      <div>heading</div>
+      <div>헤딩</div>
     </>
   );
 }
