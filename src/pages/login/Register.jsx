@@ -45,7 +45,9 @@ export default function Register() {
 
   useEffect(() => {
     if (passwordInputValue === "") {
-      setPasswordVerificationMessage("비밀번호를 입력해주세요.");
+      setPasswordVerificationMessage(
+        "비밀번호는 영문 대/소문자를 최소 하나씩 포함한 8~12자리여야 합니다."
+      );
     } else if (!isPasswordValid(passwordInputValue)) {
       setPasswordVerificationMessage("비밀번호 형식이 올바르지 않습니다.");
     } else {
@@ -53,52 +55,64 @@ export default function Register() {
     }
   }, [passwordInputValue]);
 
-  return (
-    <>
-      <div className={styles.container}>
-        <div>* 회원 가입 페이지 *</div>
-        <div>회원 가입</div>
-        <label>이메일</label>
-        <input
-          type="text"
-          name="email"
-          placeholder="codeWhisper@gmail.com"
-          ref={emailInput}
-          onInput={handleOnInput_emailInput}
-        />
-        <div>{emailVerificationMessage}</div>
-        <label>비밀번호</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="******"
-          onInput={handleOnInput_passwordInput}
-        />
-        <div>{passwordVerificationMessage}</div>
-        <label>비밀번호 확인</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="******"
-          onInput={handleOnInput_passwordConfirmInput}
-        />
-        <div>{passwordConfirmVerificationMessage}</div>
-        <div
-          onClick={() => {
-            console.log("회원 가입 페이지");
-            console.log(
-              "이메일, 패스워드 형식, 패스워드 일치 검사 통과 시 버튼 활성화"
-            );
-            console.log("본인 인증 메일 발송");
-            console.log("인증 번호 입력 페이지로 이동");
+  useEffect(() => {
+    if (passwordConfirmInputValue === "") {
+      setPasswordConfirmVerificationMessage("비밀번호를 확인해주세요.");
+    } else if (passwordInputValue !== passwordConfirmInputValue) {
+      setPasswordConfirmVerificationMessage("비밀번호가 일치하지 않습니다.");
+    } else {
+      setPasswordConfirmVerificationMessage("완벽합니다!");
+    }
+  }, [passwordConfirmInputValue]);
 
-            navigate("/login/verify-email");
-          }}
-        >
-          확인
-        </div>
+  return (
+    <div className={styles.container}>
+      <div>* 회원 가입 페이지 *</div>
+      <div>회원 가입</div>
+      <label>이메일</label>
+      <input
+        type="text"
+        name="email"
+        placeholder="codeWhisper@gmail.com"
+        ref={emailInput}
+        onInput={handleOnInput_emailInput}
+      />
+      <div>{emailVerificationMessage}</div>
+      <label>비밀번호</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="******"
+        onInput={handleOnInput_passwordInput}
+      />
+      <div>{passwordVerificationMessage}</div>
+      <label>비밀번호 확인</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="******"
+        onInput={handleOnInput_passwordConfirmInput}
+      />
+      <div>{passwordConfirmVerificationMessage}</div>
+      <div
+        onClick={() => {
+          console.log("회원 가입 페이지");
+          console.log(
+            "이메일, 패스워드 형식, 패스워드 일치 검사 통과 시 버튼 활성화"
+          );
+          console.log("본인 인증 메일 발송");
+          console.log("인증 번호 입력 페이지로 이동");
+
+          navigate("/login/verify-email", {
+            state: {
+              email: emailInputValue,
+            },
+          });
+        }}
+      >
+        확인
       </div>
-    </>
+    </div>
   );
 }
 
@@ -110,7 +124,7 @@ function isEmailValid(email) {
 }
 
 function isPasswordValid(password) {
-  const passwordRegExp = /^[A-Za-z0-9]{8,}$/;
+  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
   const result = passwordRegExp.test(password);
 
   return result;

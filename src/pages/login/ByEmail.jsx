@@ -1,3 +1,4 @@
+import styles from "./ByEmail.module.scss";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
@@ -70,7 +71,7 @@ export default function ByEmail() {
   // }, [passwordInputValue]);
 
   return (
-    <>
+    <div className={styles.container}>
       <div>* 이메일 로그인 페이지 *</div>
       <div>로고</div>
       <form>
@@ -117,7 +118,7 @@ export default function ByEmail() {
           회원 가입
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
