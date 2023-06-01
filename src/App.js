@@ -5,11 +5,13 @@ import MainLayout from "./components/layout/mainLayout";
 import LoginLayout from "./components/layout/loginLayout";
 import Quiz from "./pages/quiz";
 import QuizList from "./pages/quizList";
-import SelectWayToLogin from "./components/login/SelectWayToLogin";
-import ByEmail from "./components/login/ByEmail";
-import FindPassword from "./components/login/FindPassword";
-import Register from "./components/login/Register";
-import VerifyEmail from "./components/login/VerifyEmail";
+import MyPage from "./pages/mypage";
+import ModifyUser from "./pages/mypage/ModifyUser";
+import PassWord from "./pages/mypage/Password";
+import BookMark from "./pages/mypage/BookMark";
+import Complete from "./pages/mypage/Complete";
+import Chart from "./pages/mypage/Chart";
+import MyPost from "./pages/mypage/MyPost";
 
 function App() {
   return (
@@ -30,6 +32,15 @@ function App() {
           <Route path="find-password" element={<FindPassword />} />
           <Route path="register" element={<Register />} />
           <Route path="verify-email" element={<VerifyEmail />} />
+        </Route>
+        <Route path={PATH.MYPAGE} element={<MainLayout />}>
+          <Route index element={<MyPage />} />
+          <Route path="modify" element={<ModifyUser />} />
+          <Route path="password" element={<PassWord />} />
+          <Route path="bookmark" element={<BookMark />} />
+          <Route path="complete" element={<Complete />} />
+          <Route path="chart" element={<Chart />} />
+          <Route path="mypost" element={<MyPost />} />
         </Route>
       </Routes>
     </Router>
