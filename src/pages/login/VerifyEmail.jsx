@@ -60,17 +60,15 @@ export default function VerifyEmail() {
   };
 
   useEffect(() => {
-    console.log(2);
-    if (location.state === null) {
-      alert("잘못된 접근입니다.");
-      navigate(PATH.MAIN);
-
-      return;
-    }
-
     setEmail(location.state.email);
-
     previousPageUrl = location.state.previousPageUrl;
+
+    return () => {
+      if (location.state === null) {
+        alert("잘못된 접근입니다.");
+        navigate(PATH.MAIN);
+      }
+    };
   }, []);
 
   useEffect(() => {
