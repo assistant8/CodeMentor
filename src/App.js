@@ -13,10 +13,10 @@ import Complete from "./pages/mypage/Complete";
 import Chart from "./pages/mypage/Chart";
 import MyPost from "./pages/mypage/MyPost";
 import Login from "./pages/login/Login";
-// import ByEmail from "./pages/login/Login";
 import FindPassword from "./pages/login/FindPassword";
 import Register from "./pages/login/Register";
 import VerifyEmail from "./pages/login/VerifyEmail";
+import ResetPassword from "./pages/login/ResetPassword.jsx";
 
 function App() {
   return (
@@ -33,10 +33,10 @@ function App() {
         </Route>
         <Route path={PATH.LOGIN} element={<LoginLayout />}>
           <Route index element={<Login />} />
-          {/* <Route path="by-email" element={<ByEmail />} /> */}
           <Route path="find-password" element={<FindPassword />} />
           <Route path="register" element={<Register />} />
           <Route path="verify-email" element={<VerifyEmail />} />
+          <Route path="reset-password" element={<ResetPassword />} />
         </Route>
         <Route path={PATH.MYPAGE} element={<MainLayout />}>
           <Route index element={<MyPage />} />
