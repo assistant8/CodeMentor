@@ -1,13 +1,13 @@
 import React from "react";
-import "./header.scss";
+import styles from "./Header.module.scss";
 import { useNavigate } from "react-router-dom";
 
 const Header = ({ headerTitle = "제목을설정해주세요" }) => {
   const navigate = useNavigate();
   return (
-    <div className="header">
+    <div className={styles.header}>
       <div
-        className="back-icon"
+        className={styles.backIcon}
         onClick={() => {
           navigate(-1);
         }}
@@ -34,7 +34,7 @@ const Header = ({ headerTitle = "제목을설정해주세요" }) => {
         </svg>
       </div>
       <div className="header-title">{headerTitle}</div>
-      <div className="setting-icon">
+      <div className={styles.settingsIcon}>
         <svg
           width="5"
           height="19"

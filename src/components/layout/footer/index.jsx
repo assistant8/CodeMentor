@@ -1,11 +1,11 @@
 import React from "react";
-import "./footer.scss";
+import styles from "./Footer.module.scss";
 import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const navigate = useNavigate();
   return (
-    <div className="footer">
+    <div className={styles.footer}>
       <div
         className="menu-quiz-list"
         onClick={() => {
