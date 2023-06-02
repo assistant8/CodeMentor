@@ -20,6 +20,8 @@
           line-height: 1.25rem;
           margin-right: 1rem;
           color: #c2bcca;
+          cursor: pointer;
+
         }
       }
     }
@@ -35,6 +37,15 @@
         margin-right: 0.6rem;
         width: 1.5rem;
         height: 1.5rem;
+        cursor: pointer;
       }
     }
+  }
+
+  .categoryContainer ul li.selected {
+    color: #6700E6;
+  }
+
+  .imageContainer img.selectedFilter {
+    color: #6700E6;
   }
