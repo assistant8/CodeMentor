@@ -1,6 +1,8 @@
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import React, { useState } from "react";
+import Modal from "react-modal";
 
 const User = () => {
   let navigate = useNavigate();
@@ -22,14 +24,14 @@ const User = () => {
   );
 };
 
-const Grade = () => {
+const Grade = ({ openModal, setIsOpen }) => {
   return (
     <div className={styles.gradeInfo}>
       <div className={styles.gradeImg}>
         <img src="" alt="등급 아이콘" />
       </div>
       <h3>등급별 혜택보기</h3>
-      <button>
+      <button onClick={openModal}>
         <MdOutlineKeyboardArrowRight />
       </button>
     </div>
@@ -124,13 +126,36 @@ const LogOut = () => {
   return <p className={styles.logout}>로그아웃</p>;
 };
 
+const GradeModal = ({ isOpen, onRequestClose, children }) => {
+  return (
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel="Modal">
+      {children}
+    </Modal>
+  );
+};
+
 const MyPage = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className={styles.container}>
       <User />
-      <Grade />
+      <Grade setIsOpen={setIsOpen} openModal={openModal} />
       <Menu />
       <LogOut />
+      <GradeModal isOpen={isOpen} onRequestClose={closeModal}>
+        <h2>Modal Content</h2>
+        <p>This is the content of the modal.</p>
+        <button onClick={closeModal}>Close Modal</button>
+      </GradeModal>
     </div>
   );
 };
