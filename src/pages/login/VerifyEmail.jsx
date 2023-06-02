@@ -1,6 +1,6 @@
 import styles from "./VerifyEmail.module.scss";
-import { useEffect, useState } from "react";
-import { redirect, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PATH from "../../constants/path";
 
@@ -10,7 +10,7 @@ import PATH from "../../constants/path";
 // - verification code는 어차피 이 페이지에서 갖고 있을 거니까.
 // - 이전 페이지에서 갖고 있으려나..? 그러면.. 굳이 그걸 이 페이지로 넘겨서 다음 절차를 진행할 필요가 있나..?
 // - 아니 애초에 인증 코드를 프론트에서 갖고 있는 게 맞나? input 서버로 넘겨서 서버에서 검증을 해줘야 하나..?
-// - 사용할 라이브러리 읽어보고 결정하기.
+// - 사용할 라이브러리 읽어보고 결정하기. node-mailer 같은 걸 쓴다고 함.
 
 export default function VerifyEmail() {
   const navigate = useNavigate();
@@ -18,8 +18,12 @@ export default function VerifyEmail() {
     useState("");
   const location = useLocation();
   const [email, setEmail] = useState("");
-  let previousPageUrl = "";
-  let nextPageUrl = "";
+  const previousPageUrl = useRef("");
+  const nextPageUrl = useRef("");
+  const password = useRef("");
+
+  // let previousPageUrl = "";
+  // let nextPageUrl = "";
 
   const handleOnChange_verificationCodeInput = (e) => {
     const value = e.target.value;
@@ -31,6 +35,9 @@ export default function VerifyEmail() {
     setVerificationCodeInputValue(newValue);
   };
 
+  // 서버에서 인증 코드 검사.
+  // 일치 -> 비밀번호 재설정 or 회원 가입 완료.
+  // 불일치 -> alert.
   const handleOnClick_submitButton = (e) => {
     e.preventDefault();
 
@@ -41,35 +48,66 @@ export default function VerifyEmail() {
 
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
 
-    axios.post(url, formData).then((response) => {
-      // if (response.data.result === "인증 번호 일치") {
-      // 개발용 true 임시 설정
-      if (true) {
-        if (previousPageUrl === PATH.LOGIN + "/find-password") {
+    if (previousPageUrl.current === PATH.LOGIN + "/find-password") {
+      axios.post(url, formData).then((response) => {
+        // if (response.data.result === "인증 번호 일치") {
+        // 개발용 true 설정
+        if (true) {
           alert(
             "이메일 인증이 완료되었습니다. 비밀번호 재설정 페이지로 이동합니다."
           );
 
-          navigate(nextPageUrl, { state: { email } });
+          navigate(nextPageUrl.current, { state: { email } });
 
           return;
         }
 
-        if (previousPageUrl === PATH.LOGIN + "/register") {
+        alert("인증 번호가 일치하지 않습니다. 인증 번호를 다시 확인해주세요.");
+
+        return;
+      });
+    }
+
+    if (previousPageUrl.current === PATH.LOGIN + "/register") {
+      const newFormData = {
+        ...formData,
+        password: password.current,
+        name: "이름 기본값(겹치지 않게)",
+        profileImage: "프로필 이미지 기본값",
+      };
+
+      axios.post(url, newFormData).then((response) => {
+        // if (response.data.result === "인증 번호 일치") {
+        // 개발용 true 설정.
+        if (true) {
           alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
 
-          navigate(nextPageUrl);
+          navigate(nextPageUrl.current, {
+            state: { email, name: newFormData.name },
+          });
 
           return;
         }
-      }
 
-      alert("인증 번호가 일치하지 않습니다. 인증 번호를 다시 확인해주세요.");
-    });
+        alert("인증 번호가 일치하지 않습니다. 인증 번호를 다시 확인해주세요.");
+
+        return;
+      });
+    }
   };
 
+  // 이전 페이지서 navigate로 넘어온 데이터를 가지고 submit 다음에 렌더링될 페이지를 결정.
+  // - 회원 가입 -> 프로필 설정 페이지
+  // - 비밀번호 찾기 -> 비밀번호 재설정 페이지
   useEffect(() => {
-    if (location.state === null) {
+    // 회원 가입 페이지나 비밀번호 찾기 페이지에서 넘어온 경우에만 이 페이지를 렌더링.
+    // - 그 두 페이지에서 넘어온 경우에만 location.state가 존재할 테니까.
+    // - 아니 근데 이걸로 되나? 다른 location.state.email/previousPageUrl 존재하는 페이지에서 넘어오면.. 특정 값이 없으면 버튼이 안 눌리게 해야 하나..?
+    if (
+      location.state === null ||
+      location.state.email === undefined ||
+      location.state.previousPageUrl === undefined
+    ) {
       alert("잘못된 접근입니다.");
       navigate(PATH.MAIN);
 
@@ -77,29 +115,36 @@ export default function VerifyEmail() {
     }
 
     setEmail(location.state.email);
-    previousPageUrl = location.state.previousPageUrl;
 
-    switch (previousPageUrl) {
+    previousPageUrl.current = location.state.previousPageUrl;
+
+    // 회원 가입 페이지에서 넘어온 경우만 password를 가지고 있음.
+    if (previousPageUrl.current === PATH.LOGIN + "/register") {
+      password.current = location.state.password;
+    }
+
+    switch (previousPageUrl.current) {
       // 비밀 번호 찾기 페이지에서 넘어온 경우
       // -> 비밀 번호 재설정 페이지로 이동.
       case PATH.LOGIN + "/find-password":
-        nextPageUrl = PATH.LOGIN + "/reset-password";
+        nextPageUrl.current = PATH.LOGIN + "/reset-password";
         break;
       // 회원 가입 페이지에서 넘어온 경우
       // -> 로그인 페이지로 이동.
       case PATH.LOGIN + "/register":
-        nextPageUrl = PATH.LOGIN + "/create-profile";
+        nextPageUrl.current = PATH.LOGIN + "/create-profile";
         break;
       // 그 외의 경우
       // -> 홈으로 이동.
+      // 근데 이건 없애도 되지 않나 싶음. 앞에서 한 번 걸렀으니까.
       default:
         alert("잘못된 접근입니다.");
-        nextPageUrl = PATH.MAIN;
+        nextPageUrl.current = PATH.MAIN;
         break;
     }
 
     return;
-  }, [verificationCodeInputValue]);
+  }, []);
 
   return (
     <div className={styles.container}>
