@@ -16,12 +16,9 @@ export default function VerifyEmail() {
   const navigate = useNavigate();
   const [verificationCodeInputValue, setVerificationCodeInputValue] =
     useState("");
-
-  // 이전 페이지에서 navigate로 넘겨받은 정보 취득.
   const location = useLocation();
-  let email = "";
+  const [email, setEmail] = useState("");
   let previousPageUrl = "";
-
   let nextPageUrl = "";
 
   const handleOnChange_verificationCodeInput = (e) => {
@@ -63,11 +60,17 @@ export default function VerifyEmail() {
   };
 
   useEffect(() => {
-    console.log(1);
+    console.log(2);
     if (location.state === null) {
       alert("잘못된 접근입니다.");
       navigate(PATH.MAIN);
+
+      return;
     }
+
+    setEmail(location.state.email);
+
+    previousPageUrl = location.state.previousPageUrl;
   }, []);
 
   useEffect(() => {
