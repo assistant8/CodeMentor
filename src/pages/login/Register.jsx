@@ -1,9 +1,11 @@
 import styles from "./Register.module.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import PATH from "../../constants/path";
 
 export default function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
   const emailInput = useRef();
   const [emailInputValue, setEmailInputValue] = useState("");
   const [passwordInputValue, setPasswordInputValue] = useState("");
@@ -26,6 +28,8 @@ export default function Register() {
   };
 
   const handleOnInput_passwordConfirmInput = (e) => {
+    e.preventDefault();
+
     setPasswordConfirmInputValue(e.target.value);
   };
 
@@ -45,7 +49,9 @@ export default function Register() {
 
   useEffect(() => {
     if (passwordInputValue === "") {
-      setPasswordVerificationMessage("비밀번호를 입력해주세요.");
+      setPasswordVerificationMessage(
+        "비밀번호는 영문 대/소문자를 최소 하나씩 포함한 8~12자리여야 합니다."
+      );
     } else if (!isPasswordValid(passwordInputValue)) {
       setPasswordVerificationMessage("비밀번호 형식이 올바르지 않습니다.");
     } else {
@@ -53,11 +59,21 @@ export default function Register() {
     }
   }, [passwordInputValue]);
 
+  useEffect(() => {
+    if (passwordConfirmInputValue === "") {
+      setPasswordConfirmVerificationMessage("비밀번호를 확인해주세요.");
+    } else if (passwordInputValue !== passwordConfirmInputValue) {
+      setPasswordConfirmVerificationMessage("비밀번호가 일치하지 않습니다.");
+    } else {
+      setPasswordConfirmVerificationMessage("완벽합니다!");
+    }
+  }, [passwordConfirmInputValue]);
+
   return (
-    <>
-      <div className={styles.container}>
-        <div>* 회원 가입 페이지 *</div>
-        <div>회원 가입</div>
+    <div className={styles.container}>
+      <div>* 회원 가입 페이지 *</div>
+      <div>회원 가입</div>
+      <form>
         <label>이메일</label>
         <input
           type="text"
@@ -83,7 +99,9 @@ export default function Register() {
           onInput={handleOnInput_passwordConfirmInput}
         />
         <div>{passwordConfirmVerificationMessage}</div>
-        <div
+        <input
+          type="submit"
+          value="확인"
           onClick={() => {
             console.log("회원 가입 페이지");
             console.log(
@@ -92,13 +110,16 @@ export default function Register() {
             console.log("본인 인증 메일 발송");
             console.log("인증 번호 입력 페이지로 이동");
 
-            navigate("/login/verify-email");
+            navigate(PATH.LOGIN + "/verify-email", {
+              state: {
+                email: emailInputValue,
+                previousPageUrl: location.pathname,
+              },
+            });
           }}
-        >
-          확인
-        </div>
-      </div>
-    </>
+        ></input>
+      </form>
+    </div>
   );
 }
 
@@ -110,7 +131,7 @@ function isEmailValid(email) {
 }
 
 function isPasswordValid(password) {
-  const passwordRegExp = /^[A-Za-z0-9]{8,}$/;
+  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
   const result = passwordRegExp.test(password);
 
   return result;
