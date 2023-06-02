@@ -1,6 +1,11 @@
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { LuSprout } from "react-icons/lu";
+import { FaGraduationCap } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
+import React, { useState } from "react";
+import Modal from "react-modal";
 
 const User = () => {
   let navigate = useNavigate();
@@ -22,14 +27,14 @@ const User = () => {
   );
 };
 
-const Grade = () => {
+const Grade = ({ openModal, setIsOpen }) => {
   return (
     <div className={styles.gradeInfo}>
       <div className={styles.gradeImg}>
         <img src="" alt="등급 아이콘" />
       </div>
       <h3>등급별 혜택보기</h3>
-      <button>
+      <button onClick={openModal}>
         <MdOutlineKeyboardArrowRight />
       </button>
     </div>
@@ -124,13 +129,56 @@ const LogOut = () => {
   return <p className={styles.logout}>로그아웃</p>;
 };
 
+const GradeModal = ({ isOpen, onRequestClose, children }) => {
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      contentLabel="Modal"
+      className={styles.reactModal}
+      overlayClassName={styles.reactModalOverlay}
+    >
+      {children}
+    </Modal>
+  );
+};
+
 const MyPage = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className={styles.container}>
       <User />
-      <Grade />
+      <Grade setIsOpen={setIsOpen} openModal={openModal} />
       <Menu />
       <LogOut />
+      <GradeModal isOpen={isOpen} onRequestClose={closeModal}>
+        <GiCancel className={styles.closeBtn} onClick={closeModal} />
+        <div className={styles.gradeContainer}>
+          <div className={styles.gradeBox}>
+            <div className={styles.gradeProfile}>
+              <FaGraduationCap className={styles.gradeIcon} />
+              <p>코드 멘토</p>
+            </div>
+            <div className={styles.description}>힌트 등록, 수정 가능</div>
+          </div>
+          <div className={styles.gradeBox}>
+            <div className={styles.gradeProfile}>
+              <LuSprout className={styles.gradeIcon} />
+              <p>코드 멘티</p>
+            </div>
+            <div className={styles.description}>힌트 열람만 가능</div>
+          </div>
+        </div>
+      </GradeModal>
     </div>
   );
 };
