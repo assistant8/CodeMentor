@@ -6,3 +6,45 @@
   width: 100%;
   height: 100%;
 }
+.quizNameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 20.63rem;
+  color: #3e3e3e;
+  .quizInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    width: 17rem;
+    .quizTitle {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    .quizPersonal {
+      display: flex;
+      height: 3.5rem;
+      font-size: 0.63rem;
+      line-height: 200%;
+      .bookmark,
+      .solved {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 0.5rem;
+      }
+    }
+  }
+  .timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 3rem;
+    > .div {
+      font-size: 0.63rem;
+    }
+  }
+}
