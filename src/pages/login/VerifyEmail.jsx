@@ -1,5 +1,5 @@
 import styles from "./VerifyEmail.module.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { redirect, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PATH from "../../constants/path";
@@ -10,16 +10,20 @@ import PATH from "../../constants/path";
 // - verification code는 어차피 이 페이지에서 갖고 있을 거니까.
 // - 이전 페이지에서 갖고 있으려나..? 그러면.. 굳이 그걸 이 페이지로 넘겨서 다음 절차를 진행할 필요가 있나..?
 // - 아니 애초에 인증 코드를 프론트에서 갖고 있는 게 맞나? input 서버로 넘겨서 서버에서 검증을 해줘야 하나..?
-// - 사용할 라이브러리 읽어보고 결정하기.
+// - 사용할 라이브러리 읽어보고 결정하기. node-mailer 같은 걸 쓴다고 함.
 
 export default function VerifyEmail() {
   const navigate = useNavigate();
   const [verificationCodeInputValue, setVerificationCodeInputValue] =
     useState("");
   const location = useLocation();
-  const [email, setEmail] = useState("");
-  let previousPageUrl = "";
-  let nextPageUrl = "";
+  const email = useRef("");
+  const previousPageUrl = useRef("");
+  const nextPageUrl = useRef("");
+
+  // const [email, setEmail] = useState("");
+  // let previousPageUrl = "";
+  // let nextPageUrl = "";
 
   const handleOnChange_verificationCodeInput = (e) => {
     const value = e.target.value;
@@ -35,7 +39,7 @@ export default function VerifyEmail() {
     e.preventDefault();
 
     const formData = {
-      email,
+      email: email.current,
       verificationCode: verificationCodeInputValue,
     };
 
@@ -50,7 +54,7 @@ export default function VerifyEmail() {
             "이메일 인증이 완료되었습니다. 비밀번호 재설정 페이지로 이동합니다."
           );
 
-          navigate(nextPageUrl, { state: { email } });
+          navigate(nextPageUrl.current, { state: { email: email.current } });
 
           return;
         }
@@ -58,7 +62,7 @@ export default function VerifyEmail() {
         if (previousPageUrl === PATH.LOGIN + "/register") {
           alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
 
-          navigate(nextPageUrl);
+          navigate(nextPageUrl.current);
 
           return;
         }
@@ -68,7 +72,12 @@ export default function VerifyEmail() {
     });
   };
 
+  // 이전 페이지서 navigate로 넘어온 데이터를 가지고 submit 다음에 렌더링될 페이지를 결정.
+  // - 회원 가입 -> 프로필 설정 페이지
+  // - 비밀번호 찾기 -> 비밀번호 재설정 페이지
   useEffect(() => {
+    // 회원 가입 페이지나 비밀번호 찾기 페이지에서 넘어온 경우에만 이 페이지를 렌더링.
+    // - 두 페이지에서 넘어온 경우에만 location.state가 존재할 것.
     if (location.state === null) {
       alert("잘못된 접근입니다.");
       navigate(PATH.MAIN);
@@ -76,37 +85,38 @@ export default function VerifyEmail() {
       return;
     }
 
-    setEmail(location.state.email);
-    previousPageUrl = location.state.previousPageUrl;
+    email.current = location.state.email;
+    previousPageUrl.current = location.state.previousPageUrl;
 
-    switch (previousPageUrl) {
+    switch (previousPageUrl.current) {
       // 비밀 번호 찾기 페이지에서 넘어온 경우
       // -> 비밀 번호 재설정 페이지로 이동.
       case PATH.LOGIN + "/find-password":
-        nextPageUrl = PATH.LOGIN + "/reset-password";
+        nextPageUrl.current = PATH.LOGIN + "/reset-password";
         break;
       // 회원 가입 페이지에서 넘어온 경우
       // -> 로그인 페이지로 이동.
       case PATH.LOGIN + "/register":
-        nextPageUrl = PATH.LOGIN + "/create-profile";
+        nextPageUrl.current = PATH.LOGIN + "/create-profile";
         break;
       // 그 외의 경우
       // -> 홈으로 이동.
+      // 근데 이건 없애도 되지 않나 싶음. 앞에서 한 번 걸렀으니까.
       default:
         alert("잘못된 접근입니다.");
-        nextPageUrl = PATH.MAIN;
+        nextPageUrl.current = PATH.MAIN;
         break;
     }
 
     return;
-  }, [verificationCodeInputValue]);
+  }, []);
 
   return (
     <div className={styles.container}>
       <div>* 이메일 인증 번호 확인 페이지 *</div>
 
       <div>이메일 인증</div>
-      <div>{email}로 인증 번호가 발송되었습니다.</div>
+      <div>{email.current}로 인증 번호가 발송되었습니다.</div>
       <form>
         <label htmlFor="verificationCodeInput">인증 번호</label>
         <input

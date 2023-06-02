@@ -87,7 +87,7 @@ export default function Register() {
         <input
           type="password"
           name="password"
-          placeholder="******"
+          placeholder="********"
           onInput={handleOnInput_passwordInput}
         />
         <div>{passwordVerificationMessage}</div>
@@ -95,7 +95,7 @@ export default function Register() {
         <input
           type="password"
           name="password"
-          placeholder="******"
+          placeholder="********"
           onInput={handleOnInput_passwordConfirmInput}
         />
         <div>{passwordConfirmVerificationMessage}</div>

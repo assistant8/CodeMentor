@@ -2,6 +2,7 @@ import styles from "./CreateProfile.module.scss";
 import { useEffect, useState, useRef } from "react";
 
 export default function CreateProfile() {
+  // 겹치지 않는 기본 이름을 어떻게 만들지?
   const [nameInputValue, setNameInputValue] = useState("겹치지않는이름");
   const [nameVerificationMessage, setNameVerificationMessage] = useState("");
   const nameInput = useRef();

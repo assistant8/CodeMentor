@@ -60,7 +60,7 @@ export default function ResetPassword() {
           alert(
             "비밀번호 재설정이 완료되었습니다. 로그인 페이지로 이동합니다."
           );
-          navigate("/login");
+          navigate(PATH.LOGIN);
 
           return;
         }
@@ -90,7 +90,6 @@ export default function ResetPassword() {
   }, []);
 
   useEffect(() => {
-    console.log(passwordInputValue);
     if (passwordInputValue === "") {
       setPasswordVerificationMessage(
         "비밀번호는 영문 대/소문자를 최소 하나씩 포함한 8~12자리여야 합니다."
