@@ -1,6 +1,6 @@
 import styles from "./VerifyEmail.module.scss";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { redirect, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PATH from "../../constants/path";
 
@@ -19,7 +19,9 @@ export default function VerifyEmail() {
 
   // 이전 페이지에서 navigate로 넘겨받은 정보 취득.
   const location = useLocation();
-  const { email, previousPageUrl } = location.state;
+  let email = "";
+  let previousPageUrl = "";
+
   let nextPageUrl = "";
 
   const handleOnChange_verificationCodeInput = (e) => {
@@ -32,7 +34,9 @@ export default function VerifyEmail() {
     setVerificationCodeInputValue(newValue);
   };
 
-  const handleOnClick_verificationCodeInput = () => {
+  const handleOnClick_submitButton = (e) => {
+    e.preventDefault();
+
     const formData = {
       email,
       verificationCode: verificationCodeInputValue,
@@ -57,6 +61,14 @@ export default function VerifyEmail() {
       alert("인증 번호가 일치하지 않습니다. 인증 번호를 다시 확인해주세요.");
     });
   };
+
+  useEffect(() => {
+    console.log(1);
+    if (location.state === null) {
+      alert("잘못된 접근입니다.");
+      navigate(PATH.MAIN);
+    }
+  }, []);
 
   useEffect(() => {
     switch (previousPageUrl) {
@@ -92,14 +104,14 @@ export default function VerifyEmail() {
           name="verificationCode"
           id="verificationCodeInput"
           maxLength="6"
-          placeholder="인증 번호 6자리를 입력해주세요."
+          placeholder="인증 번호 6자리 숫자를 입력해주세요."
           onInput={handleOnChange_verificationCodeInput}
           value={verificationCodeInputValue}
         />
         <input
           type="submit"
           value="확인"
-          onClick={handleOnClick_verificationCodeInput}
+          onClick={handleOnClick_submitButton}
         ></input>
       </form>
     </div>
