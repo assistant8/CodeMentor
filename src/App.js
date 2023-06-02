@@ -17,6 +17,7 @@ import FindPassword from "./pages/login/FindPassword";
 import Register from "./pages/login/Register";
 import VerifyEmail from "./pages/login/VerifyEmail";
 import ResetPassword from "./pages/login/ResetPassword.jsx";
+import CreateProfile from "./pages/login/CreateProfile";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="verify-email" element={<VerifyEmail />} />
           <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="create-profile" element={<CreateProfile />} />
         </Route>
         <Route path={PATH.MYPAGE} element={<MainLayout />}>
           <Route index element={<MyPage />} />

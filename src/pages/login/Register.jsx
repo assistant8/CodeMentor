@@ -1,9 +1,11 @@
 import styles from "./Register.module.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import PATH from "../../constants/path";
 
 export default function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
   const emailInput = useRef();
   const [emailInputValue, setEmailInputValue] = useState("");
   const [passwordInputValue, setPasswordInputValue] = useState("");
@@ -26,6 +28,8 @@ export default function Register() {
   };
 
   const handleOnInput_passwordConfirmInput = (e) => {
+    e.preventDefault();
+
     setPasswordConfirmInputValue(e.target.value);
   };
 
@@ -69,49 +73,52 @@ export default function Register() {
     <div className={styles.container}>
       <div>* 회원 가입 페이지 *</div>
       <div>회원 가입</div>
-      <label>이메일</label>
-      <input
-        type="text"
-        name="email"
-        placeholder="codeWhisper@gmail.com"
-        ref={emailInput}
-        onInput={handleOnInput_emailInput}
-      />
-      <div>{emailVerificationMessage}</div>
-      <label>비밀번호</label>
-      <input
-        type="password"
-        name="password"
-        placeholder="******"
-        onInput={handleOnInput_passwordInput}
-      />
-      <div>{passwordVerificationMessage}</div>
-      <label>비밀번호 확인</label>
-      <input
-        type="password"
-        name="password"
-        placeholder="******"
-        onInput={handleOnInput_passwordConfirmInput}
-      />
-      <div>{passwordConfirmVerificationMessage}</div>
-      <div
-        onClick={() => {
-          console.log("회원 가입 페이지");
-          console.log(
-            "이메일, 패스워드 형식, 패스워드 일치 검사 통과 시 버튼 활성화"
-          );
-          console.log("본인 인증 메일 발송");
-          console.log("인증 번호 입력 페이지로 이동");
+      <form>
+        <label>이메일</label>
+        <input
+          type="text"
+          name="email"
+          placeholder="codeWhisper@gmail.com"
+          ref={emailInput}
+          onInput={handleOnInput_emailInput}
+        />
+        <div>{emailVerificationMessage}</div>
+        <label>비밀번호</label>
+        <input
+          type="password"
+          name="password"
+          placeholder="******"
+          onInput={handleOnInput_passwordInput}
+        />
+        <div>{passwordVerificationMessage}</div>
+        <label>비밀번호 확인</label>
+        <input
+          type="password"
+          name="password"
+          placeholder="******"
+          onInput={handleOnInput_passwordConfirmInput}
+        />
+        <div>{passwordConfirmVerificationMessage}</div>
+        <input
+          type="submit"
+          value="확인"
+          onClick={() => {
+            console.log("회원 가입 페이지");
+            console.log(
+              "이메일, 패스워드 형식, 패스워드 일치 검사 통과 시 버튼 활성화"
+            );
+            console.log("본인 인증 메일 발송");
+            console.log("인증 번호 입력 페이지로 이동");
 
-          navigate("/login/verify-email", {
-            state: {
-              email: emailInputValue,
-            },
-          });
-        }}
-      >
-        확인
-      </div>
+            navigate(PATH.LOGIN + "/verify-email", {
+              state: {
+                email: emailInputValue,
+                previousPageUrl: location.pathname,
+              },
+            });
+          }}
+        ></input>
+      </form>
     </div>
   );
 }

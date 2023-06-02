@@ -24,7 +24,7 @@ export default function VerifyEmail() {
   const handleOnChange_verificationCodeInput = (e) => {
     const value = e.target.value;
 
-    const RegExp = /\D/g;
+    const RegExp = /\D/;
 
     const newValue = value.replace(RegExp, "");
 
@@ -42,15 +42,24 @@ export default function VerifyEmail() {
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
 
     axios.post(url, formData).then((response) => {
-      if (response.data.result === "인증 번호 일치") {
+      // if (response.data.result === "인증 번호 일치") {
+      // 개발용 true 임시 설정
+      if (true) {
         if (previousPageUrl === PATH.LOGIN + "/find-password") {
-          navigate(nextPageUrl);
+          alert(
+            "이메일 인증이 완료되었습니다. 비밀번호 재설정 페이지로 이동합니다."
+          );
+
+          navigate(nextPageUrl, { state: { email } });
+
           return;
         }
 
         if (previousPageUrl === PATH.LOGIN + "/register") {
-          alert("이메일 인증이 완료되었습니다. 로그인 페이지로 이동합니다.");
+          alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
+
           navigate(nextPageUrl);
+
           return;
         }
       }
@@ -60,18 +69,16 @@ export default function VerifyEmail() {
   };
 
   useEffect(() => {
+    if (location.state === null) {
+      alert("잘못된 접근입니다.");
+      navigate(PATH.MAIN);
+
+      return;
+    }
+
     setEmail(location.state.email);
     previousPageUrl = location.state.previousPageUrl;
 
-    return () => {
-      if (location.state === null) {
-        alert("잘못된 접근입니다.");
-        navigate(PATH.MAIN);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     switch (previousPageUrl) {
       // 비밀 번호 찾기 페이지에서 넘어온 경우
       // -> 비밀 번호 재설정 페이지로 이동.
@@ -81,7 +88,7 @@ export default function VerifyEmail() {
       // 회원 가입 페이지에서 넘어온 경우
       // -> 로그인 페이지로 이동.
       case PATH.LOGIN + "/register":
-        nextPageUrl = PATH.LOGIN;
+        nextPageUrl = PATH.LOGIN + "/create-profile";
         break;
       // 그 외의 경우
       // -> 홈으로 이동.
@@ -90,7 +97,9 @@ export default function VerifyEmail() {
         nextPageUrl = PATH.MAIN;
         break;
     }
-  }, []);
+
+    return;
+  }, [verificationCodeInputValue]);
 
   return (
     <div className={styles.container}>

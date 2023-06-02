@@ -2,6 +2,7 @@ import styles from "./Login.module.scss";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import PATH from "../../constants/path";
 
 export default function ByEmail() {
   const navigate = useNavigate();
@@ -26,8 +27,6 @@ export default function ByEmail() {
   const passwordInput_handleOnChange = (e) => {
     setPasswordInputValue(e.target.value);
   };
-
-  console.log(emailInputValue, passwordInputValue);
 
   const submitButton_handleOnClick = (e) => {
     e.preventDefault();
@@ -121,7 +120,6 @@ export default function ByEmail() {
       <div>로고</div>
       <form>
         <label>이메일</label>
-        <br />
         <input
           type="text"
           name="email"
@@ -130,9 +128,7 @@ export default function ByEmail() {
           onChange={emailInput_handleOnChange}
         />
         {/* <div>{emailVerificationMessage}</div> */}
-        <br />
         <label>비밀번호</label>
-        <br />
         <input
           type="password"
           name="password"
@@ -140,7 +136,6 @@ export default function ByEmail() {
           onChange={passwordInput_handleOnChange}
         />
         {/* <div>{passwordVerificationMessage}</div> */}
-        <br />
         <input
           type="submit"
           value="로그인"
@@ -150,14 +145,14 @@ export default function ByEmail() {
       <div className={styles.wrapper_loginNav}>
         <div
           onClick={() => {
-            navigate("/login/find-password");
+            navigate(PATH.LOGIN + "/find-password");
           }}
         >
           👀비밀번호 찾기/
         </div>
         <div
           onClick={() => {
-            navigate("/login/register");
+            navigate(PATH.LOGIN + "/register");
           }}
         >
           🏓회원 가입

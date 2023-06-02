@@ -1,9 +1,12 @@
 import styles from "./ResetPassword.module.scss";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import PATH from "../../constants/path";
 
 export default function ResetPassword() {
+  const [email, setEmail] = useState("");
+  const location = useLocation();
   const passwordInput = useRef();
   const [passwordInputValue, setPasswordInputValue] = useState("");
   const [passwordConfirmInputValue, setPasswordConfirmInputValue] =
@@ -51,7 +54,9 @@ export default function ResetPassword() {
     axios
       .post(url, data)
       .then((response) => {
-        if (response.data.result === "비밀번호 재설정 완료") {
+        // if (response.data.result === "비밀번호 재설정 완료") {
+        // 개발용 true 임시 설정
+        if (true) {
           alert(
             "비밀번호 재설정이 완료되었습니다. 로그인 페이지로 이동합니다."
           );
@@ -67,6 +72,18 @@ export default function ResetPassword() {
         alert("서버 문제로 비밀번호 재설정에 실패했습니다. 다시 시도해주세요.");
       });
   };
+
+  useEffect(() => {
+    if (location.state === null) {
+      alert("잘못된 접근입니다.");
+      navigate(PATH.MAIN);
+
+      return;
+    }
+
+    setEmail(location.state.email);
+    return;
+  }, []);
 
   useEffect(() => {
     passwordInput.current.focus();
