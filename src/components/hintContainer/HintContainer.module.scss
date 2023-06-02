@@ -1,0 +1,42 @@
+.hintContainer {
+  display: flex;
+  width: 20.63rem;
+  border: 1px solid #c2bcca;
+  padding: 0.75rem 1rem 0.75rem 1rem;
+  box-shadow: 0 0.25rem 0.25rem 0 #00000040;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  .hintName {
+    display: flex;
+    flex-direction: column;
+    width: 17rem;
+    .hintTitle {
+      font-family: "Inter";
+      font-weight: 600;
+      font-size: 0.94rem;
+      line-height: 1.3rem;
+      color: #3e3e3e;
+      text-overflow: ellipsis;
+      line-height: 110%;
+      padding-bottom: 0.5rem;
+    }
+    .hintContent {
+      font-family: "Inter";
+      font-size: 0.94rem;
+      line-height: 110%;
+      color: #3e3e3e;
+    }
+    .blurContent {
+      font-family: "Inter";
+      font-size: 0.94rem;
+      line-height: 110%;
+      color: #3e3e3e;
+      filter: blur(4px);
+    }
+  }
+  .editIcon {
+    margin-left: auto;
+  }
+
+
+}
