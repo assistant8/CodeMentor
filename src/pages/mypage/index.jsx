@@ -1,6 +1,9 @@
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { LuSprout } from "react-icons/lu";
+import { FaGraduationCap } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
 import React, { useState } from "react";
 import Modal from "react-modal";
 
@@ -128,7 +131,13 @@ const LogOut = () => {
 
 const GradeModal = ({ isOpen, onRequestClose, children }) => {
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel="Modal">
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      contentLabel="Modal"
+      className={styles.reactModal}
+      overlayClassName={styles.reactModalOverlay}
+    >
       {children}
     </Modal>
   );
@@ -152,9 +161,23 @@ const MyPage = () => {
       <Menu />
       <LogOut />
       <GradeModal isOpen={isOpen} onRequestClose={closeModal}>
-        <h2>Modal Content</h2>
-        <p>This is the content of the modal.</p>
-        <button onClick={closeModal}>Close Modal</button>
+        <GiCancel className={styles.closeBtn} onClick={closeModal} />
+        <div className={styles.gradeContainer}>
+          <div className={styles.gradeBox}>
+            <div className={styles.gradeProfile}>
+              <FaGraduationCap className={styles.gradeIcon} />
+              <p>코드 멘토</p>
+            </div>
+            <div className={styles.description}>힌트 등록, 수정 가능</div>
+          </div>
+          <div className={styles.gradeBox}>
+            <div className={styles.gradeProfile}>
+              <LuSprout className={styles.gradeIcon} />
+              <p>코드 멘티</p>
+            </div>
+            <div className={styles.description}>힌트 열람만 가능</div>
+          </div>
+        </div>
       </GradeModal>
     </div>
   );
