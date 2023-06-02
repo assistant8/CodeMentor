@@ -13,24 +13,24 @@
   margin-top: 3.7rem;
 }
 
-.searchButton {
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-  transform: translateY(-50%);
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
+// .searchButton {
+//   position: absolute;
+//   top: 50%;
+//   right: 1rem;
+//   transform: translateY(-50%);
+//   background-color: transparent;
+//   border: none;
+//   cursor: pointer;
+// }
 
-.searchButton::before {
-  content: "";
-  display: block;
-  width: 1.43rem;
-  height: 1.43rem;
-  background-image: url("../../image/Vector.png");
-  background-size: cover;
-}
+// .searchButton::before {
+//   content: "";
+//   display: block;
+//   width: 1.43rem;
+//   height: 1.43rem;
+//   background-image: url("../../image/Vector.png");
+//   background-size: cover;
+// }
 
 // .menuContainer {
 //   width: 20.63rem;
