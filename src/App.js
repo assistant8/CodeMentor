@@ -12,8 +12,8 @@ import BookMark from "./pages/mypage/BookMark";
 import Complete from "./pages/mypage/Complete";
 import Chart from "./pages/mypage/Chart";
 import MyPost from "./pages/mypage/MyPost";
-import SelectWayToLogin from "./pages/login/SelectWayToLogin";
-import ByEmail from "./pages/login/ByEmail";
+import Login from "./pages/login/Login";
+// import ByEmail from "./pages/login/Login";
 import FindPassword from "./pages/login/FindPassword";
 import Register from "./pages/login/Register";
 import VerifyEmail from "./pages/login/VerifyEmail";
@@ -32,8 +32,8 @@ function App() {
           <Route index element={<QuizList />} />
         </Route>
         <Route path={PATH.LOGIN} element={<LoginLayout />}>
-          <Route index element={<SelectWayToLogin />} />
-          <Route path="by-email" element={<ByEmail />} />
+          <Route index element={<Login />} />
+          {/* <Route path="by-email" element={<ByEmail />} /> */}
           <Route path="find-password" element={<FindPassword />} />
           <Route path="register" element={<Register />} />
           <Route path="verify-email" element={<VerifyEmail />} />
