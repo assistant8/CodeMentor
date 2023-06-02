@@ -110,10 +110,12 @@ export default function Register() {
             console.log("본인 인증 메일 발송");
             console.log("인증 번호 입력 페이지로 이동");
 
+            // 비밀번호 같은 걸 navigate에 담아서 다른 컴포넌트로 막 넘겨줘도 되나..?
             navigate(PATH.LOGIN + "/verify-email", {
               state: {
                 email: emailInputValue,
                 previousPageUrl: location.pathname,
+                password: passwordInputValue,
               },
             });
           }}
