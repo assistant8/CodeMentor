@@ -7,7 +7,7 @@ const Header = ({ headerTitle = "제목을설정해주세요" }) => {
   return (
     <div className={styles.header}>
       <div
-        className="back-icon"
+        className={styles.backIcon}
         onClick={() => {
           navigate(-1);
         }}
@@ -34,7 +34,7 @@ const Header = ({ headerTitle = "제목을설정해주세요" }) => {
         </svg>
       </div>
       <div className="header-title">{headerTitle}</div>
-      <div className="setting-icon">
+      <div className={styles.settingsIcon}>
         <svg
           width="5"
           height="19"
