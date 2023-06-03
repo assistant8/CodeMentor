@@ -11,7 +11,24 @@ export default function CreateProfile() {
   const [nameInputValue, setNameInputValue] = useState(defaultName);
   const [nameVerificationMessage, setNameVerificationMessage] = useState("");
   const nameInput = useRef();
-  // 프로필 이미지 파일 업로드 기능 구현 필요.
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  // 프로필 이미지 업로드 기능
+  const handleOnChange_profileImageInput = (e) => {
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const fileDataURL = reader.result;
+
+      setSelectedFile(fileDataURL);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleOnChange_nameInput = (e) => {
     setNameInputValue(e.target.value);
@@ -34,7 +51,7 @@ export default function CreateProfile() {
     }
 
     const formData = {
-      profileImg: "사용자가 등록한  이미지",
+      profileImage: "사용자가 등록한  이미지",
       name: nameInputValue,
     };
 
@@ -80,7 +97,12 @@ export default function CreateProfile() {
       <form>
         <div>
           사진
-          <input type="file" />
+          <input
+            type="file"
+            name="profileImage"
+            onChange={handleOnChange_profileImageInput}
+          />
+          {selectedFile && <img src={selectedFile} alt="Profile" />}
         </div>
         <label htmlFor="nameInput">이름</label>
         <input

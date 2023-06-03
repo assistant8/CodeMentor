@@ -67,7 +67,6 @@ export default function ByEmail() {
     axios
       .post(url, formData)
       .then((response) => {
-        console.log(response.status);
         if (response.data.result === "이메일 불일치") {
           alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
