@@ -8,12 +8,12 @@ export default function CreateProfile() {
   const navigate = useNavigate();
   const location = useLocation();
   const defaultName = location.state.name;
+  const defaultImage = "기본 이미지";
   const [nameInputValue, setNameInputValue] = useState(defaultName);
   const [nameVerificationMessage, setNameVerificationMessage] = useState("");
   const nameInput = useRef();
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(defaultImage);
 
-  // 프로필 이미지 업로드 기능
   const handleOnChange_profileImageInput = (e) => {
     const file = e.target.files[0];
 
@@ -44,16 +44,21 @@ export default function CreateProfile() {
       return;
     }
 
-    if (!checkNameValid(nameInputValue)) {
+    if (!isNameValid(nameInputValue)) {
       alert("이름을 다시 확인해주세요.");
 
       return;
     }
 
-    const formData = {
-      profileImage: "사용자가 등록한  이미지",
-      name: nameInputValue,
-    };
+    const formData = new FormData();
+    formData.append(
+      "profileImg",
+      selectedFile !== defaultImage ? selectedFile : null
+    );
+    formData.append(
+      "name",
+      nameInputValue !== defaultName ? nameInputValue : null
+    );
 
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
 
@@ -83,7 +88,7 @@ export default function CreateProfile() {
   useEffect(() => {
     if (nameInputValue === "") {
       setNameVerificationMessage("이름은 2-8 글자로 설정해주세요.");
-    } else if (!checkNameValid(nameInputValue)) {
+    } else if (!isNameValid(nameInputValue)) {
       setNameVerificationMessage("이름 형식이 올바르지 않습니다.");
     } else {
       setNameVerificationMessage("완벽합니다!");
@@ -131,7 +136,7 @@ export default function CreateProfile() {
   );
 }
 
-function checkNameValid(name) {
+function isNameValid(name) {
   const nameRegex = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/;
   const result = nameRegex.test(name);
 
