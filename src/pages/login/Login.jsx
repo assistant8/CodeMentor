@@ -9,7 +9,7 @@ import isPasswordValid from "./utils/isPasswordValid";
 export default function ByEmail() {
   const navigate = useNavigate();
   const emailInput = useRef();
-  const [formData, setFormData] = useState({
+  const [formInputValue, setFormInputValue] = useState({
     email: "",
     password: "",
   });
@@ -24,28 +24,28 @@ export default function ByEmail() {
   // - input 오른쪽에 체크 아이콘 같은 걸로 표시해주면 어떨까?
 
   const handleOnChangeInput = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
-    if (formData.email === "") {
+    if (formInputValue.email === "") {
       alert("이메일을 입력해주세요.");
       return;
     }
 
-    if (formData.password === "") {
+    if (formInputValue.password === "") {
       alert("비밀번호를 입력해주세요.");
       return;
     }
 
-    if (!isEmailValid(formData.email)) {
+    if (!isEmailValid(formInputValue.email)) {
       alert("이메일 형식이 올바르지 않습니다.");
       return;
     }
 
-    if (!isPasswordValid(formData.password)) {
+    if (!isPasswordValid(formInputValue.password)) {
       alert("비밀번호 형식이 올바르지 않습니다.");
 
       // 비밀번호 형식 안내 메세지 살짝 보여주기?
@@ -56,6 +56,8 @@ export default function ByEmail() {
 
     // formData 서버로 전송(확인용 테스트 서버)
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
+
+    const formData = { ...formInputValue };
 
     axios
       .post(url, formData)
@@ -86,7 +88,7 @@ export default function ByEmail() {
   }, []);
 
   useEffect(() => {
-    if (formData.email === "") {
+    if (formInputValue.email === "") {
       setVerificationMessage((prev) => ({
         ...prev,
         email: "",
@@ -95,7 +97,7 @@ export default function ByEmail() {
       return;
     }
 
-    if (!isEmailValid(formData.email)) {
+    if (!isEmailValid(formInputValue.email)) {
       setVerificationMessage((prev) => ({
         ...prev,
         email: "이메일 형식이 올바르지 않습니다.",
@@ -108,9 +110,32 @@ export default function ByEmail() {
       ...prev,
       email: "완벽합니다!",
     }));
-  }, [formData.email]);
+  }, [formInputValue.email]);
 
-  useEffect(() => {}, [formData.password]);
+  useEffect(() => {
+    if (formInputValue.password === "") {
+      setVerificationMessage((prev) => ({
+        ...prev,
+        password: "",
+      }));
+
+      return;
+    }
+
+    if (!isPasswordValid(formInputValue.password)) {
+      setVerificationMessage((prev) => ({
+        ...prev,
+        password: "비밀번호 형식이 올바르지 않습니다.",
+      }));
+
+      return;
+    }
+
+    setVerificationMessage((prev) => ({
+      ...prev,
+      password: "완벽합니다!",
+    }));
+  }, [formInputValue.password]);
 
   return (
     <div className={styles.container}>
