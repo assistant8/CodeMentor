@@ -2,6 +2,8 @@ import styles from "./Register.module.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PATH from "../../constants/path";
+import isEmailValid from "./utils/isEmailValid";
+import isPasswordValid from "./utils/isPasswordValid";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -123,18 +125,4 @@ export default function Register() {
       </form>
     </div>
   );
-}
-
-function isEmailValid(email) {
-  const emailRegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-  const result = emailRegExp.test(email);
-
-  return result;
-}
-
-function isPasswordValid(password) {
-  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
-  const result = passwordRegExp.test(password);
-
-  return result;
 }
