@@ -3,28 +3,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import PATH from "../../constants/path.js";
+import isEmailValid from "./utils/isEmailValid";
 
 export default function FindPassword() {
   const navigate = useNavigate();
   const location = useLocation();
-  // let emailInputValue = "";
   const emailInputValue = useRef("");
-
-  // 재랜더링이 필요 없어도 state를 쓰는 게 좋은가??
-  // - 변수의 값은 계속해서 재할당되지만 그 변화가 화면에 출력되지 않아도 되는 상황에서는 state를 쓰지 않는 게 좋을 듯.
-  // - state를 쓰면 state를 사용하는 컴포넌트가 불필요하게 재랜더링 되기 때문.
-  //  - 성는에 막 엄청 큰 영향을 미칠 것 같진 않지만.
-  // - 근데 나중에 state를 사용해야 할 요소가 추가될 수도 있고.. 그럴 때까지 대비해서 미리 state를 쓰자니 과한 것 같고..
-  // - 뭔가를 명확하게 아는 수준이 되지 않으면 선택이 어려워져버림. 맞딱뜨릴 때마다 각각의 방법을 저울질해야 해서 스트레스.
-  // - 그니까 제대로 알아두는 게 중요한 것 같음. 프로그래밍이라는 게 해결 방법을 찾는 일들의 연쇄니까. 아닐지도 모름.
-  // - 일단 냅두기~
-
-  // const [emailInputValue, setEmailInputValue] = useState("");
   const emailInput = useRef();
 
   const handleOnChange_emailInput = (e) => {
-    // setEmailInputValue(e.target.value);
-    // emailInputValue = e.target.value;
     emailInputValue.current = e.target.value;
   };
 
@@ -86,11 +73,4 @@ export default function FindPassword() {
       </form>
     </div>
   );
-}
-
-function isEmailValid(email) {
-  const emailRegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-  const result = emailRegExp.test(email);
-
-  return result;
 }
