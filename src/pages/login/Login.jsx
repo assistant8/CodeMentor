@@ -3,50 +3,51 @@ import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import PATH from "../../constants/path";
+import { isEmailValid, isPasswordValid } from "./utils/utils";
 
 export default function ByEmail() {
   const navigate = useNavigate();
   const emailInput = useRef();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const [emailInputValue, setEmailInputValue] = useState("");
-  const [passwordInputValue, setPasswordInputValue] = useState("");
+  const [verificationMessage, setVerificationMessage] = useState({
+    email: "",
+    password: "",
+  });
+
+  // const [emailInputValue, setEmailInputValue] = useState("");
+  // const [passwordInputValue, setPasswordInputValue] = useState("");
 
   // 로그인 페이지에선 실시간 형식 검증 메세지 출력하지 않기?
   // - 페이지가 깔끔했으면 좋겠음.
   // - input 오른쪽에 체크 아이콘 같은 걸로 표시해주면 어떨까?
 
-  // const [emailVerificationMessage, setEmailVerificationMessage] =
-  //   useState("이메일을 입력해주세요.");
-  // const [passwordVerificationMessage, setPasswordVerificationMessage] =
-  //   useState("비밀번호를 입력해주세요");
-
-  const emailInput_handleOnChange = (e) => {
-    setEmailInputValue(e.target.value);
+  const handleOnChangeInput = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const passwordInput_handleOnChange = (e) => {
-    setPasswordInputValue(e.target.value);
-  };
-
-  const submitButton_handleOnClick = (e) => {
+  const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
-    if (emailInputValue === "") {
+    if (formData.email === "") {
       alert("이메일을 입력해주세요.");
       return;
     }
 
-    if (passwordInputValue === "") {
+    if (formData.password === "") {
       alert("비밀번호를 입력해주세요.");
       return;
     }
 
-    if (!isEmailValid(emailInputValue)) {
+    if (!isEmailValid(formData.email)) {
       alert("이메일 형식이 올바르지 않습니다.");
       return;
     }
 
-    if (!isPasswordValid(passwordInputValue)) {
+    if (!isPasswordValid(formData.password)) {
       alert("비밀번호 형식이 올바르지 않습니다.");
 
       // 비밀번호 형식 안내 메세지 살짝 보여주기?
@@ -54,12 +55,6 @@ export default function ByEmail() {
 
       return;
     }
-
-    // formData 생성
-    const formData = {
-      email: emailInputValue,
-      password: passwordInputValue,
-    };
 
     // formData 서버로 전송(확인용 테스트 서버)
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
@@ -79,8 +74,7 @@ export default function ByEmail() {
           return;
         }
 
-        // 로그인 성공 시 해야 할 일들(토큰 저장, 로그인 상태 변경 등)
-        // - 쉽지 않음..
+        // 로그인 성공 시 해야 할 일들 추가(토큰 저장, 로그인 상태 변경 등)
 
         navigate("/");
       })
@@ -93,25 +87,32 @@ export default function ByEmail() {
     emailInput.current.focus();
   }, []);
 
-  // useEffect(() => {
-  //   if (emailInputValue === "") {
-  //     setEmailVerificationMessage("이메일을 입력해주세요.");
-  //   } else if (!isEmailCorrect(emailInputValue)) {
-  //     setEmailVerificationMessage("이메일 형식이 올바르지 않습니다.");
-  //   } else {
-  //     setEmailVerificationMessage("완벽합니다!");
-  //   }
-  // }, [emailInputValue]);
+  useEffect(() => {
+    if (formData.email === "") {
+      setVerificationMessage((prev) => ({
+        ...prev,
+        email: "",
+      }));
 
-  // useEffect(() => {
-  //   if (passwordInputValue === "") {
-  //     setPasswordVerificationMessage("비밀번호를 입력해주세요.");
-  //   } else if (!isPasswordCorrect(passwordInputValue)) {
-  //     setPasswordVerificationMessage("비밀번호 형식이 올바르지 않습니다.");
-  //   } else {
-  //     setPasswordVerificationMessage("완벽합니다!");
-  //   }
-  // }, [passwordInputValue]);
+      return;
+    }
+
+    if (!isEmailValid(formData.email)) {
+      setVerificationMessage((prev) => ({
+        ...prev,
+        email: "이메일 형식이 올바르지 않습니다.",
+      }));
+
+      return;
+    }
+
+    setVerificationMessage((prev) => ({
+      ...prev,
+      email: "완벽합니다!",
+    }));
+  }, [formData.email]);
+
+  useEffect(() => {}, [formData.password]);
 
   return (
     <div className={styles.container}>
@@ -124,21 +125,21 @@ export default function ByEmail() {
           name="email"
           placeholder="codeWhisper@gmail.com"
           ref={emailInput}
-          onChange={emailInput_handleOnChange}
+          onChange={handleOnChangeInput}
         />
-        {/* <div>{emailVerificationMessage}</div> */}
+        <div>{verificationMessage.email}</div>
         <label>비밀번호</label>
         <input
           type="password"
           name="password"
           placeholder="********"
-          onChange={passwordInput_handleOnChange}
+          onChange={handleOnChangeInput}
         />
-        {/* <div>{passwordVerificationMessage}</div> */}
+        <div>{verificationMessage.password}</div>
         <input
           type="submit"
           value="로그인"
-          onClick={submitButton_handleOnClick}
+          onClick={handleOnClickSubmitButton}
         />
       </form>
       <div className={styles.wrapper_loginNav}>
@@ -182,18 +183,4 @@ export default function ByEmail() {
       </div>
     </div>
   );
-}
-
-function isEmailValid(email) {
-  const emailRegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-  const result = emailRegExp.test(email);
-
-  return result;
-}
-
-function isPasswordValid(password) {
-  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
-  const result = passwordRegExp.test(password);
-
-  return result;
 }
