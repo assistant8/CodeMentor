@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import PATH from "../../constants/path";
+import isPasswordValid from "./utils/isPasswordValid";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
@@ -143,11 +144,4 @@ export default function ResetPassword() {
       </form>
     </div>
   );
-}
-
-function isPasswordValid(password) {
-  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
-  const result = passwordRegExp.test(password);
-
-  return result;
 }
