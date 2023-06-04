@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import PATH from "../../constants/path";
-import isPasswordValid from "./utils/isPasswordValid";
+import { isPasswordValid } from "../../hooks/useLogin.js";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");

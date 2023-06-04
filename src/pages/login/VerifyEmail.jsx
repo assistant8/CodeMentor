@@ -13,17 +13,14 @@ import PATH from "../../constants/path";
 // - 사용할 라이브러리 읽어보고 결정하기. node-mailer 같은 걸 쓴다고 함.
 
 export default function VerifyEmail() {
-  const navigate = useNavigate();
-  const [verificationCodeInputValue, setVerificationCodeInputValue] =
-    useState("");
   const location = useLocation();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const password = useRef("");
   const previousPageUrl = useRef("");
   const nextPageUrl = useRef("");
-  const password = useRef("");
-
-  // let previousPageUrl = "";
-  // let nextPageUrl = "";
+  const [verificationCodeInputValue, setVerificationCodeInputValue] =
+    useState("");
 
   const handleOnChange_verificationCodeInput = (e) => {
     const value = e.target.value;
@@ -104,9 +101,9 @@ export default function VerifyEmail() {
     // - 그 두 페이지에서 넘어온 경우에만 location.state가 존재할 테니까.
     // - 아니 근데 이걸로 되나? 다른 location.state.email/previousPageUrl 존재하는 페이지에서 넘어오면.. 특정 값이 없으면 버튼이 안 눌리게 해야 하나..?
     if (
-      location.state === null ||
-      location.state.email === undefined ||
-      location.state.previousPageUrl === undefined
+      !location.state ||
+      !location.state.email ||
+      !location.state.previousPageUrl
     ) {
       alert("잘못된 접근입니다.");
       navigate(PATH.MAIN);
@@ -145,6 +142,8 @@ export default function VerifyEmail() {
 
     return;
   }, []);
+
+  useEffect(() => {}, []);
 
   return (
     <div className={styles.container}>
