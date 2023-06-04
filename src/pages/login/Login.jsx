@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import PATH from "../../constants/path";
-import { isEmailValid, isPasswordValid } from "./utils/utils";
+import isEmailValid from "./utils/isEmailValid";
+import isPasswordValid from "./utils/isPasswordValid";
 
 export default function ByEmail() {
   const navigate = useNavigate();
