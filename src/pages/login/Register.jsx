@@ -3,11 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PATH from "../../constants/path";
 import {
-  isEmailValid,
-  isPasswordValid,
-  returnEmailVericationMessage,
-  returnPasswordVericationMessage,
-  returnPasswordConfirmVericationMessage,
+  makeEmailValidationMessage,
+  makePasswordValidationMessage,
+  makePasswordConfirmValidationMessage,
+  isPassValidation,
+  alertValidationMessage,
 } from "../../hooks/useLogin.js";
 import axios from "axios";
 
@@ -20,74 +20,22 @@ export default function Register() {
     password: "",
     passwordConfirm: "",
   });
-
-  // const [formInputValue.email, setEmailInputValue] = useState("");
-  // const [passwordInputValue, setPasswordInputValue] = useState("");
-  // const [passwordConfirmInputValue, setPasswordConfirmInputValue] =
-  //   useState("");
-  const [verificationMessage, setVerificationMessage] = useState({
+  const { email, password, passwordConfirm } = formInputValue;
+  const [validationMessage, setValidationMessage] = useState({
     email: "",
     password: "",
     passwordConfirm: "",
   });
 
-  // const [emailVerificationMessage, setEmailVerificationMessage] = useState("");
-  // const [passwordVerificationMessage, setPasswordVerificationMessage] =
-  //   useState("");
-  // const [
-  //   passwordConfirmVerificationMessage,
-  //   setPasswordConfirmVerificationMessage,
-  // ] = useState("");
-
   const handleOnChangeFormInput = (e) => {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // const handleOnChangeF = (e) => {
-  //   setPasswordInputValue(e.target.value);
-  // };
-
-  // const handleOnInput_passwordConfirmInput = (e) => {
-  //   e.preventDefault();
-
-  //   setPasswordConfirmInputValue(e.target.value);
-  // };
-
   const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
-    if (formInputValue.email === "") {
-      alert("이메일이 입력되지 않았습니다.");
-
-      return;
-    }
-
-    if (!isEmailValid(formInputValue.email)) {
-      alert("이메일 형식이 올바르지 않습니다.");
-
-      return;
-    }
-
-    if (formInputValue.password === "") {
-      alert("비밀번호가 입력되지 않았습니다.");
-
-      return;
-    }
-
-    if (!isPasswordValid(formInputValue.password)) {
-      alert("비밀번호 형식이 올바르지 않습니다.");
-
-      return;
-    }
-
-    if (passwordConfirmInputValue === "") {
-      alert("확인 비밀번호가 입력되지 않았습니다.");
-
-      return;
-    }
-
-    if (formInputValue.password !== passwordConfirmInputValue) {
-      alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
+    if (!isPassValidation(formInputValue)) {
+      alertValidationMessage(validationMessage);
 
       return;
     }
@@ -95,8 +43,8 @@ export default function Register() {
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
 
     const formData = {
-      email: formInputValue.email,
-      password: formInputValue.password,
+      email,
+      password,
     };
 
     axios(url, formData);
@@ -119,90 +67,64 @@ export default function Register() {
   }, []);
 
   useEffect(() => {
-    setVerificationMessage((prev) => ({
+    setValidationMessage((prev) => ({
       ...prev,
-      email: returnEmailVericationMessage(formInputValue.email),
+      email: makeEmailValidationMessage(email),
     }));
-  }, [formInputValue.email]);
+  }, [email]);
 
   useEffect(() => {
-    setVerificationMessage((prev) => ({
+    setValidationMessage((prev) => ({
       ...prev,
-      password: returnEmailVericationMessage(formInputValue.password),
+      password: makePasswordValidationMessage(password),
     }));
-  }, [formInputValue.password]);
+  }, [password]);
 
   useEffect(() => {
-    setVerificationMessage((prev) => ({
+    setValidationMessage((prev) => ({
       ...prev,
-      passwordConfirm: returnEmailVericationMessage(
-        formInputValue.password,
-        formInputValue.passwordConfirm
+      passwordConfirm: makePasswordConfirmValidationMessage(
+        password,
+        passwordConfirm
       ),
     }));
-  }, [formInputValue.passwordConfirm]);
-
-  //   if (formInputValue.email === "") {
-  //     setEmailVerificationMessage("이메일을 입력해주세요.");
-  //   } else if (!isEmailValid(formInputValue.email)) {
-  //     setEmailVerificationMessage("이메일 형식이 올바르지 않습니다.");
-  //   } else {
-  //     setEmailVerificationMessage("완벽합니다!");
-  //   }
-  // }, [formInputValue.email]);
-
-  // useEffect(() => {
-  //   if (formInputValue.password === "") {
-  //     setPasswordVerificationMessage(
-  //       "비밀번호는 영문 대/소문자를 최소 하나씩 포함한 8~12자리여야 합니다."
-  //     );
-  //   } else if (!isPasswordValid(formInputValue.password)) {
-  //     setPasswordVerificationMessage("비밀번호 형식이 올바르지 않습니다.");
-  //   } else {
-  //     setPasswordVerificationMessage("완벽합니다!");
-  //   }
-  // }, [formInputValue.password]);
-
-  // useEffect(() => {
-  //   if (passwordConfirmInputValue === "") {
-  //     setPasswordConfirmVerificationMessage("비밀번호를 확인해주세요.");
-  //   } else if (formInputValue.password !== passwordConfirmInputValue) {
-  //     setPasswordConfirmVerificationMessage("비밀번호가 일치하지 않습니다.");
-  //   } else {
-  //     setPasswordConfirmVerificationMessage("완벽합니다!");
-  //   }
-  // }, [passwordConfirmInputValue]);
+  }, [passwordConfirm]);
 
   return (
     <div className={styles.container}>
       <div>* 회원 가입 페이지 *</div>
       <div>회원 가입</div>
       <form>
-        <label>이메일</label>
+        <label htmlFor="email">이메일</label>
         <input
           type="text"
           name="email"
+          id="email"
           placeholder="codeWhisper@gmail.com"
           ref={emailInput}
-          onInput={handleOnChangeFormInput}
+          onChange={handleOnChangeFormInput}
         />
-        <div>{verificationMessage.email}</div>
-        <label>비밀번호</label>
+        <div>{validationMessage.email}</div>
+        <label htmlFor="password">비밀번호</label>
         <input
           type="password"
           name="password"
+          id="password"
+          maxLength="12"
           placeholder="********"
-          onInput={handleOnChangeFormInput}
+          onChange={handleOnChangeFormInput}
         />
-        <div>{verificationMessage.password}</div>
-        <label>비밀번호 확인</label>
+        <div>{validationMessage.password}</div>
+        <label htmlFor="passwordConfirm">비밀번호 확인</label>
         <input
           type="password"
-          name="password"
+          name="passwordConfirm"
+          id="passwordConfirm"
+          maxLength="12"
           placeholder="********"
-          onInput={handleOnChangeFormInput}
+          onChange={handleOnChangeFormInput}
         />
-        <div>{verificationMessage.passwordConfirm}</div>
+        <div>{validationMessage.passwordConfirm}</div>
         <input
           type="submit"
           value="확인"
