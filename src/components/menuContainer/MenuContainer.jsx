@@ -1,22 +1,19 @@
 import styles from "./MenuContainer.module.scss";
 import bookmark from "../../image/bookmark.png";
 import check from "../../image/check.png";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export const MenuContainer = ({ style, isImgNeed = true }) => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const [selectedFilter, setSelectedFilter] = useState('전체');
+  const [selectedFilter, setSelectedFilter] = useState();
 
-
-  const handleItemClick = (item) => {
-    console.log(item)
+  const handleItemClick = useCallback((item)=>{
     setSelectedCategory(item);
-  };
+  }, [])
 
-  const handleFilterClick = (item) => {
-    console.log(item)
-    setSelectedFilter(item)
-  }
+  const handleFilterClick = useCallback((item)=>{
+    setSelectedFilter(item);
+  }, [])
 
   return (
     <div className={styles.menuContainer}>
