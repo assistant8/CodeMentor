@@ -31,10 +31,9 @@ const AppLayout = () => {
   const [isLoginPage, setIsLoginPage] = useState(false); //첫 화면 로그인인데 괜찮으려나
 
   useEffect(() => {
-    if (location.pathname === "login") { //이부분 수정
+    if (location.pathname.includes("login")) {
       setIsLoginPage(true);
     } else setIsLoginPage(false);
-    console.log("location.pathname", location.pathname)
   }, [location.pathname]);
 
   const Layout = useMemo(() => {
@@ -48,7 +47,6 @@ const AppLayout = () => {
       </MainLayout>
     );
   }, [isLoginPage]);
-  console.log(Layout, isLoginPage)
 
   return <>{Layout}</>;
 };
