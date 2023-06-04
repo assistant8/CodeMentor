@@ -18,9 +18,6 @@ export default function ByEmail() {
     password: "",
   });
 
-  // const [emailInputValue, setEmailInputValue] = useState("");
-  // const [passwordInputValue, setPasswordInputValue] = useState("");
-
   // 로그인 페이지에선 실시간 형식 검증 메세지 출력하지 않기?
   // - 페이지가 깔끔했으면 좋겠음.
   // - input 오른쪽에 체크 아이콘 같은 걸로 표시해주면 어떨까?
@@ -74,7 +71,7 @@ export default function ByEmail() {
           return;
         }
 
-        // 로그인 성공 시 해야 할 일들 추가(토큰 저장, 로그인 상태 변경 등)
+        // 로그인 성공 시 해야 할 일들 추가(로그인 상태 키 발급, 토큰 발급받고 저장, 유저/관리자 판별 키 발급 등)
 
         navigate("/");
       })
