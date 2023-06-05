@@ -15,6 +15,13 @@ export default function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const emailInput = useRef();
+  const passwordInput = useRef();
+  const passwordConfirmInput = useRef();
+  const ref = {
+    email: emailInput,
+    password: passwordInput,
+    passwordConfirm: passwordConfirmInput,
+  };
   const [formInputValue, setFormInputValue] = useState({
     email: "",
     password: "",
@@ -35,7 +42,7 @@ export default function Register() {
     e.preventDefault();
 
     if (!isPassValidation(formInputValue)) {
-      alertValidationMessage(validationMessage);
+      alertValidationMessage(validationMessage, ref);
 
       return;
     }
@@ -49,15 +56,12 @@ export default function Register() {
 
     axios(url, formData);
 
-    console.log("본인 인증 메일 발송");
-    console.log("인증 번호 입력 페이지로 이동");
-
     // 비밀번호 같은 걸 navigate에 담아서 다른 컴포넌트로 막 넘겨줘도 되나..?
     navigate(PATH.LOGIN + "/verify-email", {
       state: {
-        email: formInputValue.email,
+        email,
+        password,
         previousPageUrl: location.pathname,
-        password: formInputValue.password,
       },
     });
   };
@@ -67,26 +71,32 @@ export default function Register() {
   }, []);
 
   useEffect(() => {
+    const newMessage = makeEmailValidationMessage(email);
+
     setValidationMessage((prev) => ({
       ...prev,
-      email: makeEmailValidationMessage(email),
+      email: newMessage,
     }));
   }, [email]);
 
   useEffect(() => {
+    const newMessage = makePasswordValidationMessage(password);
+
     setValidationMessage((prev) => ({
       ...prev,
-      password: makePasswordValidationMessage(password),
+      password: newMessage,
     }));
   }, [password]);
 
   useEffect(() => {
+    const newMessage = makePasswordConfirmValidationMessage(
+      password,
+      passwordConfirm
+    );
+
     setValidationMessage((prev) => ({
       ...prev,
-      passwordConfirm: makePasswordConfirmValidationMessage(
-        password,
-        passwordConfirm
-      ),
+      passwordConfirm: newMessage,
     }));
   }, [passwordConfirm]);
 
@@ -112,6 +122,7 @@ export default function Register() {
           id="password"
           maxLength="12"
           placeholder="********"
+          ref={passwordInput}
           onChange={handleOnChangeFormInput}
         />
         <div>{validationMessage.password}</div>
@@ -122,6 +133,7 @@ export default function Register() {
           id="passwordConfirm"
           maxLength="12"
           placeholder="********"
+          ref={passwordConfirmInput}
           onChange={handleOnChangeFormInput}
         />
         <div>{validationMessage.passwordConfirm}</div>

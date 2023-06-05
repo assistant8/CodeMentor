@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PATH from "../../constants/path";
-import { set } from "immutable";
 
 // 클릭 버튼을 없애는 게 사용자한테 더 편하려나.
 // - verification code랑 input 내용 평가해서 자동으로 다음 페이지로 넘어가게.
@@ -22,9 +21,9 @@ export default function VerifyEmail() {
   const nextPageUrl = useRef("");
   const [verificationCodeInputValue, setVerificationCodeInputValue] =
     useState("");
-  const [validationMessage, setValidationMessage] = useState("");
+  const verificationCodeInput = useRef();
 
-  const handleOnChangeVerificationCodeInput = (e) => {
+  const handleOnChange_verificationCodeInput = (e) => {
     const value = e.target.value;
 
     const RegExp = /\D/;
@@ -37,14 +36,8 @@ export default function VerifyEmail() {
   // 서버에서 인증 코드 검사.
   // 일치 -> 비밀번호 재설정 or 회원 가입 완료.
   // 불일치 -> alert.
-  const handleOnClickSubmitButton = (e) => {
+  const handleOnClick_submitButton = (e) => {
     e.preventDefault();
-
-    if (!isVerificationCodeValid(verificationCodeInputValue)) {
-      alert(validationMessage);
-
-      return;
-    }
 
     const formData = {
       email,
@@ -152,12 +145,8 @@ export default function VerifyEmail() {
   }, []);
 
   useEffect(() => {
-    const newMessage = makeVerificationCodeVaildationMessage(
-      verificationCodeInputValue
-    );
-
-    setValidationMessage((oldMessage) => newMessage);
-  }, [verificationCodeInputValue]);
+    verificationCodeInput.current.focus();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -172,38 +161,17 @@ export default function VerifyEmail() {
           name="verificationCode"
           id="verificationCodeInput"
           maxLength="6"
+          ref={verificationCodeInput}
           placeholder="인증 번호 6자리 숫자를 입력해주세요."
-          onChange={handleOnChangeVerificationCodeInput}
-          onKeyDown={(e) => {
-            if (e.key === " ") {
-              e.preventDefault();
-            }
-          }}
+          onInput={handleOnChange_verificationCodeInput}
           value={verificationCodeInputValue}
         />
-        <div>{validationMessage}</div>
         <input
           type="submit"
           value="확인"
-          onClick={handleOnClickSubmitButton}
+          onClick={handleOnClick_submitButton}
         ></input>
       </form>
     </div>
   );
-}
-
-function isVerificationCodeValid(verificationCode) {
-  return verificationCode.length === 6;
-}
-
-function makeVerificationCodeVaildationMessage(verificationCode) {
-  if (verificationCode === "") {
-    return "인증 번호를 입력해주세요.";
-  }
-
-  if (!isVerificationCodeValid(verificationCode)) {
-    return "인증 번호는 6자리 숫자입니다.";
-  }
-
-  return "";
 }

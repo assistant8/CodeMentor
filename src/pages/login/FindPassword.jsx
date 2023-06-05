@@ -7,6 +7,7 @@ import {
   isPassValidation,
   alertValidationMessage,
   makeEmailValidationMessage,
+  axiosInterceptors,
 } from "../../hooks/useLogin.js";
 
 export default function FindPassword() {
@@ -36,8 +37,12 @@ export default function FindPassword() {
       return;
     }
 
+    // 비밀번호 찾기 통과 -> 인증 페이지로 이메일을 넘김(navigate)
+
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
     const data = { email };
+
+    axiosInterceptors();
 
     // 이 요청에서 아이디 등록 여부 확인, 인증 코드 발송을 모두 처리하는데
     // 각각을 처리하는 api가 나뉜다면 요청을 두 번 날려야 할까?
@@ -57,7 +62,7 @@ export default function FindPassword() {
         if (true) {
           navigate(PATH.LOGIN + "/verify-email", {
             state: {
-              email: email,
+              email,
               previousPageUrl: location.pathname,
             },
           });

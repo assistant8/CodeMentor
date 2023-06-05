@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // 유효성 검사
 export function isEmailValid(email) {
   if (email === "") return false;
@@ -91,12 +93,38 @@ export function isPassValidation(formInputValue, validationMessage) {
 }
 
 // submit 시 유효성 검사 통과 못하면 경고창 띄우기.
-export function alertValidationMessage(validationMessage) {
-  alert(
-    validationMessage.email ||
-      validationMessage.password ||
-      validationMessage.passwordConfirm
-  );
+export function alertValidationMessage(validationMessage, ref) {
+  if (validationMessage.email) {
+    alert(validationMessage.email);
+
+    ref.email.current.focus();
+
+    return;
+  }
+
+  if (validationMessage.password) {
+    alert(validationMessage.password);
+
+    console.log(1);
+
+    ref.password.current.focus();
+
+    return;
+  }
+
+  if (validationMessage.passwordConfirm) {
+    alert(validationMessage.passwordConfirm);
+
+    ref.passwordConfirm.current.focus();
+
+    return;
+  }
+
+  // alert(
+  //   validationMessage.email ||
+  //     validationMessage.password ||
+  //     validationMessage.passwordConfirm
+  // );
 }
 
 // 형식 검사 & 경고창 띄우기 한 번에.
@@ -153,3 +181,30 @@ export function alertValidationMessage(validationMessage) {
 
 //   return isPassValidation(formInputValue, validationMessage);
 // }
+
+export function axiosInterceptors() {
+  axios.interceptors.request.use(
+    (config) => {
+      console.log("요청 인터셉터: ", config);
+
+      return config;
+    },
+    function (error) {
+      console.error("요청 에러: ", error);
+
+      return Promise.reject(error);
+    }
+  );
+
+  axios.interceptors.response.use(
+    (response) => {
+      console.log("응답 인터셉터: ", response);
+      return response;
+    },
+    (error) => {
+      console.error("응답 에러: ", error);
+
+      return Promise.reject(error);
+    }
+  );
+}
