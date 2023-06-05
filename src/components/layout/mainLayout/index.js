@@ -5,12 +5,12 @@ import Footer from "../footer/index"
 import Header from "../header/index";
 
 
-const MainLayout = () => {
+const MainLayout = ({children}) => {
   return (
     <div className="Full">
         <Header/>
         <div className="Inner">
-            <Outlet />
+            {children}
         </div>
         <Footer/>
     </div>
