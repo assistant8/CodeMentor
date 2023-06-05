@@ -5,8 +5,6 @@ import { LuSprout } from "react-icons/lu";
 import { FaGraduationCap } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import React, { useState } from "react";
-import Modal from "react-modal";
-
 const User = () => {
   let navigate = useNavigate();
   return (
@@ -130,19 +128,14 @@ const LogOut = () => {
 };
 
 const GradeModal = ({ isOpen, onRequestClose, children }) => {
+  if (!isOpen) return null;
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      contentLabel="Modal"
-      className={styles.reactModal}
-      overlayClassName={styles.reactModalOverlay}
-    >
-      {children}
-    </Modal>
+    <div className={styles.reactModalOverlay}>
+      <div className={styles.reactModal}>{children}</div>
+    </div>
   );
 };
-
 const MyPage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
