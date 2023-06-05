@@ -4,7 +4,7 @@ import check from "../../image/check.png";
 import { useNavigate } from "react-router-dom";
 import PATH from "../../constants/path";
 
-export const QuizListContainer = ({ style, isImgNeed = true }) => {
+export const QuizListContainer = ({ style, isImgNeed = true, searchKey }) => {
   const navigate = useNavigate();
   const quizs = [
     //더미
@@ -19,27 +19,30 @@ export const QuizListContainer = ({ style, isImgNeed = true }) => {
       title: "사과",
     },
   ];
+  console.log("searchKey", searchKey)
 
   return (
     <div className={styles.quizListContainer}>
-      {quizs.map((quiz) => {
-        return (
-          <div className={styles.quizList}>
-            <div
-              className={styles.quizListTitle}
-              onClick={() => navigate(PATH.QUIZ)} //navigate(PATH.QUIZ+`/:${quiz.id}`)
-            >
-              {quiz.title}
-            </div>
-            {isImgNeed && (
-              <div className={styles.imageContainer}>
-                <img src={bookmark} alt="bookmark" />
-                <img src={check} alt="check" />
+      {quizs
+        .filter((quiz) => quiz.title.includes(searchKey))
+        .map((quiz) => {
+          return (
+            <div className={styles.quizList}>
+              <div
+                className={styles.quizListTitle}
+                onClick={() => navigate(PATH.QUIZ)} //navigate(PATH.QUIZ+`/:${quiz.id}`)
+              >
+                {quiz.title}
               </div>
-            )}
-          </div>
-        );
-      })}
+              {isImgNeed && (
+                <div className={styles.imageContainer}>
+                  <img src={bookmark} alt="bookmark" />
+                  <img src={check} alt="check" />
+                </div>
+              )}
+            </div>
+          );
+        })}
     </div>
   );
 };
