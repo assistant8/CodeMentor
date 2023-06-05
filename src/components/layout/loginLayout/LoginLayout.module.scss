@@ -1,0 +1,14 @@
+.FullLogin {
+  width: 100%;
+  max-width: 390px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.InnerLogin {
+  width: 100%;
+  display: flex;
+  position: relative;
+  // padding-top: 5.5rem;
+}

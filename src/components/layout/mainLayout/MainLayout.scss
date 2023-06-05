@@ -1,0 +1,15 @@
+.Full {
+  width: 100%;
+  max-width: 390px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Inner {
+  width: 100%;
+  display: flex;
+//   justify-content: center;
+  position: relative;
+  padding-top: 66px;
+}

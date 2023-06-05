@@ -1,0 +1,16 @@
+$border-color: #c2bcca;
+$font-color: #3e3e3e;
+$violet-1: #e4d2fa;
+$violet-2: #c79aff;
+$violet-3: #a256ff;
+$violet-4: #6700e6;
+.UserInput {
+  width: 20.625rem; /* 330px converted to rem */
+  height: 3.75rem; /* 60px converted to rem */
+  border-radius: 1.875rem; /* 30px converted to rem */
+  display: flex;
+  align-items: center;
+  padding-left: 1.875rem; /* 30px converted to rem */
+  font-size: 1.25rem; /* 20px converted to rem */
+  border: 0.0625rem solid $border-color; /* 1px converted to rem */
+}

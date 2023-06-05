@@ -1,0 +1,51 @@
+.menuContainer {
+    width: 20.63rem;
+    height: 2.13rem;
+    display: flex;
+    flex-direction: row;
+  
+    .categoryContainer {
+      ul {
+        display: flex;
+        flex-direction: row;
+        list-style: none;
+        padding: 0rem;
+        margin: 0.5rem;
+  
+        li {
+          font-family: "Inter";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 0.94rem;
+          line-height: 1.25rem;
+          margin-right: 1rem;
+          color: #c2bcca;
+          cursor: pointer;
+
+        }
+      }
+    }
+  
+    .imageContainer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: auto;
+      margin-right: 0.3rem;
+  
+      img {
+        margin-right: 0.6rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .categoryContainer ul li.selected {
+    color: #6700E6;
+  }
+
+  .imageContainer img.selectedFilter {
+    color: #6700E6;
+  }
