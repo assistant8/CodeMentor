@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import PATH from "../../constants/path";
-import { isEmailValid, isPasswordValid } from "../../hooks/useLogin.js";
+import {
+  isPassValidation,
+  alertValidationMessage,
+  makeEmailValidationMessage,
+  makePasswordValidationMessage,
+} from "../../hooks/useLogin.js";
 
 export default function ByEmail() {
   const navigate = useNavigate();
@@ -12,8 +17,8 @@ export default function ByEmail() {
     email: "",
     password: "",
   });
-
-  const [verificationMessage, setVerificationMessage] = useState({
+  const { email, password } = formInputValue;
+  const [validationMessage, setValidationMessage] = useState({
     email: "",
     password: "",
   });
@@ -29,26 +34,8 @@ export default function ByEmail() {
   const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
-    if (formInputValue.email === "") {
-      alert("이메일을 입력해주세요.");
-      return;
-    }
-
-    if (formInputValue.password === "") {
-      alert("비밀번호를 입력해주세요.");
-      return;
-    }
-
-    if (!isEmailValid(formInputValue.email)) {
-      alert("이메일 형식이 올바르지 않습니다.");
-      return;
-    }
-
-    if (!isPasswordValid(formInputValue.password)) {
-      alert("비밀번호 형식이 올바르지 않습니다.");
-
-      // 비밀번호 형식 안내 메세지 살짝 보여주기?
-      // - 어떤 형식이었는지 알쏭달쏭할 때 있음. 애플 비밀번호엔 대문자 두 개 넣어야 됨.
+    if (!isPassValidation(formInputValue)) {
+      alertValidationMessage(validationMessage);
 
       return;
     }
@@ -61,13 +48,13 @@ export default function ByEmail() {
     axios
       .post(url, formData)
       .then((response) => {
-        if (response.data.result === "이메일 불일치") {
+        if (response.data.result === "이메일이 db에 등록되어 있지 않음.") {
           alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
           return;
         }
 
-        if (response.data.result === "비밀번호 불일치") {
+        if (response.data.result === "db에 이메일은 있는데 비밀번호가 틀림.") {
           alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
 
           return;
@@ -79,6 +66,8 @@ export default function ByEmail() {
       })
       .catch((error) => {
         console.log(error);
+
+        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
       });
   };
 
@@ -87,54 +76,18 @@ export default function ByEmail() {
   }, []);
 
   useEffect(() => {
-    if (formInputValue.email === "") {
-      setVerificationMessage((prev) => ({
-        ...prev,
-        email: "",
-      }));
-
-      return;
-    }
-
-    if (!isEmailValid(formInputValue.email)) {
-      setVerificationMessage((prev) => ({
-        ...prev,
-        email: "이메일 형식이 올바르지 않습니다.",
-      }));
-
-      return;
-    }
-
-    setVerificationMessage((prev) => ({
+    setValidationMessage((prev) => ({
       ...prev,
-      email: "완벽합니다!",
+      email: makeEmailValidationMessage(email),
     }));
-  }, [formInputValue.email]);
+  }, [email]);
 
   useEffect(() => {
-    if (formInputValue.password === "") {
-      setVerificationMessage((prev) => ({
-        ...prev,
-        password: "",
-      }));
-
-      return;
-    }
-
-    if (!isPasswordValid(formInputValue.password)) {
-      setVerificationMessage((prev) => ({
-        ...prev,
-        password: "비밀번호 형식이 올바르지 않습니다.",
-      }));
-
-      return;
-    }
-
-    setVerificationMessage((prev) => ({
+    setValidationMessage((prev) => ({
       ...prev,
-      password: "완벽합니다!",
+      password: makePasswordValidationMessage(password),
     }));
-  }, [formInputValue.password]);
+  }, [password]);
 
   return (
     <div className={styles.container}>
@@ -149,7 +102,7 @@ export default function ByEmail() {
           ref={emailInput}
           onChange={handleOnChangeInput}
         />
-        <div>{verificationMessage.email}</div>
+        <div>{validationMessage.email}</div>
         <label>비밀번호</label>
         <input
           type="password"
@@ -157,7 +110,7 @@ export default function ByEmail() {
           placeholder="********"
           onChange={handleOnChangeInput}
         />
-        <div>{verificationMessage.password}</div>
+        <div>{validationMessage.password}</div>
         <input
           type="submit"
           value="로그인"

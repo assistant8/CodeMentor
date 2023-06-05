@@ -3,14 +3,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import PATH from "../../constants/path.js";
-import { isEmailValid } from "../../hooks/useLogin.js";
+import {
+  isPassValidation,
+  alertValidationMessage,
+  makeEmailValidationMessage,
+} from "../../hooks/useLogin.js";
 
 export default function FindPassword() {
   const navigate = useNavigate();
   const location = useLocation();
   const emailInput = useRef();
-  const [emailInputValue, setEmailInputValue] = useState("");
-  // const [formInputValue, setFormInputValue] = useState({ email: "" });
+  const [formInputValue, setFormInputValue] = useState({ email: "" });
+  const { email } = formInputValue;
+  const [validationMessage, setValidationMessage] = useState({ email: "" });
+  console.log(formInputValue);
 
   // <오피스아워 질문>
   // form 안의 input 데이터를 하나의 객체에 담아 state로 만들면 관리가 용이함.
@@ -18,29 +24,20 @@ export default function FindPassword() {
   // - 그렇다고 input마다 따로 관리하자니,, 번거로워짐.
 
   const handleOnChangeEmailInput = (e) => {
-    const value = e.target.value;
-
-    setEmailInputValue(value);
-    // setFormInputValue((prev) => ({ ...prev, [e.target.name]: value }));
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
-    if (emailInputValue === "") {
-      alert("이메일을 입력해주세요.");
-
-      return;
-    }
-
-    if (!isEmailValid(emailInputValue)) {
-      alert("이메일 형식이 올바르지 않습니다.");
+    if (!isPassValidation(formInputValue)) {
+      alertValidationMessage(validationMessage);
 
       return;
     }
 
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
-    const data = { email: emailInputValue };
+    const data = { email };
 
     // 이 요청에서 아이디 등록 여부 확인, 인증 코드 발송을 모두 처리하는데
     // 각각을 처리하는 api가 나뉜다면 요청을 두 번 날려야 할까?
@@ -48,7 +45,7 @@ export default function FindPassword() {
       .post(url, data)
       .then((response) => {
         // 아이디 등록 여부 확인.
-        if (response.data.result === "일치하는 이메일 없음") {
+        if (response.data.result === "이메일이 db에 등록되어 있지 않음.") {
           alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
           return;
@@ -60,7 +57,7 @@ export default function FindPassword() {
         if (true) {
           navigate(PATH.LOGIN + "/verify-email", {
             state: {
-              email: emailInputValue,
+              email: email,
               previousPageUrl: location.pathname,
             },
           });
@@ -79,6 +76,13 @@ export default function FindPassword() {
     emailInput.current.focus();
   }, []);
 
+  useEffect(() => {
+    setValidationMessage((prev) => ({
+      ...prev,
+      email: makeEmailValidationMessage(email),
+    }));
+  }, [email]);
+
   return (
     <div className={styles.container}>
       <div>* 비밀번호 찾기 페이지 *</div>
@@ -91,7 +95,8 @@ export default function FindPassword() {
           placeholder="가입 시 사용한 이메일을 입력해주세요"
           ref={emailInput}
           onChange={handleOnChangeEmailInput}
-        />{" "}
+        />
+        <div>{validationMessage.email}</div>
         <input
           type="submit"
           value="확인"

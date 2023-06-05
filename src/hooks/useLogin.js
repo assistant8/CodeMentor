@@ -1,3 +1,4 @@
+// 유효성 검사
 export function isEmailValid(email) {
   if (email === "") return false;
 
@@ -24,6 +25,7 @@ export function isPasswordConfirmValid(password, passwordConfirm) {
   return true;
 }
 
+// 유효성 검사 메세지
 export function makeEmailValidationMessage(email) {
   if (email === "") {
     return "이메일을 입력해주세요.";
@@ -63,24 +65,32 @@ export function makePasswordConfirmValidationMessage(
   return "";
 }
 
+// submit 시 유효성 검사 한 번에 & 통과 못 하면 다음 코드 진행 X.
 export function isPassValidation(formInputValue, validationMessage) {
   const { email, password, passwordConfirm } = formInputValue;
 
-  if (!isEmailValid(email)) {
+  console.log(email, password, passwordConfirm);
+
+  if (email && !isEmailValid(email)) {
     return false;
   }
 
-  if (!isPasswordValid(password)) {
+  if (password && !isPasswordValid(password)) {
     return false;
   }
 
-  if (!isPasswordConfirmValid(password, passwordConfirm)) {
+  if (
+    password &&
+    passwordConfirm &&
+    !isPasswordConfirmValid(password, passwordConfirm)
+  ) {
     return false;
   }
 
   return true;
 }
 
+// submit 시 유효성 검사 통과 못하면 경고창 띄우기.
 export function alertValidationMessage(validationMessage) {
   alert(
     validationMessage.email ||
