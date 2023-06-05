@@ -1,8 +1,4 @@
-$border-color: #c2bcca;
-$violet-1: #e4d2fa;
-$violet-2: #c79aff;
-$violet-3: #a256ff;
-$violet-4: #6700e6;
+@import "../../constants/utils.scss";
 * {
   box-sizing: border-box;
 }
@@ -115,6 +111,7 @@ $violet-4: #6700e6;
 .logout {
   text-align: right;
   margin-right: 0.3125rem; /* 5px converted to rem */
+  font-weight: bold;
 }
 
 .reactModal {
