@@ -83,9 +83,11 @@ export default function FindPassword() {
   }, []);
 
   useEffect(() => {
+    const newMessage = makeEmailValidationMessage(email);
+
     setValidationMessage((prev) => ({
       ...prev,
-      email: makeEmailValidationMessage(email),
+      email: newMessage,
     }));
   }, [email]);
 
