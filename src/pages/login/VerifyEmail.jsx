@@ -173,7 +173,12 @@ export default function VerifyEmail() {
           id="verificationCodeInput"
           maxLength="6"
           placeholder="인증 번호 6자리 숫자를 입력해주세요."
-          onInput={handleOnChangeVerificationCodeInput}
+          onChange={handleOnChangeVerificationCodeInput}
+          onKeyDown={(e) => {
+            if (e.key === " ") {
+              e.preventDefault();
+            }
+          }}
           value={verificationCodeInputValue}
         />
         <div>{validationMessage}</div>

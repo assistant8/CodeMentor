@@ -13,6 +13,7 @@ export default function CreateProfile() {
   const [nameVerificationMessage, setNameVerificationMessage] = useState("");
   const nameInput = useRef();
   const [selectedFile, setSelectedFile] = useState(defaultImage);
+  const [validationMessage, setValidationMessage] = useState("");
 
   const handleOnChange_profileImageInput = (e) => {
     const file = e.target.files[0];
@@ -33,31 +34,32 @@ export default function CreateProfile() {
   const handleOnChange_nameInput = (e) => {
     const value = e.target.value;
 
-    if (value.length > 8) {
-      const value2 = value.split("");
-      value2[8] = "";
-      const value3 = value2.join("");
-    }
-    // if (value.length > 8) {
-    // const newValue = value.substr(0, 7);
-    // console.log(value, value.length, newValue, newValue.length);
+    // if (value.includes(" ")) {
+    //   const RegExp = / /g;
+    //   const newValue = value.replace(RegExp, "");
 
-    // setNameInputValue(newValue);
+    //   setNameInputValue(newValue);
+
+    //   return;
     // }
+
+    // if (value.length > 10) {
+    //   const newValue = value.slice(0, 10);
+
+    //   setNameInputValue(newValue);
+
+    //   return;
+    // }
+
+    setNameInputValue(value);
   };
 
   // 입력값이 조건에 부합해야 버튼이 활성화되게 만들어야겠음.
   const handleOnClick_submitButton = (e) => {
     e.preventDefault();
 
-    if (nameInputValue === "") {
-      alert("이름을 입력해주세요.");
-
-      return;
-    }
-
     if (!isNameValid(nameInputValue)) {
-      alert("이름을 다시 확인해주세요.");
+      alert(nameVerificationMessage);
 
       return;
     }
@@ -98,13 +100,9 @@ export default function CreateProfile() {
   }, []);
 
   useEffect(() => {
-    if (nameInputValue === "") {
-      setNameVerificationMessage("이름은 2-8 글자로 설정해주세요.");
-    } else if (!isNameValid(nameInputValue)) {
-      setNameVerificationMessage("이름 형식이 올바르지 않습니다.");
-    } else {
-      setNameVerificationMessage("완벽합니다!");
-    }
+    const newValidationMessage = makeNameValidationMessage(nameInputValue);
+
+    setNameVerificationMessage(newValidationMessage);
   }, [nameInputValue]);
 
   return (
@@ -126,13 +124,19 @@ export default function CreateProfile() {
           type="text"
           name="name"
           id="nameInput"
-          maxLength="8"
-          placeholder="이름을 입력해주세요."
+          maxLength="15"
+          placeholder="너구리와함께사라지다"
           ref={nameInput}
           onChange={handleOnChange_nameInput}
+          onKeyDown={(e) => {
+            if (e.key === " ") {
+              e.preventDefault();
+            }
+          }}
           value={nameInputValue}
         />
         <div>{nameVerificationMessage}</div>
+        <div>이름은 공백을 제외한 2~10자의 한글, 영문만 입력 가능합니다.</div>
         <input
           type="submit"
           value="시작하기"
@@ -149,8 +153,24 @@ export default function CreateProfile() {
 }
 
 function isNameValid(name) {
-  const nameRegex = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/;
+  if (name === "") {
+    return false;
+  }
+
+  const nameRegex = /^[a-zA-Z가-힣]{2,10}$/;
   const result = nameRegex.test(name);
 
   return result;
+}
+
+function makeNameValidationMessage(nameInputValue) {
+  if (nameInputValue === "") {
+    return "사용할 이름을 입력해주세요.";
+  }
+
+  if (!isNameValid(nameInputValue)) {
+    return "유효하지 않은 이름입니다.";
+  }
+
+  return "완벽합니다!";
 }
