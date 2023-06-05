@@ -2,11 +2,11 @@ import React from "react";
 import "./LoginLayout.module.scss";
 import { Outlet } from "react-router-dom";
 
-const LoginLayout = () => {
+const LoginLayout = ({children}) => {
   return (
     <div className="FullLogin">
       <div className="InnerLogin">
-        <Outlet />
+        {children}
       </div>
     </div>
   );
