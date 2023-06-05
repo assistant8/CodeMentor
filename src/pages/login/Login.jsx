@@ -13,6 +13,8 @@ import {
 export default function ByEmail() {
   const navigate = useNavigate();
   const emailInput = useRef();
+  const passwordInput = useRef();
+  const focusRef = { email: emailInput, password: passwordInput };
   const [formInputValue, setFormInputValue] = useState({
     email: "",
     password: "",
@@ -35,7 +37,7 @@ export default function ByEmail() {
     e.preventDefault();
 
     if (!isPassValidation(formInputValue)) {
-      alertValidationMessage(validationMessage);
+      alertValidationMessage(validationMessage, focusRef);
 
       return;
     }
@@ -94,20 +96,23 @@ export default function ByEmail() {
       <div>* 로그인 페이지 *</div>
       <div>로고</div>
       <form>
-        <label>이메일</label>
+        <label htmlFor="email">이메일</label>
         <input
           type="text"
           name="email"
+          id="email"
           placeholder="codeWhisper@gmail.com"
           ref={emailInput}
           onChange={handleOnChangeInput}
         />
         <div>{validationMessage.email}</div>
-        <label>비밀번호</label>
+        <label htmlFor="passwor">비밀번호</label>
         <input
           type="password"
           name="password"
+          id="password"
           placeholder="********"
+          ref={passwordInput}
           onChange={handleOnChangeInput}
         />
         <div>{validationMessage.password}</div>

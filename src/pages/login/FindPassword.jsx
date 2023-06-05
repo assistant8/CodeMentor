@@ -14,6 +14,7 @@ export default function FindPassword() {
   const navigate = useNavigate();
   const location = useLocation();
   const emailInput = useRef();
+  const focusRef = { email: emailInput };
   const [formInputValue, setFormInputValue] = useState({ email: "" });
   const { email } = formInputValue;
   const [validationMessage, setValidationMessage] = useState({ email: "" });
@@ -32,7 +33,7 @@ export default function FindPassword() {
     e.preventDefault();
 
     if (!isPassValidation(formInputValue)) {
-      alertValidationMessage(validationMessage);
+      alertValidationMessage(validationMessage, focusRef);
 
       return;
     }

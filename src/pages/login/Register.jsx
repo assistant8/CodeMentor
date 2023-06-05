@@ -17,7 +17,7 @@ export default function Register() {
   const emailInput = useRef();
   const passwordInput = useRef();
   const passwordConfirmInput = useRef();
-  const ref = {
+  const focusRef = {
     email: emailInput,
     password: passwordInput,
     passwordConfirm: passwordConfirmInput,
@@ -41,8 +41,10 @@ export default function Register() {
   const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
+    console.log(isPassValidation(formInputValue));
+
     if (!isPassValidation(formInputValue)) {
-      alertValidationMessage(validationMessage, ref);
+      alertValidationMessage(validationMessage, focusRef);
 
       return;
     }

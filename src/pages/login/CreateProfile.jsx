@@ -10,10 +10,9 @@ export default function CreateProfile() {
   const defaultName = location.state.name;
   const defaultImage = "기본 이미지";
   const [nameInputValue, setNameInputValue] = useState(defaultName);
-  const [nameVerificationMessage, setNameVerificationMessage] = useState("");
+  const [nameValidationMessage, setNameValidationMessage] = useState("");
   const nameInput = useRef();
   const [selectedFile, setSelectedFile] = useState(defaultImage);
-  const [validationMessage, setValidationMessage] = useState("");
 
   const handleOnChange_profileImageInput = (e) => {
     const file = e.target.files[0];
@@ -59,7 +58,9 @@ export default function CreateProfile() {
     e.preventDefault();
 
     if (!isNameValid(nameInputValue)) {
-      alert(nameVerificationMessage);
+      alert(nameValidationMessage);
+
+      nameInput.current.focus();
 
       return;
     }
@@ -102,7 +103,7 @@ export default function CreateProfile() {
   useEffect(() => {
     const newValidationMessage = makeNameValidationMessage(nameInputValue);
 
-    setNameVerificationMessage(newValidationMessage);
+    setNameValidationMessage(newValidationMessage);
   }, [nameInputValue]);
 
   return (
@@ -135,7 +136,7 @@ export default function CreateProfile() {
           }}
           value={nameInputValue}
         />
-        <div>{nameVerificationMessage}</div>
+        <div>{nameValidationMessage}</div>
         <div>이름은 공백을 제외한 2~10자의 한글, 영문만 입력 가능합니다.</div>
         <input
           type="submit"

@@ -73,17 +73,16 @@ export function isPassValidation(formInputValue, validationMessage) {
 
   console.log(email, password, passwordConfirm);
 
-  if (email && !isEmailValid(email)) {
+  if ("email" in formInputValue && !isEmailValid(email)) {
     return false;
   }
 
-  if (password && !isPasswordValid(password)) {
+  if (formInputValue.hasOwnProperty("password") && !isPasswordValid(password)) {
     return false;
   }
 
   if (
-    password &&
-    passwordConfirm &&
+    "passwordConfirm" in formInputValue &&
     !isPasswordConfirmValid(password, passwordConfirm)
   ) {
     return false;
@@ -93,11 +92,13 @@ export function isPassValidation(formInputValue, validationMessage) {
 }
 
 // submit 시 유효성 검사 통과 못하면 경고창 띄우기.
-export function alertValidationMessage(validationMessage, ref) {
+export function alertValidationMessage(validationMessage, focusRef = null) {
   if (validationMessage.email) {
     alert(validationMessage.email);
 
-    ref.email.current.focus();
+    if (focusRef !== null && focusRef?.email?.current) {
+      focusRef.email.current.focus();
+    }
 
     return;
   }
@@ -105,9 +106,9 @@ export function alertValidationMessage(validationMessage, ref) {
   if (validationMessage.password) {
     alert(validationMessage.password);
 
-    console.log(1);
-
-    ref.password.current.focus();
+    if (focusRef !== null && focusRef?.password?.current) {
+      focusRef.password.current.focus();
+    }
 
     return;
   }
@@ -115,7 +116,9 @@ export function alertValidationMessage(validationMessage, ref) {
   if (validationMessage.passwordConfirm) {
     alert(validationMessage.passwordConfirm);
 
-    ref.passwordConfirm.current.focus();
+    if (focusRef !== null && focusRef?.passwordConfirm?.current) {
+      focusRef.passwordConfirm.current.focus();
+    }
 
     return;
   }
