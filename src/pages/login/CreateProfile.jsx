@@ -31,7 +31,19 @@ export default function CreateProfile() {
   };
 
   const handleOnChange_nameInput = (e) => {
-    setNameInputValue(e.target.value);
+    const value = e.target.value;
+
+    if (value.length > 8) {
+      const value2 = value.split("");
+      value2[8] = "";
+      const value3 = value2.join("");
+    }
+    // if (value.length > 8) {
+    // const newValue = value.substr(0, 7);
+    // console.log(value, value.length, newValue, newValue.length);
+
+    // setNameInputValue(newValue);
+    // }
   };
 
   // 입력값이 조건에 부합해야 버튼이 활성화되게 만들어야겠음.
