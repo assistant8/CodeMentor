@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PATH from "../../constants/path";
 import { set } from "immutable";
+import { axiosInterceptors } from "../../hooks/useLogin.js";
 
 // 클릭 버튼을 없애는 게 사용자한테 더 편하려나.
 // - verification code랑 input 내용 평가해서 자동으로 다음 페이지로 넘어가게.
@@ -24,6 +25,8 @@ export default function VerifyEmail() {
     useState("");
   const [validationMessage, setValidationMessage] = useState("");
   const verificationCodeInput = useRef();
+
+  axiosInterceptors();
 
   const handleOnChangeVerificationCodeInput = (e) => {
     const value = e.target.value;
@@ -80,7 +83,7 @@ export default function VerifyEmail() {
       const newFormData = {
         ...formData,
         password: password.current,
-        name: "이름 기본값(겹치지 않게)",
+        name: "이름 기본값",
         profileImage: "프로필 이미지 기본값",
       };
 
@@ -91,6 +94,7 @@ export default function VerifyEmail() {
           alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
 
           navigate(nextPageUrl.current, {
+            // 회원 가입에 어떤 정보가 필요한지 모르겠네.
             state: { email, name: newFormData.name },
           });
 
@@ -108,17 +112,18 @@ export default function VerifyEmail() {
     verificationCodeInput.current.focus();
   });
 
-  // 이전 페이지서 navigate로 넘어온 데이터를 가지고 submit 다음에 렌더링될 페이지를 결정.
-  // - 회원 가입 -> 프로필 설정 페이지
+  // * 다음 페이지 결정
+  // - 이전 페이지에서 넘어온 navigate state 데이터로 다음 렌더링 페이지를 결정.
   // - 비밀번호 찾기 -> 비밀번호 재설정 페이지
+  // - 회원 가입 -> 프로필 설정 페이지
   useEffect(() => {
-    // 회원 가입 페이지나 비밀번호 찾기 페이지에서 넘어온 경우에만 이 페이지를 렌더링.
+    // 회원 가입 페이지, 비밀번호 찾기 페이지에서 넘어온 경우에만 허용.
     // - 그 두 페이지에서 넘어온 경우에만 location.state가 존재할 테니까.
     // - 아니 근데 이걸로 되나? 다른 location.state.email/previousPageUrl 존재하는 페이지에서 넘어오면.. 특정 값이 없으면 버튼이 안 눌리게 해야 하나..?
     if (
       !location.state ||
-      !location.state.email ||
-      !location.state.previousPageUrl
+      !location.state?.email ||
+      !location.state?.previousPageUrl
     ) {
       alert("잘못된 접근입니다.");
       navigate(PATH.MAIN);

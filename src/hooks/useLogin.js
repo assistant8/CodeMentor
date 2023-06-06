@@ -130,6 +130,33 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
   // );
 }
 
+export function axiosInterceptors() {
+  axios.interceptors.request.use(
+    (config) => {
+      console.log("요청 인터셉터: ", config.url, config.data);
+
+      return config;
+    },
+    function (error) {
+      console.error("요청 에러: ", error);
+
+      return Promise.reject(error);
+    }
+  );
+
+  axios.interceptors.response.use(
+    (response) => {
+      console.log("응답 인터셉터: ", response.status, response.data);
+      return response;
+    },
+    (error) => {
+      console.error("응답 에러: ", error);
+
+      return Promise.reject(error);
+    }
+  );
+}
+
 // 형식 검사 & 경고창 띄우기 한 번에.
 // export function checkValidationAndAlertValidationMessage(
 //   formInputValue,
@@ -184,30 +211,3 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
 
 //   return isPassValidation(formInputValue, validationMessage);
 // }
-
-export function axiosInterceptors() {
-  axios.interceptors.request.use(
-    (config) => {
-      console.log("요청 인터셉터: ", config);
-
-      return config;
-    },
-    function (error) {
-      console.error("요청 에러: ", error);
-
-      return Promise.reject(error);
-    }
-  );
-
-  axios.interceptors.response.use(
-    (response) => {
-      console.log("응답 인터셉터: ", response);
-      return response;
-    },
-    (error) => {
-      console.error("응답 에러: ", error);
-
-      return Promise.reject(error);
-    }
-  );
-}
