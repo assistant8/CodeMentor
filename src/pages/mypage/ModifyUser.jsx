@@ -2,11 +2,19 @@ import styles from "./ModifyUser.module.scss";
 import { useNavigate } from "react-router-dom";
 import { VioletButton } from "../../components/buttons/VioletButton";
 import { UserInput } from "../../components/inputs/UserInput";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { FaPencilAlt } from "react-icons/fa";
-import { useRef } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { headerTitleState } from "../../state/headerTitleState";
+import { useEffect } from "react";
 
 const ModifyUser = () => {
+  const setHeaderTitle = useSetRecoilState(headerTitleState);
+
+  useEffect(()=>{
+    setHeaderTitle("정보 수정")
+  }, [setHeaderTitle]);
+
   const [imgUrl, setImgUrl] = useState("");
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -28,6 +36,7 @@ const ModifyUser = () => {
       reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
     }
   };
+  const buttonRef = useRef(null);
   return (
     <div className={styles.modifyContainer}>
       <FaPencilAlt className={styles.pencilIcon} onClick={modifyImg} />
@@ -51,7 +60,7 @@ const ModifyUser = () => {
         />
         <p>중복된 유저명입니다</p>
       </div>
-      <VioletButton>저장하기</VioletButton>
+      <VioletButton ref={buttonRef}>저장하기</VioletButton>
       <div className={styles.btns}>
         <p
           onClick={() => {

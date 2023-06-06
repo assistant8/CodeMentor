@@ -1,9 +1,4 @@
-$border-color: #c2bcca;
-$font-color: #3e3e3e;
-$violet-1: #e4d2fa;
-$violet-2: #c79aff;
-$violet-3: #a256ff;
-$violet-4: #6700e6;
+@import "../../constants/utils.scss";
 .UserInput {
   width: 20.625rem; /* 330px converted to rem */
   height: 3.75rem; /* 60px converted to rem */
