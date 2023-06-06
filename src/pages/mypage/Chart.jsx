@@ -4,14 +4,12 @@ import { useState } from "react";
 
 const Calendar = ({ startDate, endDate, studyData }) => {
   const days = eachDayOfInterval({ start: startDate, end: endDate });
-  const sortedDays = [...days].reverse();
 
   const [tooltipDate, setTooltipDate] = useState(null); // 말풍선에 표시할 날짜 정보 상태
 
   const handleMouseEnter = (date) => {
     setTooltipDate(date);
   };
-
   const handleMouseLeave = () => {
     setTooltipDate(null);
   };
@@ -20,29 +18,54 @@ const Calendar = ({ startDate, endDate, studyData }) => {
     return <div className={styles.tooltip}>{format(date, "yyyy-MM-dd")}</div>;
   };
 
+  const rows = [];
+  let currentRow = [];
+  days.forEach((day) => {
+    const dayOfWeek = getDay(day);
+    if (dayOfWeek === 6) {
+      // 토요일인 경우
+      currentRow.push(day);
+      rows.push(currentRow);
+      currentRow = [];
+    } else {
+      currentRow.push(day);
+    }
+  });
+  if (currentRow.length !== 0) {
+    rows.push(currentRow);
+  }
+
+  const reversedRows = rows.reverse();
+
   return (
     <div className={styles.calendar}>
-      {sortedDays.map((day) => {
-        const studyInfo = studyData.find((data) => isSameDay(data.date, day));
-        const duration = studyInfo ? studyInfo.duration : 0;
-        const color = duration > 0 ? "#c79aff" : "#c2bcca";
-        const dayOfWeek = getDay(day);
-        const gridColumn = dayOfWeek + 1; // 일~월 순으로 배치
+      {reversedRows.map((row, rowIndex) => (
+        <div key={rowIndex} className={styles.calendarRow}>
+          {row.map((day, columnIndex) => {
+            const studyInfo = studyData.find((data) =>
+              isSameDay(data.date, day)
+            );
+            const duration = studyInfo ? studyInfo.duration : 0;
+            const color = duration > 0 ? "#c79aff" : "#c2bcca";
 
-        return (
-          <div
-            key={day.toISOString()}
-            className={styles.calendarCell}
-            style={{ backgroundColor: color, gridColumn: gridColumn }}
-            onMouseEnter={() => handleMouseEnter(day)}
-            onMouseLeave={handleMouseLeave}
-          >
-            {tooltipDate && isSameDay(day, tooltipDate) && (
-              <Tooltip date={tooltipDate} />
-            )}
-          </div>
-        );
-      })}
+            const gridColumn = columnIndex + 1; // 일요일은 첫 번째 열
+
+            return (
+              <div
+                key={day.toISOString()}
+                className={styles.calendarCell}
+                style={{ backgroundColor: color, gridColumn: gridColumn }}
+                onMouseEnter={() => handleMouseEnter(day)}
+                onMouseLeave={handleMouseLeave}
+              >
+                {tooltipDate && isSameDay(day, tooltipDate) && (
+                  <Tooltip date={tooltipDate} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 };
