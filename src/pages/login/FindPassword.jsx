@@ -3,94 +3,120 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import PATH from "../../constants/path.js";
+import {
+  isPassValidation,
+  alertValidationMessage,
+  makeEmailValidationMessage,
+  // axiosInterceptors,
+} from "../../hooks/useLogin.js";
 
 export default function FindPassword() {
   const navigate = useNavigate();
   const location = useLocation();
-  // let emailInputValue = "";
-  const emailInputValue = useRef("");
-
-  // 재랜더링이 필요 없어도 state를 쓰는 게 좋은가??
-  // - 변수의 값은 계속해서 재할당되지만 그 변화가 화면에 출력되지 않아도 되는 상황에서는 state를 쓰지 않는 게 좋을 듯.
-  // - state를 쓰면 state를 사용하는 컴포넌트가 불필요하게 재랜더링 되기 때문.
-  //  - 성는에 막 엄청 큰 영향을 미칠 것 같진 않지만.
-  // - 근데 나중에 state를 사용해야 할 요소가 추가될 수도 있고.. 그럴 때까지 대비해서 미리 state를 쓰자니 과한 것 같고..
-  // - 뭔가를 명확하게 아는 수준이 되지 않으면 선택이 어려워져버림. 맞딱뜨릴 때마다 각각의 방법을 저울질해야 해서 스트레스.
-  // - 그니까 제대로 알아두는 게 중요한 것 같음. 프로그래밍이라는 게 해결 방법을 찾는 일들의 연쇄니까. 아닐지도 모름.
-  // - 일단 냅두기~
-
-  // const [emailInputValue, setEmailInputValue] = useState("");
   const emailInput = useRef();
+  const focusRef = { email: emailInput };
+  const [formInputValue, setFormInputValue] = useState({ email: "" });
+  const { email } = formInputValue;
+  const [validationMessage, setValidationMessage] = useState({ email: "" });
 
-  const handleOnChange_emailInput = (e) => {
-    // setEmailInputValue(e.target.value);
-    // emailInputValue = e.target.value;
-    emailInputValue.current = e.target.value;
+  const handleOnChangeEmailInput = (e) => {
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleOnClick_submitButton = (e) => {
+  const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
-    if (emailInputValue.current === "") {
-      alert("이메일을 입력해주세요.");
+    if (!isPassValidation(formInputValue)) {
+      alertValidationMessage(validationMessage, focusRef);
 
       return;
     }
 
-    if (!isEmailValid(emailInputValue.current)) {
-      alert("이메일 형식이 올바르지 않습니다.");
+    // 비밀번호 찾기 통과 -> 인증 페이지로 이메일을 넘김(navigate)
 
-      return;
-    }
-
-    // 임시 서버(데이터 전송 확인용)
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
+    const data = { email };
 
-    axios.post(url, { email: emailInputValue.current }).then((response) => {
-      if (response.data.result === "이메일 불일치") {
-        alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
+    // * 아이디 등록 여부 확인 & 인증 코드 발송 요청.
+    // - 각각을 처리하는 api가 나뉜다면 요청을 두 번 날려야 할까?
+    // - ㄴㄴ. api를 정해주면 어떤 요청인지 서버가 인지할 것. 아마도.
+    axios
+      .post(url, data)
+      .then((response) => {
+        console.log(1);
+        // 아이디 등록 여부 확인.
+        // - 없음 -> alert -> return;
+        // - 있음 -> 서버에서 사용자 메일 인증 과정 실행.
+        if (response.data.result === "이메일이 db에 등록되어 있지 않음.") {
+          alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
-        return;
-      }
+          return;
+        }
 
-      navigate(PATH.LOGIN + "/verify-email", {
-        state: {
-          email: emailInputValue.current,
-          previousPageUrl: location.pathname,
-        },
+        // if (response.data.result === "인증 메일 발송") {
+        // - 개발용 true 임시 설정
+        if (true) {
+          navigate(PATH.LOGIN + "/verify-email", {
+            state: {
+              // 다음 페이지에 넘길 정보
+              // - email
+              //  - 이메일 인증 페이지에서 사용자 id 출력.
+              //  - 이메일 인증 페이지에서 인증 중인 사용자 식별.
+              // - previousPageUr
+              //  - 이메일 인증 완료 후 이전 페이지를 기반으로 다음 페이지 결정.
+              email,
+              previousPageUrl: location.pathname,
+            },
+          });
+
+          return;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+
+        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
       });
-    });
   };
+
+  // useEffect(() => {
+  //   axiosInterceptors();
+  // });
 
   useEffect(() => {
     emailInput.current.focus();
   }, []);
 
+  useEffect(() => {
+    const newMessage = makeEmailValidationMessage(email);
+
+    setValidationMessage((prev) => ({
+      ...prev,
+      email: newMessage,
+    }));
+  }, [email]);
+
   return (
-    <div className={styles.container}>
+    <>
       <div>* 비밀번호 찾기 페이지 *</div>
       <div>비밀번호 찾기</div>
       <form>
-        <label>이메일</label>
+        <label htmlFor="emailInput">이메일</label>
         <input
           type="text"
-          placeholder="가입 시 사용한 이메일을 입력해주세요"
+          name="email"
+          id="emailInput"
+          placeholder="murakami@haruki.com"
           ref={emailInput}
-          onChange={handleOnChange_emailInput}
-        />{" "}
+          onChange={handleOnChangeEmailInput}
+        />
+        <div>{validationMessage.email}</div>
         <input
           type="submit"
           value="확인"
-          onClick={handleOnClick_submitButton}
+          onClick={handleOnClickSubmitButton}
         ></input>
       </form>
-    </div>
+    </>
   );
-}
-
-function isEmailValid(email) {
-  const emailRegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-  const result = emailRegExp.test(email);
-
-  return result;
 }

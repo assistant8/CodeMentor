@@ -2,35 +2,81 @@ import styles from "./Register.module.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PATH from "../../constants/path";
+import {
+  makeEmailValidationMessage,
+  makePasswordValidationMessage,
+  makePasswordConfirmValidationMessage,
+  isPassValidation,
+  alertValidationMessage,
+  axiosInterceptors,
+} from "../../hooks/useLogin.js";
+import axios from "axios";
 
 export default function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const emailInput = useRef();
-  const [emailInputValue, setEmailInputValue] = useState("");
-  const [passwordInputValue, setPasswordInputValue] = useState("");
-  const [passwordConfirmInputValue, setPasswordConfirmInputValue] =
-    useState("");
-  const [emailVerificationMessage, setEmailVerificationMessage] = useState("");
-  const [passwordVerificationMessage, setPasswordVerificationMessage] =
-    useState("");
-  const [
-    passwordConfirmVerificationMessage,
-    setPasswordConfirmVerificationMessage,
-  ] = useState("");
+  const passwordInput = useRef();
+  const passwordConfirmInput = useRef();
+  const focusRef = {
+    email: emailInput,
+    password: passwordInput,
+    passwordConfirm: passwordConfirmInput,
+  };
+  const [formInputValue, setFormInputValue] = useState({
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  });
+  const { email, password, passwordConfirm } = formInputValue;
+  const [validationMessage, setValidationMessage] = useState({
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  });
 
-  const handleOnInput_emailInput = (e) => {
-    setEmailInputValue(e.target.value);
+  axiosInterceptors();
+
+  const handleOnChangeFormInput = (e) => {
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleOnInput_passwordInput = (e) => {
-    setPasswordInputValue(e.target.value);
-  };
-
-  const handleOnInput_passwordConfirmInput = (e) => {
+  const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
-    setPasswordConfirmInputValue(e.target.value);
+    if (!isPassValidation(formInputValue)) {
+      alertValidationMessage(validationMessage, focusRef);
+
+      return;
+    }
+
+    const url = "https://eonaf45qzbokh52.m.pipedream.net";
+
+    const formData = {
+      email,
+      password,
+    };
+
+    axios(url, formData);
+
+    // 비밀번호 같은 걸 navigate에 담아서 다른 컴포넌트로 막 넘겨줘도 되나..?
+    navigate(PATH.LOGIN + "/verify-email", {
+      state: {
+        // 다음 페이지에 넘길 정보
+        // - email
+        //  - 이메일 인증 페이지에서 사용자 id 출력.
+        //  - 이메일 인증 페이지에서 인증 중인 사용자 식별.
+        //  - 이메일 인증 완료 후 회원 이메일 서버 전송.
+        // - password
+        //  - 이메일 인증 완료 후 회원 비밀번호 서버 전송.
+        //  - ???) 보안이 필요한 정보를 컴포넌트 간에 막 넘겨줘도 되는지 모르겠음.
+        // - previousPageUr
+        //  - 이메일 인증 완료 후 이전 페이지를 기반으로 다음 페이지 결정.
+        email,
+        password,
+        previousPageUrl: location.pathname,
+      },
+    });
   };
 
   useEffect(() => {
@@ -38,103 +84,78 @@ export default function Register() {
   }, []);
 
   useEffect(() => {
-    if (emailInputValue === "") {
-      setEmailVerificationMessage("이메일을 입력해주세요.");
-    } else if (!isEmailValid(emailInputValue)) {
-      setEmailVerificationMessage("이메일 형식이 올바르지 않습니다.");
-    } else {
-      setEmailVerificationMessage("완벽합니다!");
-    }
-  }, [emailInputValue]);
+    const newMessage = makeEmailValidationMessage(email);
+
+    setValidationMessage((oldMessage) => ({
+      ...oldMessage,
+      email: newMessage,
+    }));
+  }, [email]);
 
   useEffect(() => {
-    if (passwordInputValue === "") {
-      setPasswordVerificationMessage(
-        "비밀번호는 영문 대/소문자를 최소 하나씩 포함한 8~12자리여야 합니다."
-      );
-    } else if (!isPasswordValid(passwordInputValue)) {
-      setPasswordVerificationMessage("비밀번호 형식이 올바르지 않습니다.");
-    } else {
-      setPasswordVerificationMessage("완벽합니다!");
-    }
-  }, [passwordInputValue]);
+    const newMessage = makePasswordValidationMessage(password);
+
+    setValidationMessage((oldMessage) => ({
+      ...oldMessage,
+      password: newMessage,
+    }));
+  }, [password]);
 
   useEffect(() => {
-    if (passwordConfirmInputValue === "") {
-      setPasswordConfirmVerificationMessage("비밀번호를 확인해주세요.");
-    } else if (passwordInputValue !== passwordConfirmInputValue) {
-      setPasswordConfirmVerificationMessage("비밀번호가 일치하지 않습니다.");
-    } else {
-      setPasswordConfirmVerificationMessage("완벽합니다!");
-    }
-  }, [passwordConfirmInputValue]);
+    const newMessage = makePasswordConfirmValidationMessage(
+      password,
+      passwordConfirm
+    );
+
+    setValidationMessage((oldMessage) => ({
+      ...oldMessage,
+      passwordConfirm: newMessage,
+    }));
+  }, [passwordConfirm]);
 
   return (
-    <div className={styles.container}>
+    <>
       <div>* 회원 가입 페이지 *</div>
       <div>회원 가입</div>
       <form>
-        <label>이메일</label>
+        <label htmlFor="emailInput">이메일</label>
         <input
           type="text"
           name="email"
+          id="emailInput"
           placeholder="codeWhisper@gmail.com"
           ref={emailInput}
-          onInput={handleOnInput_emailInput}
+          onChange={handleOnChangeFormInput}
         />
-        <div>{emailVerificationMessage}</div>
-        <label>비밀번호</label>
+        <div>{validationMessage.email}</div>
+        <label htmlFor="passwordInput">비밀번호</label>
         <input
           type="password"
           name="password"
+          id="passwordInput"
+          maxLength="12"
           placeholder="********"
-          onInput={handleOnInput_passwordInput}
+          ref={passwordInput}
+          onChange={handleOnChangeFormInput}
         />
-        <div>{passwordVerificationMessage}</div>
-        <label>비밀번호 확인</label>
+        <div>{validationMessage.password}</div>
+        <label htmlFor="passwordConfirmInput">비밀번호 확인</label>
         <input
           type="password"
-          name="password"
+          name="passwordConfirm"
+          id="passwordConfirmInput"
+          maxLength="12"
           placeholder="********"
-          onInput={handleOnInput_passwordConfirmInput}
+          ref={passwordConfirmInput}
+          onChange={handleOnChangeFormInput}
         />
-        <div>{passwordConfirmVerificationMessage}</div>
+        <div>{validationMessage.passwordConfirm}</div>
         <input
           type="submit"
           value="확인"
-          onClick={() => {
-            console.log("회원 가입 페이지");
-            console.log(
-              "이메일, 패스워드 형식, 패스워드 일치 검사 통과 시 버튼 활성화"
-            );
-            console.log("본인 인증 메일 발송");
-            console.log("인증 번호 입력 페이지로 이동");
-
-            // 비밀번호 같은 걸 navigate에 담아서 다른 컴포넌트로 막 넘겨줘도 되나..?
-            navigate(PATH.LOGIN + "/verify-email", {
-              state: {
-                email: emailInputValue,
-                previousPageUrl: location.pathname,
-                password: passwordInputValue,
-              },
-            });
-          }}
+          onClick={handleOnClickSubmitButton}
         ></input>
       </form>
-    </div>
+    </>
   );
-}
-
-function isEmailValid(email) {
-  const emailRegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-  const result = emailRegExp.test(email);
-
-  return result;
-}
-
-function isPasswordValid(password) {
-  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
-  const result = passwordRegExp.test(password);
-
-  return result;
 }
