@@ -94,7 +94,7 @@ export default function FindPassword() {
   }, [email]);
 
   return (
-    <div className={styles.container}>
+    <>
       <div>* 비밀번호 찾기 페이지 *</div>
       <div>비밀번호 찾기</div>
       <form>
@@ -114,6 +114,6 @@ export default function FindPassword() {
           onClick={handleOnClickSubmitButton}
         ></input>
       </form>
-    </div>
+    </>
   );
 }

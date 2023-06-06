@@ -118,7 +118,7 @@ export default function ResetPassword() {
   }, [passwordConfirm]);
 
   return (
-    <div className={styles.container}>
+    <>
       <div>* 비밀번호 재설정 페이지 *</div>
       <div>비밀번호 재설정</div>
       <form>
@@ -144,6 +144,6 @@ export default function ResetPassword() {
         <div>{validationMessage.passwordConfirm}</div>
         <input type="submit" value="확인" onClick={handleOnClickSubmitButton} />
       </form>
-    </div>
+    </>
   );
 }

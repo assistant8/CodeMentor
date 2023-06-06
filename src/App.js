@@ -58,7 +58,7 @@ function App() {
         <Route path="/" element={<QuizList />} />
         <Route path={PATH.QUIZ} element={<Quiz />} />
         <Route path={PATH.QUIZLIST} element={<QuizList />} />
-        
+
         <Route path={PATH.LOGIN}>
           <Route index element={<Login />} />
           <Route path="find-password" element={<FindPassword />} />
@@ -67,7 +67,7 @@ function App() {
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="create-profile" element={<CreateProfile />} />
         </Route>
-        
+
         <Route path={PATH.MYPAGE}>
           <Route index element={<MyPage />} />
           <Route path="modify" element={<ModifyUser />} />
@@ -77,7 +77,6 @@ function App() {
           <Route path="chart" element={<Chart />} />
           <Route path="mypost" element={<MyPost />} />
         </Route>
-
       </Route>
     </Routes>
   );

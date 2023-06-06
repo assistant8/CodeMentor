@@ -172,7 +172,7 @@ export default function VerifyEmail() {
   }, [verificationCodeInputValue]);
 
   return (
-    <div className={styles.container}>
+    <>
       <div>* 이메일 인증 번호 확인 페이지 *</div>
 
       <div>이메일 인증</div>
@@ -201,7 +201,7 @@ export default function VerifyEmail() {
           onClick={handleOnClickSubmitButton}
         ></input>
       </form>
-    </div>
+    </>
   );
 }
 

@@ -114,7 +114,7 @@ export default function Register() {
   }, [passwordConfirm]);
 
   return (
-    <div className={styles.container}>
+    <>
       <div>* 회원 가입 페이지 *</div>
       <div>회원 가입</div>
       <form>
@@ -156,6 +156,6 @@ export default function Register() {
           onClick={handleOnClickSubmitButton}
         ></input>
       </form>
-    </div>
+    </>
   );
 }

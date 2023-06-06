@@ -107,7 +107,7 @@ export default function CreateProfile() {
   }, [nameInputValue]);
 
   return (
-    <div className={styles.container}>
+    <>
       <div>* 회원 가입 후 최초 프로필 설정 페이지 *</div>
       <div>내 정보</div>
       <form>
@@ -149,7 +149,7 @@ export default function CreateProfile() {
           onClick={() => navigate(PATH.LOGIN)}
         />
       </form>
-    </div>
+    </>
   );
 }
 

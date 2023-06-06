@@ -9,6 +9,8 @@ import {
   makeEmailValidationMessage,
   makePasswordValidationMessage,
 } from "../../hooks/useLogin.js";
+import { VioletButton } from "../../components/buttons/VioletButton.jsx";
+import { UserInput } from "../../components/inputs/UserInput.jsx";
 
 export default function ByEmail() {
   const navigate = useNavigate();
@@ -92,7 +94,7 @@ export default function ByEmail() {
   }, [password]);
 
   return (
-    <div className={styles.container}>
+    <>
       <div>* 로그인 페이지 *</div>
       <div>로고</div>
       <form>
@@ -161,6 +163,6 @@ export default function ByEmail() {
           🍮카카오
         </div>
       </div>
-    </div>
+    </>
   );
 }
