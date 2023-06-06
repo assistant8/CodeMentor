@@ -5,9 +5,17 @@ import { LuSprout } from "react-icons/lu";
 import { FaGraduationCap } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import React, { useState } from "react";
-import Modal from "react-modal";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { headerTitleState } from "../../state/headerTitleState";
+import { useEffect } from "react";
 
 const User = () => {
+  const setHeaderTitle = useSetRecoilState(headerTitleState);
+
+  useEffect(()=>{
+    setHeaderTitle("마이페이지")
+  }, [setHeaderTitle]);
+
   let navigate = useNavigate();
   return (
     <div className={styles.userInfo}>
@@ -130,19 +138,14 @@ const LogOut = () => {
 };
 
 const GradeModal = ({ isOpen, onRequestClose, children }) => {
+  if (!isOpen) return null;
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      contentLabel="Modal"
-      className={styles.reactModal}
-      overlayClassName={styles.reactModalOverlay}
-    >
-      {children}
-    </Modal>
+    <div className={styles.reactModalOverlay}>
+      <div className={styles.reactModal}>{children}</div>
+    </div>
   );
 };
-
 const MyPage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
