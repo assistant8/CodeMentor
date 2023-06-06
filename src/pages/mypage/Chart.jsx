@@ -48,13 +48,11 @@ const Calendar = ({ startDate, endDate, studyData }) => {
             const duration = studyInfo ? studyInfo.duration : 0;
             const color = duration > 0 ? "#c79aff" : "#c2bcca";
 
-            const gridColumn = columnIndex + 1; // 일요일은 첫 번째 열
-
             return (
               <div
                 key={day.toISOString()}
                 className={styles.calendarCell}
-                style={{ backgroundColor: color, gridColumn: gridColumn }}
+                style={{ backgroundColor: color }}
                 onMouseEnter={() => handleMouseEnter(day)}
                 onMouseLeave={handleMouseLeave}
               >
@@ -70,6 +68,55 @@ const Calendar = ({ startDate, endDate, studyData }) => {
   );
 };
 
+const Legend = () => {
+  return (
+    <div className={styles.legendContainer}>
+      <div className={styles.level}>
+        <div
+          className={styles.calendarCell}
+          style={{ backgroundColor: "#e4d2fa" }}
+        />
+        <p>1</p>
+      </div>
+      <div className={styles.level}>
+        <div
+          className={styles.calendarCell}
+          style={{ backgroundColor: "#c79aff" }}
+        />
+        <p>2</p>
+      </div>
+      <div className={styles.level}>
+        <div
+          className={styles.calendarCell}
+          style={{ backgroundColor: "#a256ff" }}
+        />
+        <p>3</p>
+      </div>
+      <div className={styles.level}>
+        <div
+          className={styles.calendarCell}
+          style={{ backgroundColor: "#6700e6" }}
+        />
+        <p>4</p>
+      </div>
+    </div>
+  );
+};
+
+const DayOfWeek = () => {
+  return (
+    <div className={styles.weekLegend}>
+      <div style={{ color: "red" }}>S</div>
+      <div>M</div>
+      <div>T</div>
+      <div>W</div>
+      <div>T</div>
+      <div>F</div>
+      <div style={{ color: "blue" }}>S</div>
+    </div>
+  );
+};
+
 const Chart = () => {
   const startDate = new Date("2023-01-01");
   const endDate = new Date();
@@ -80,7 +127,11 @@ const Chart = () => {
   ];
 
   return (
-    <Calendar startDate={startDate} endDate={endDate} studyData={studyData} />
+    <div className={styles.container}>
+      <Legend />
+      <DayOfWeek />
+      <Calendar startDate={startDate} endDate={endDate} studyData={studyData} />
+    </div>
   );
 };
 

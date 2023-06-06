@@ -1,10 +1,62 @@
+* {
+  box-sizing: border-box;
+}
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.calendar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .calendarRow {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  width: 14.125rem;
 }
 .calendarCell {
-  width: 50px;
-  height: 50px;
-  border-radius: 5px;
-  margin: 2px;
+  width: 1.875rem; // (30 / 16) = 1.875
+  height: 1.875rem; // (30 / 16) = 1.875
+  border-radius: 0.3125rem; // (5 / 16) = 0.3125
+  margin: 0.125rem; // (2 / 16) = 0.125
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #fff;
+  padding: 0.3125rem; // (5 / 16) = 0.3125
+  border: 0.0625rem solid #ccc; // (1 / 16) = 0.0625
+  border-radius: 0.1875rem; // (3 / 16) = 0.1875
+  z-index: 9999;
+}
+.legendContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: right;
+  padding-right: 4rem;
+  margin-bottom: 1rem;
+}
+.level {
+  p {
+    margin: 0;
+    text-align: center;
+  }
+}
+.weekLegend {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  width: 14.125rem;
+  margin: auto;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.125rem;
+    font-size: 1.5rem;
+  }
 }
