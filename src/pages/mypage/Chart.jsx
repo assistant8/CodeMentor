@@ -1,8 +1,17 @@
 import { eachDayOfInterval, isSameDay, getDay, format } from "date-fns";
 import styles from "./Chart.module.scss";
 import { useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { headerTitleState } from "../../state/headerTitleState";
+import { useEffect } from "react";
 
 const Calendar = ({ startDate, endDate, studyData }) => {
+  const setHeaderTitle = useSetRecoilState(headerTitleState);
+
+  useEffect(()=>{
+    setHeaderTitle("통계")
+  }, [setHeaderTitle]);
+
   const days = eachDayOfInterval({ start: startDate, end: endDate });
 
   const [tooltipDate, setTooltipDate] = useState(null); // 말풍선에 표시할 날짜 정보 상태

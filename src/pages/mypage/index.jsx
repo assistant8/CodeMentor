@@ -5,7 +5,17 @@ import { LuSprout } from "react-icons/lu";
 import { FaGraduationCap } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import React, { useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { headerTitleState } from "../../state/headerTitleState";
+import { useEffect } from "react";
+
 const User = () => {
+  const setHeaderTitle = useSetRecoilState(headerTitleState);
+
+  useEffect(()=>{
+    setHeaderTitle("마이페이지")
+  }, [setHeaderTitle]);
+
   let navigate = useNavigate();
   return (
     <div className={styles.userInfo}>
