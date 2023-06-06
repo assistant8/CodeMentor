@@ -11,8 +11,8 @@ import { useEffect } from "react";
 const ModifyUser = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
-  useEffect(()=>{
-    setHeaderTitle("정보 수정")
+  useEffect(() => {
+    setHeaderTitle("정보 수정");
   }, [setHeaderTitle]);
 
   const [imgUrl, setImgUrl] = useState("");
@@ -37,6 +37,7 @@ const ModifyUser = () => {
     }
   };
   const buttonRef = useRef(null);
+  const nameRef = useRef(null);
   return (
     <div className={styles.modifyContainer}>
       <FaPencilAlt className={styles.pencilIcon} onClick={modifyImg} />
@@ -54,6 +55,7 @@ const ModifyUser = () => {
       </div>
       <div className={styles.inputBox}>
         <UserInput
+          ref={nameRef}
           placeholder="유저_1B789RS"
           value={userName}
           onChange={onChange}
