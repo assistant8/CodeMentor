@@ -11,7 +11,7 @@ import {
 } from "../../hooks/useLogin.js";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
-import { TextLink } from "../../components/link/TextLink.jsx";
+import { LoginTextLink } from "../../components/links/LoginTextLink.jsx";
 
 export default function ByEmail() {
   const navigate = useNavigate();
@@ -101,11 +101,10 @@ export default function ByEmail() {
       <form>
         {/* <label htmlFor="email">이메일</label> */}
         <UserInput
-          // className={"input_email"}
           style={{ position: "absolute", top: "139px", left: "30.16px" }}
           type={"text"}
           name={"email"}
-          placeholder={"murakami@haruki.com"}
+          placeholder={"이메일"}
           ref={emailInput}
           onChange={handleOnChangeInput}
         />
@@ -120,10 +119,9 @@ export default function ByEmail() {
         <div>{validationMessage.email}</div>
         {/* <label htmlFor="passwor">비밀번호</label> */}
         <UserInput
-          // className={"input_email"}
           type={"text"}
           name={"email"}
-          placeholder={"murakami@haruki.com"}
+          placeholder={"비밀번호"}
           ref={emailInput}
           onChange={handleOnChangeInput}
           style={{ position: "absolute", top: "241px", left: "30.16px" }}
@@ -148,9 +146,7 @@ export default function ByEmail() {
           onClick={handleOnClickSubmitButton}
         /> */}
       </form>
-      <TextLink
-        styles={styles}
-        className={"register"}
+      <LoginTextLink
         children={"회원 가입"}
         onClick={() => {
           navigate(PATH.LOGIN + "/register");
