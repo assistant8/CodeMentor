@@ -1,5 +1,5 @@
 import React from "react";
-import "./MainLayout.scss";
+import styles from "./MainLayout.module.scss";
 import { Outlet } from "react-router-dom";
 import Footer from "../footer/index"
 import Header from "../header/index";
@@ -7,9 +7,9 @@ import Header from "../header/index";
 
 const MainLayout = ({children}) => {
   return (
-    <div className="Full">
+    <div className={styles.Full}>
         <Header/>
-        <div className="Inner">
+        <div className={styles.Inner}>
             {children}
         </div>
         <Footer/>
