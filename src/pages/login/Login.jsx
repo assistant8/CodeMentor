@@ -11,6 +11,7 @@ import {
 } from "../../hooks/useLogin.js";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
+import { TextLink } from "../../components/link/TextLink.jsx";
 
 export default function ByEmail() {
   const navigate = useNavigate();
@@ -94,75 +95,109 @@ export default function ByEmail() {
   }, [password]);
 
   return (
-    <>
-      <div>* 로그인 페이지 *</div>
-      <div>로고</div>
+    <div className={styles.container_Login}>
+      <div className={styles.topBar}>11:11</div>
+      <div className={styles.logo}>/*CodeWhisper*/</div>
       <form>
-        <label htmlFor="email">이메일</label>
-        <input
+        {/* <label htmlFor="email">이메일</label> */}
+        <UserInput
+          // className={"input_email"}
+          style={{ position: "absolute", top: "139px", left: "30.16px" }}
+          type={"text"}
+          name={"email"}
+          placeholder={"murakami@haruki.com"}
+          ref={emailInput}
+          onChange={handleOnChangeInput}
+        />
+        {/* <input
           type="text"
           name="email"
           id="email"
           placeholder="codeWhisper@gmail.com"
           ref={emailInput}
           onChange={handleOnChangeInput}
-        />
+        /> */}
         <div>{validationMessage.email}</div>
-        <label htmlFor="passwor">비밀번호</label>
-        <input
+        {/* <label htmlFor="passwor">비밀번호</label> */}
+        <UserInput
+          // className={"input_email"}
+          type={"text"}
+          name={"email"}
+          placeholder={"murakami@haruki.com"}
+          ref={emailInput}
+          onChange={handleOnChangeInput}
+          style={{ position: "absolute", top: "241px", left: "30.16px" }}
+        />
+        {/* <input
           type="password"
           name="password"
           id="password"
           placeholder="********"
           ref={passwordInput}
           onChange={handleOnChangeInput}
-        />
+        /> */}
         <div>{validationMessage.password}</div>
-        <input
+        <VioletButton
+          children={"로그인"}
+          onClick={handleOnClickSubmitButton}
+          style={{ position: "absolute", top: "343px", left: "30.16px" }}
+        />
+        {/* <input
           type="submit"
           value="로그인"
           onClick={handleOnClickSubmitButton}
-        />
+        /> */}
       </form>
-      <div className={styles.wrapper_loginNav}>
-        <div
-          onClick={() => {
-            navigate(PATH.LOGIN + "/find-password");
-          }}
-        >
-          👀비밀번호 찾기/
-        </div>
-        <div
-          onClick={() => {
-            navigate(PATH.LOGIN + "/register");
-          }}
-        >
-          🏓회원 가입
-        </div>
+      <TextLink
+        styles={styles}
+        className={"register"}
+        children={"회원 가입"}
+        onClick={() => {
+          navigate(PATH.LOGIN + "/register");
+        }}
+      />
+      {/* <div
+        className={styles.register}
+        onClick={() => {
+          navigate(PATH.LOGIN + "/register");
+        }}
+      >
+        회원 가입
+      </div> */}
+      <div
+        className={styles.findPassword}
+        onClick={() => {
+          navigate(PATH.LOGIN + "/find-password");
+        }}
+      >
+        비밀번호 찾기
       </div>
       <div className={styles.wrapper_loginOptions}>
         <div
+          className={styles.loginOption}
           onClick={() => {
             console.log("구글");
           }}
         >
-          🚬구글/
+          구글
         </div>
         <div
+          className={styles.loginOption}
           onClick={() => {
             console.log("네이버");
           }}
         >
-          🥝네이버/
+          카카오
         </div>
         <div
+          className={styles.loginOption}
           onClick={() => {
             console.log("카카오");
           }}
         >
-          🍮카카오
+          네이버
         </div>
       </div>
-    </>
+    </div>
   );
 }

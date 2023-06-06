@@ -7,7 +7,7 @@ import {
   isPassValidation,
   alertValidationMessage,
   makeEmailValidationMessage,
-  axiosInterceptors,
+  // axiosInterceptors,
 } from "../../hooks/useLogin.js";
 
 export default function FindPassword() {
@@ -18,8 +18,6 @@ export default function FindPassword() {
   const [formInputValue, setFormInputValue] = useState({ email: "" });
   const { email } = formInputValue;
   const [validationMessage, setValidationMessage] = useState({ email: "" });
-
-  axiosInterceptors();
 
   const handleOnChangeEmailInput = (e) => {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -45,6 +43,7 @@ export default function FindPassword() {
     axios
       .post(url, data)
       .then((response) => {
+        console.log(1);
         // 아이디 등록 여부 확인.
         // - 없음 -> alert -> return;
         // - 있음 -> 서버에서 사용자 메일 인증 과정 실행.
@@ -80,6 +79,10 @@ export default function FindPassword() {
       });
   };
 
+  // useEffect(() => {
+  //   axiosInterceptors();
+  // });
+
   useEffect(() => {
     emailInput.current.focus();
   }, []);
@@ -103,7 +106,7 @@ export default function FindPassword() {
           type="text"
           name="email"
           id="emailInput"
-          placeholder="가입 시 사용한 이메일을 입력해주세요"
+          placeholder="murakami@haruki.com"
           ref={emailInput}
           onChange={handleOnChangeEmailInput}
         />

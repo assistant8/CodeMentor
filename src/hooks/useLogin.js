@@ -134,12 +134,10 @@ export function axiosInterceptors() {
   axios.interceptors.request.use(
     (config) => {
       console.log("요청 인터셉터: ", config.url, config.data);
-
       return config;
     },
     function (error) {
       console.error("요청 에러: ", error);
-
       return Promise.reject(error);
     }
   );
@@ -151,7 +149,6 @@ export function axiosInterceptors() {
     },
     (error) => {
       console.error("응답 에러: ", error);
-
       return Promise.reject(error);
     }
   );
