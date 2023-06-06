@@ -1,7 +1,16 @@
 import {HintContainer} from "../../components/hintContainer/HintCotainer";
 import styles from './Quiz.module.scss'
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { headerTitleState } from "../../state/headerTitleState";
+import { useEffect } from "react";
 
 const QuizNameContainer = () => {
+    const setHeaderTitle = useSetRecoilState(headerTitleState);
+
+  useEffect(()=>{
+    setHeaderTitle("문제")
+  }, [setHeaderTitle]);
+
     return (
         <div className={styles.quizNameContainer}>
             <div className={styles.quizInfo}>

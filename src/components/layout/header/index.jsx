@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Header.module.scss";
 import { useNavigate } from "react-router-dom";
 
-const Header = ({ headerTitle = "제목을설정해주세요" }) => {
+const Header = ({ headerTitle }) => {
   const navigate = useNavigate();
   return (
     <div className={styles.header}>
