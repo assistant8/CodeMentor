@@ -1,9 +1,4 @@
-$border-color: #c2bcca;
-$font-color: #3e3e3e;
-$violet-1: #e4d2fa;
-$violet-2: #c79aff;
-$violet-3: #a256ff;
-$violet-4: #6700e6;
+@import "../../constants/utils.scss";
 
 * {
   box-sizing: border-box;
@@ -42,8 +37,9 @@ $violet-4: #6700e6;
     align-items: center;
     background-color: $border-color;
     border-radius: 50%;
-    background-size: cover;
-    background-position: center;
+    img {
+      width: 100%;
+    }
   }
 
   .inputBox {
