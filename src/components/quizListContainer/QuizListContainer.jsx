@@ -4,26 +4,35 @@ import check from "../../image/check.png";
 import { useNavigate } from "react-router-dom";
 import PATH from "../../constants/path";
 
-export const QuizListContainer = ({ style, isImgNeed = true, searchKey }) => {
+export const QuizListContainer = ({ style, isImgNeed = true, searchKey, selectedCategory }) => {
   const navigate = useNavigate();
-  const quizs = [
-    //더미
+  const quizs = [ //더미
     {
       id: 1,
-      category: "그래프",
+      category: "백준", //백준
       title: "토마토",
     },
     {
       id: 2,
-      category: "구현",
+      category: "프로그래머스", //프로그래머스
       title: "사과",
     },
+    {
+      id: 3,
+      category: "프로그래머스", //프로그래머스
+      title: "큰 수 구하기",
+    },
+    {
+      id: 4,
+      category: "프로그래머스", //프로그래머스
+      title: "작은 수 구하기",
+    },
   ];
-  console.log("searchKey", searchKey)
 
   return (
     <div className={styles.quizListContainer}>
       {quizs
+        .filter((quiz) => selectedCategory==='전체' ? true : quiz.category === selectedCategory)
         .filter((quiz) => quiz.title.includes(searchKey))
         .map((quiz) => {
           return (

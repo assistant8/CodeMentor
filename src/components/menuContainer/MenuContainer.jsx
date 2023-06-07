@@ -1,19 +1,23 @@
 import styles from "./MenuContainer.module.scss";
 import bookmark from "../../image/bookmark.png";
 import check from "../../image/check.png";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-export const MenuContainer = ({ style, isImgNeed = true }) => {
+export const MenuContainer = ({ style, isImgNeed = true, onClick, category }) => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [selectedFilter, setSelectedFilter] = useState();
 
-  const handleItemClick = useCallback((item)=>{
-    setSelectedCategory(item);
-  }, [])
+  // const handleItemClick = useCallback((item)=>{
+  //   setSelectedCategory(item);
+  // }, [])
 
   const handleFilterClick = useCallback((item)=>{
     setSelectedFilter(item);
   }, [])
+
+  useEffect(()=>{
+    setSelectedCategory(category);
+  }, [category])
 
   return (
     <div className={styles.menuContainer}>
@@ -21,19 +25,19 @@ export const MenuContainer = ({ style, isImgNeed = true }) => {
         <ul>
           <li
             className={selectedCategory === '전체' ? styles.selected : ''}
-            onClick={() => handleItemClick('전체')}
+            onClick={() => onClick('전체')}
           >
             전체
           </li>
           <li
             className={selectedCategory === '백준' ? styles.selected : ''}
-            onClick={() => handleItemClick('백준')}
+            onClick={() => onClick('백준')}
           >
             백준
           </li>
           <li
             className={selectedCategory === '프로그래머스' ? styles.selected : ''}
-            onClick={() => handleItemClick('프로그래머스')}
+            onClick={() => onClick('프로그래머스')}
           >
             프로그래머스
           </li>
