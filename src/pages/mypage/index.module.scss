@@ -1,4 +1,5 @@
 @import "../../constants/utils.scss";
+@import "../../components/layout/mixins";
 
 .container {
   width: 100%;
@@ -121,9 +122,11 @@
   padding: 1.25rem;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
   width: 80%;
+  max-width: 312px; //390px * 80%
 }
 
 .reactModalOverlay {
+  @include common-layout;
   position: fixed;
   top: 0;
   left: 0;
