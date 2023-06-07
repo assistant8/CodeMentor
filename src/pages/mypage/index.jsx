@@ -12,8 +12,8 @@ import { useEffect } from "react";
 const User = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
-  useEffect(()=>{
-    setHeaderTitle("마이페이지")
+  useEffect(() => {
+    setHeaderTitle("마이페이지");
   }, [setHeaderTitle]);
 
   let navigate = useNavigate();
@@ -137,12 +137,17 @@ const LogOut = () => {
   return <p className={styles.logout}>로그아웃</p>;
 };
 
-const GradeModal = ({ isOpen, onRequestClose, children }) => {
+const GradeModal = ({ isOpen, closeModal, children }) => {
+  const handleModalClick = (e) => {
+    e.stopPropagation();
+  };
   if (!isOpen) return null;
 
   return (
-    <div className={styles.reactModalOverlay}>
-      <div className={styles.reactModal}>{children}</div>
+    <div className={styles.reactModalOverlay} onClick={closeModal}>
+      <div className={styles.reactModal} onClick={handleModalClick}>
+        {children}
+      </div>
     </div>
   );
 };
@@ -163,7 +168,7 @@ const MyPage = () => {
       <Grade setIsOpen={setIsOpen} openModal={openModal} />
       <Menu />
       <LogOut />
-      <GradeModal isOpen={isOpen} onRequestClose={closeModal}>
+      <GradeModal isOpen={isOpen} closeModal={closeModal}>
         <GiCancel className={styles.closeBtn} onClick={closeModal} />
         <div className={styles.gradeContainer}>
           <div className={styles.gradeBox}>
