@@ -99,74 +99,49 @@ export default function ByEmail() {
       <div className={styles.topBar}>11:11</div>
       <div className={styles.logo}>/*CodeWhisper*/</div>
       <form>
-        {/* <label htmlFor="email">이메일</label> */}
-        <UserInput
-          style={{ position: "absolute", top: "139px", left: "30.16px" }}
-          type={"text"}
-          name={"email"}
-          placeholder={"이메일"}
-          ref={emailInput}
-          onChange={handleOnChangeInput}
-        />
-        {/* <input
-          type="text"
-          name="email"
-          id="email"
-          placeholder="codeWhisper@gmail.com"
-          ref={emailInput}
-          onChange={handleOnChangeInput}
-        /> */}
-        <div>{validationMessage.email}</div>
+        <div className={styles.wrapper_emailInput}>
+          <UserInput
+            type={"text"}
+            name={"email"}
+            placeholder={"이메일"}
+            ref={emailInput}
+            onChange={handleOnChangeInput}
+          />
+        </div>
+        {/* <div>{validationMessage.email}</div> */}
         {/* <label htmlFor="passwor">비밀번호</label> */}
-        <UserInput
-          type={"text"}
-          name={"email"}
-          placeholder={"비밀번호"}
-          ref={emailInput}
-          onChange={handleOnChangeInput}
-          style={{ position: "absolute", top: "241px", left: "30.16px" }}
-        />
-        {/* <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="********"
-          ref={passwordInput}
-          onChange={handleOnChangeInput}
-        /> */}
-        <div>{validationMessage.password}</div>
-        <VioletButton
-          children={"로그인"}
-          onClick={handleOnClickSubmitButton}
-          style={{ position: "absolute", top: "343px", left: "30.16px" }}
-        />
-        {/* <input
-          type="submit"
-          value="로그인"
-          onClick={handleOnClickSubmitButton}
-        /> */}
+        <div className={styles.wrapper_passwordInput}>
+          <UserInput
+            type={"text"}
+            name={"password"}
+            placeholder={"비밀번호"}
+            ref={passwordInput}
+            onChange={handleOnChangeInput}
+          />
+        </div>
+        {/* <div>{validationMessage.password}</div> */}
+        <div className={styles.wrapper_loginButton}>
+          <VioletButton
+            children={"로그인"}
+            onClick={handleOnClickSubmitButton}
+          />
+        </div>
       </form>
-      <LoginTextLink
-        children={"회원 가입"}
-        onClick={() => {
-          navigate(PATH.LOGIN + "/register");
-        }}
-      />
-      {/* <div
-        className={styles.register}
-        onClick={() => {
-          navigate(PATH.LOGIN + "/register");
-        }}
-      >
-        회원 가입
-      </div> */}
-      <div
-        className={styles.findPassword}
-        onClick={() => {
-          navigate(PATH.LOGIN + "/find-password");
-        }}
-      >
-        비밀번호 찾기
+      <div className={styles.wrapper_registerLink}>
+        <LoginTextLink
+          children={"회원 가입"}
+          onClick={() => {
+            navigate(PATH.LOGIN + "/register");
+          }}
+        />
+      </div>
+      <div className={styles.wrapper_findPasswordLink}>
+        <LoginTextLink
+          children={"비밀번호 찾기"}
+          onClick={() => {
+            navigate(PATH.LOGIN + "/find-password");
+          }}
+        />
       </div>
       <div className={styles.wrapper_loginOptions}>
         <div
