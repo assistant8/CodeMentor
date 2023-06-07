@@ -9,6 +9,8 @@ import {
   makeEmailValidationMessage,
   // axiosInterceptors,
 } from "../../hooks/useLogin.js";
+import { UserInput } from "../../components/inputs/UserInput";
+import { VioletButton } from "../../components/buttons/VioletButton";
 
 export default function FindPassword() {
   const navigate = useNavigate();
@@ -97,26 +99,29 @@ export default function FindPassword() {
   }, [email]);
 
   return (
-    <>
-      <div>* 비밀번호 찾기 페이지 *</div>
-      <div>비밀번호 찾기</div>
+    <div className={styles.container_FindPassword}>
+      <div className={styles.topBar}>11:11</div>
+      <div className={styles.logo}>비밀번호 찾기</div>
+
+      <div className={styles.message}>가입했던 이메일을 입력해주세요.</div>
       <form>
-        <label htmlFor="emailInput">이메일</label>
-        <input
-          type="text"
-          name="email"
-          id="emailInput"
-          placeholder="murakami@haruki.com"
-          ref={emailInput}
-          onChange={handleOnChangeEmailInput}
-        />
-        <div>{validationMessage.email}</div>
-        <input
-          type="submit"
-          value="확인"
-          onClick={handleOnClickSubmitButton}
-        ></input>
+        <div className={styles.wrapper_inputAndValidationMessage}>
+          <UserInput
+            type="text"
+            name="email"
+            id="emailInput"
+            placeholder="murakami@haruki.com"
+            ref={emailInput}
+            onChange={handleOnChangeEmailInput}
+          />
+          <div className={styles.validationMessage}>
+            {validationMessage.email}
+          </div>
+        </div>
+        <div className={styles.wrapper_submitButton}>
+          <VioletButton children={"확인"} onClick={handleOnClickSubmitButton} />
+        </div>
       </form>
-    </>
+    </div>
   );
 }

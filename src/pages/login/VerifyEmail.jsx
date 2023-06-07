@@ -5,6 +5,8 @@ import axios from "axios";
 import PATH from "../../constants/path";
 import { set } from "immutable";
 import { axiosInterceptors } from "../../hooks/useLogin.js";
+import { UserInput } from "../../components/inputs/UserInput";
+import { VioletButton } from "../../components/buttons/VioletButton";
 
 // 클릭 버튼을 없애는 게 사용자한테 더 편하려나.
 // - verification code랑 input 내용 평가해서 자동으로 다음 페이지로 넘어가게.
@@ -172,36 +174,36 @@ export default function VerifyEmail() {
   }, [verificationCodeInputValue]);
 
   return (
-    <>
-      <div>* 이메일 인증 번호 확인 페이지 *</div>
+    <div className={styles.container_VerifyEmail}>
+      <div className={styles.topBar}>11:11</div>
+      <div className={styles.logo}>회원 가입</div>
 
-      <div>이메일 인증</div>
-      <div>{email}로 인증 번호가 발송되었습니다.</div>
+      <div className={styles.message}>
+        {email}로 인증 번호가 발송되었습니다.
+      </div>
       <form>
-        <label htmlFor="verificationCodeInput">인증 번호</label>
-        <input
-          type="text"
-          name="verificationCode"
-          id="verificationCodeInput"
-          maxLength="6"
-          placeholder="인증 번호 6자리 숫자를 입력해주세요."
-          ref={verificationCodeInput}
-          onChange={handleOnChangeVerificationCodeInput}
-          onKeyDown={(e) => {
-            if (e.key === " ") {
-              e.preventDefault();
-            }
-          }}
-          value={verificationCodeInputValue}
-        />
-        <div>{validationMessage}</div>
-        <input
-          type="submit"
-          value="확인"
-          onClick={handleOnClickSubmitButton}
-        ></input>
+        <div className={styles.wrapper_inputAndValidationMessage}>
+          <UserInput
+            type={"text"}
+            name={"verificationCode"}
+            placeholder={"인증 번호 6자리"}
+            maxLength="6"
+            ref={verificationCodeInput}
+            onChange={handleOnChangeVerificationCodeInput}
+            onKeyDown={(e) => {
+              if (e.key === " ") {
+                e.preventDefault();
+              }
+            }}
+            value={verificationCodeInputValue}
+          />
+          <div className={styles.validationMessage}>{validationMessage}</div>
+        </div>
+        <div className={styles.wrapper_submitButton}>
+          <VioletButton children={"확인"} onClick={handleOnClickSubmitButton} />
+        </div>
       </form>
-    </>
+    </div>
   );
 }
 

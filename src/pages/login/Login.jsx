@@ -11,9 +11,12 @@ import {
 } from "../../hooks/useLogin.js";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
-import { TextLink } from "../../components/link/TextLink.jsx";
+import { LoginTextLink } from "../../components/links/LoginTextLink.jsx";
+import google from "../../image/google.svg";
+import kakao from "../../image/kakao.svg";
+import naver from "../../image/naver.svg";
 
-export default function ByEmail() {
+export default function Login() {
   const navigate = useNavigate();
   const emailInput = useRef();
   const passwordInput = useRef();
@@ -32,7 +35,7 @@ export default function ByEmail() {
   // - 페이지가 깔끔했으면 좋겠음.
   // - input 오른쪽에 체크 아이콘 같은 걸로 표시해주면 어떨까?
 
-  const handleOnChangeInput = (e) => {
+  const handleOnChangeFormInput = (e) => {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -99,105 +102,66 @@ export default function ByEmail() {
       <div className={styles.topBar}>11:11</div>
       <div className={styles.logo}>/*CodeWhisper*/</div>
       <form>
-        {/* <label htmlFor="email">이메일</label> */}
-        <UserInput
-          // className={"input_email"}
-          style={{ position: "absolute", top: "139px", left: "30.16px" }}
-          type={"text"}
-          name={"email"}
-          placeholder={"murakami@haruki.com"}
-          ref={emailInput}
-          onChange={handleOnChangeInput}
-        />
-        {/* <input
-          type="text"
-          name="email"
-          id="email"
-          placeholder="codeWhisper@gmail.com"
-          ref={emailInput}
-          onChange={handleOnChangeInput}
-        /> */}
-        <div>{validationMessage.email}</div>
-        {/* <label htmlFor="passwor">비밀번호</label> */}
-        <UserInput
-          // className={"input_email"}
-          type={"text"}
-          name={"email"}
-          placeholder={"murakami@haruki.com"}
-          ref={emailInput}
-          onChange={handleOnChangeInput}
-          style={{ position: "absolute", top: "241px", left: "30.16px" }}
-        />
-        {/* <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="********"
-          ref={passwordInput}
-          onChange={handleOnChangeInput}
-        /> */}
-        <div>{validationMessage.password}</div>
-        <VioletButton
-          children={"로그인"}
-          onClick={handleOnClickSubmitButton}
-          style={{ position: "absolute", top: "343px", left: "30.16px" }}
-        />
-        {/* <input
-          type="submit"
-          value="로그인"
-          onClick={handleOnClickSubmitButton}
-        /> */}
+        <div className={styles.wrapper_Inputs}>
+          <UserInput
+            type={"text"}
+            name={"email"}
+            placeholder={"이메일"}
+            ref={emailInput}
+            onChange={handleOnChangeFormInput}
+          />
+          <UserInput
+            type={"password"}
+            name={"password"}
+            placeholder={"비밀번호"}
+            ref={passwordInput}
+            onChange={handleOnChangeFormInput}
+          />
+        </div>
+        {/* <div>{validationMessage.password}</div> */}
+        <div className={styles.wrapper_submitButton}>
+          <VioletButton
+            children={"로그인"}
+            onClick={handleOnClickSubmitButton}
+          />
+        </div>
       </form>
-      <TextLink
-        styles={styles}
-        className={"register"}
-        children={"회원 가입"}
-        onClick={() => {
-          navigate(PATH.LOGIN + "/register");
-        }}
-      />
-      {/* <div
-        className={styles.register}
-        onClick={() => {
-          navigate(PATH.LOGIN + "/register");
-        }}
-      >
-        회원 가입
-      </div> */}
-      <div
-        className={styles.findPassword}
-        onClick={() => {
-          navigate(PATH.LOGIN + "/find-password");
-        }}
-      >
-        비밀번호 찾기
+      <div className={styles.wrapper_TextLinks}>
+        <LoginTextLink
+          children={"비밀번호 찾기"}
+          onClick={() => {
+            navigate(PATH.LOGIN + "/find-password");
+          }}
+        />
+        <LoginTextLink
+          children={"회원 가입"}
+          onClick={() => {
+            navigate(PATH.LOGIN + "/register");
+          }}
+        />
       </div>
       <div className={styles.wrapper_loginOptions}>
-        <div
-          className={styles.loginOption}
-          onClick={() => {
-            console.log("구글");
-          }}
-        >
-          구글
-        </div>
-        <div
-          className={styles.loginOption}
-          onClick={() => {
-            console.log("네이버");
-          }}
-        >
-          카카오
-        </div>
-        <div
-          className={styles.loginOption}
-          onClick={() => {
-            console.log("카카오");
-          }}
-        >
-          네이버
-        </div>
+        <LoginOption optionName={"구글"} />
+        <LoginOption optionName={"카카오"} />
+        <LoginOption optionName={"네이버"} />
       </div>
+    </div>
+  );
+}
+
+function LoginOption({ optionName }) {
+  return (
+    <div
+      className={styles.loginOption}
+      style={{
+        border: "1px solid",
+      }}
+      onClick={() => {
+        console.log(optionName);
+      }}
+    >
+      {optionName}
+      {/* <img src={name} alt="" /> */}
     </div>
   );
 }
