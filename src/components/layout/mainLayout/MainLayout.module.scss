@@ -1,4 +1,7 @@
+@import '../mixins';
+
 .Full {
+  @include common-layout;
   width: 100%;
   max-width: 390px;
   display: flex;
