@@ -8,12 +8,13 @@ import React, { useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
 import { useEffect } from "react";
+import { Modal } from "../../components/modal";
 
 const User = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
-  useEffect(()=>{
-    setHeaderTitle("마이페이지")
+  useEffect(() => {
+    setHeaderTitle("마이페이지");
   }, [setHeaderTitle]);
 
   let navigate = useNavigate();
@@ -35,7 +36,7 @@ const User = () => {
   );
 };
 
-const Grade = ({ openModal, setIsOpen }) => {
+const Grade = ({ openModal }) => {
   return (
     <div className={styles.gradeInfo}>
       <div className={styles.gradeImg}>
@@ -137,15 +138,6 @@ const LogOut = () => {
   return <p className={styles.logout}>로그아웃</p>;
 };
 
-const GradeModal = ({ isOpen, onRequestClose, children }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className={styles.reactModalOverlay}>
-      <div className={styles.reactModal}>{children}</div>
-    </div>
-  );
-};
 const MyPage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -160,10 +152,10 @@ const MyPage = () => {
   return (
     <div className={styles.container}>
       <User />
-      <Grade setIsOpen={setIsOpen} openModal={openModal} />
+      <Grade openModal={openModal} />
       <Menu />
       <LogOut />
-      <GradeModal isOpen={isOpen} onRequestClose={closeModal}>
+      <Modal isOpen={isOpen} closeModal={closeModal}>
         <GiCancel className={styles.closeBtn} onClick={closeModal} />
         <div className={styles.gradeContainer}>
           <div className={styles.gradeBox}>
@@ -181,7 +173,7 @@ const MyPage = () => {
             <div className={styles.description}>힌트 열람만 가능</div>
           </div>
         </div>
-      </GradeModal>
+      </Modal>
     </div>
   );
 };
