@@ -1,8 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap");
+
 .FullLogin {
   width: 100%;
   max-width: 390px;
 
   margin: 0 auto;
+
+  font-family: "IBM Plex Mono", monospace;
 }
 
 .InnerLogin {
@@ -14,8 +18,4 @@
   align-items: center;
 
   border: 1px solid;
-
-  div {
-    border: 1px solid;
-  }
 }

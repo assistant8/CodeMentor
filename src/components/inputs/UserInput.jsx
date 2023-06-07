@@ -2,7 +2,7 @@ import styles from "./UserInput.module.scss";
 import React from "react";
 
 export const UserInput = React.forwardRef(
-  ({ placeholder, value, onChange, type, name }, ref) => {
+  ({ placeholder, value, onChange, type, name, maxLength, onKeyDown }, ref) => {
     return (
       <input
         className={styles.UserInput}
@@ -12,6 +12,8 @@ export const UserInput = React.forwardRef(
         onChange={onChange}
         name={name}
         ref={ref}
+        maxLength={maxLength}
+        onKeyDown={onKeyDown}
       ></input>
     );
   }

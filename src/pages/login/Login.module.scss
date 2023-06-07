@@ -8,85 +8,79 @@
   flex-direction: column;
   align-items: center;
 
-  .topBar {
-    width: 354.33px;
-    height: 20px;
-
-    position: absolute;
-    top: 15px;
+  div {
+    // border: 1px solid;
   }
+}
 
-  .logo {
-    width: 291px;
-    height: 20px;
+.topBar {
+  width: 354.33px;
+  height: 20px;
 
-    position: absolute;
-    top: 77px;
-    left: 49.66px;
+  margin-top: 15px;
+}
 
-    margin: 77 49.66 0 49.66;
+.logo {
+  height: 20px;
 
-    font-family: "JetBrains Mono";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 20px;
+  margin-top: 134px;
 
-    text-align: center;
-    letter-spacing: 0.05em;
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 20px;
 
-    color: $violet-4;
+  text-align: center;
+  letter-spacing: 0.05em;
+
+  color: $violet-4;
+}
+
+.wrapper_Inputs {
+  margin-top: 64px;
+
+  input + input {
+    margin-top: 18px;
   }
+}
 
-  .wrapper_emailInput {
-    position: absolute;
-    top: 139px;
-    left: 30.16px;
-  }
+.wrapper_submitButton {
+  margin-top: 40px;
+}
 
-  .wrapper_passwordInput {
-    position: absolute;
-    top: 241px;
-    left: 30.16px;
-  }
+.wrapper_TextLinks {
+  width: 300px;
 
-  .wrapper_loginButton {
-    position: absolute;
-    top: 343px;
-    left: 30.16px;
-  }
+  margin-top: 18px;
 
-  .wrapper_registerLink {
-    position: absolute;
-    top: 445px;
-    margin: 0 auto;
-  }
+  display: flex;
+  justify-content: space-between;
+}
 
-  .wrapper_findPasswordLink {
-    position: absolute;
-    top: 507px;
-    margin: 0 auto;
-  }
+.wrapper_loginOptions {
+  width: 264px;
+  height: 66px;
 
-  .wrapper_loginOptions {
-    width: 264px;
+  margin-top: 42px;
+
+  display: flex;
+  align-items: center;
+
+  .loginOption {
+    width: 66px;
     height: 66px;
 
-    position: absolute;
-    top: 569px;
-    left: 63.16px;
-
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+  }
 
-    .loginOption {
-      width: 66px;
-      height: 66px;
+  div + div {
+    margin-left: 33px;
+  }
 
-      display: flex;
-      justify-self: center;
-      align-items: center;
-    }
+  img {
+    width: 100%;
   }
 }

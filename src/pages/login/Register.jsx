@@ -11,6 +11,8 @@ import {
   axiosInterceptors,
 } from "../../hooks/useLogin.js";
 import axios from "axios";
+import { VioletButton } from "../../components/buttons/VioletButton.jsx";
+import { UserInput } from "../../components/inputs/UserInput";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -114,48 +116,55 @@ export default function Register() {
   }, [passwordConfirm]);
 
   return (
-    <>
-      <div>* 회원 가입 페이지 *</div>
-      <div>회원 가입</div>
+    <div className={styles.container_Register}>
+      <div className={styles.topBar}>11:11</div>
+      <div className={styles.logo}>회원 가입</div>
+
       <form>
-        <label htmlFor="emailInput">이메일</label>
-        <input
-          type="text"
-          name="email"
-          id="emailInput"
-          placeholder="codeWhisper@gmail.com"
-          ref={emailInput}
-          onChange={handleOnChangeFormInput}
-        />
-        <div>{validationMessage.email}</div>
-        <label htmlFor="passwordInput">비밀번호</label>
-        <input
-          type="password"
-          name="password"
-          id="passwordInput"
-          maxLength="12"
-          placeholder="********"
-          ref={passwordInput}
-          onChange={handleOnChangeFormInput}
-        />
-        <div>{validationMessage.password}</div>
-        <label htmlFor="passwordConfirmInput">비밀번호 확인</label>
-        <input
-          type="password"
-          name="passwordConfirm"
-          id="passwordConfirmInput"
-          maxLength="12"
-          placeholder="********"
-          ref={passwordConfirmInput}
-          onChange={handleOnChangeFormInput}
-        />
-        <div>{validationMessage.passwordConfirm}</div>
-        <input
-          type="submit"
-          value="확인"
-          onClick={handleOnClickSubmitButton}
-        ></input>
+        <div className={styles.wrapper_Inputs}>
+          <div className={styles.wrapper_InputAndValidationMessage}>
+            <UserInput
+              type={"text"}
+              name={"email"}
+              placeholder={"이메일"}
+              ref={emailInput}
+              onChange={handleOnChangeFormInput}
+            />
+            <div className={styles.validationMessage}>
+              {validationMessage.email}
+            </div>
+          </div>
+          <div className={styles.wrapper_InputAndValidationMessage}>
+            <UserInput
+              type={"password"}
+              name={"password"}
+              placeholder={"비밀번호"}
+              ref={passwordInput}
+              onChange={handleOnChangeFormInput}
+              maxLength={12}
+            />
+            <div className={styles.validationMessage}>
+              {validationMessage.password}
+            </div>
+          </div>
+          <div className={styles.wrapper_InputAndValidationMessage}>
+            <UserInput
+              type={"password"}
+              name={"passwordConfirm"}
+              placeholder={"비밀번호 확인"}
+              ref={passwordConfirmInput}
+              onChange={handleOnChangeFormInput}
+              maxLength={12}
+            />
+            <div className={styles.validationMessage}>
+              {validationMessage.passwordConfirm}
+            </div>
+          </div>
+        </div>
+        <div className={styles.wrapper_submitButton}>
+          <VioletButton children={"확인"} onClick={handleOnClickSubmitButton} />
+        </div>
       </form>
-    </>
+    </div>
   );
 }

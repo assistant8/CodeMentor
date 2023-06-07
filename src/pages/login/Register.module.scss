@@ -1,6 +1,63 @@
-.container {
+@import "../../constants/utils.scss";
+
+.container_Register {
   width: 100%;
+  height: 100vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  div {
+    // border: 1px solid;
+  }
+}
+
+.topBar {
+  width: 354.33px;
+  height: 20px;
+
+  margin-top: 15px;
+}
+
+.logo {
+  height: 20px;
+
+  margin-top: 134px;
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 20px;
+
+  text-align: center;
+  letter-spacing: 0.05em;
+
+  color: $violet-4;
+}
+
+.wrapper_Inputs {
+  margin-top: 58px;
+
+  div + div {
+    // margin-top: 20px;
+  }
+
+  .wrapper_InputAndValidationMessage {
+    .validationMessage {
+      height: 30px;
+
+      color: #f16f6f;
+
+      line-height: 30px;
+
+      // margin-top: 5px;
+      margin-left: 20px;
+    }
+  }
+}
+
+.wrapper_submitButton {
+  margin-top: 52px;
 }
