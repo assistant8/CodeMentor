@@ -80,7 +80,7 @@ export default function Quiz() {
   return (
     <div className={styles.quizContainer}>
       <QuizNameContainer />
-      <Timer initialMinutes={1} initialSeconds={10} onComplete={handleTimerComplete}/>
+      <Timer initialMinutes={0} initialSeconds={10} onComplete={handleTimerComplete}/>
       <HintContainer
         hintTitle={"힌트 1"}
         hintContent={"풀어줘요"}

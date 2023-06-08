@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import timer from "../../image/timer.png"
+import styles from "./Timer.module.scss";
+
 
 const Timer = ({ initialMinutes, initialSeconds, onComplete }) => { //초기값
   const [minutes, setMinutes] = useState(initialMinutes); //현재값 업뎃 용도
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isPause, setIsPause] = useState(false);
+  const [isHover, setIsHover] = useState(false);
 
   const handleTimerClick = () => { // 누르면 일시중지되거나 재생됨
     isPause ? setIsPause(false) : setIsPause(true); //일시정지 표시 
@@ -35,16 +38,20 @@ const Timer = ({ initialMinutes, initialSeconds, onComplete }) => { //초기값
       setIsPause(true); //및 일시정지 표시 
       console.log("끝")
     }
-  }, [minutes, seconds]);
+  }, [minutes, seconds, onComplete]);
 
+  const handleHover = () => {
+    setIsHover(true)
+  }
+  const handleLeave = () => {
+    setIsHover(false)
+  }
 
   return (
-    <div onClick={handleTimerClick} style={{backgroundColor: 'yellow'}}>
-      <div style={{ position: 'relative', display: 'inline-block' }}>
-        <img src={timer} style={{ width: '100%' }} alt="Timer" />
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-          {`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
-        </div>
+    <div className={styles.timerContainer} onClick={handleTimerClick} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
+      <img src={timer} className={styles.timerRing} alt="Timer" />
+      <div className={`${isHover ? (!isPause ? styles.hoverPauseImage : styles.hoverPlayImage) : styles.timerString}`} >
+        {isHover ? "" : `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
       </div>
     </div>
   );
