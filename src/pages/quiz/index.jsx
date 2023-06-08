@@ -2,7 +2,8 @@ import { HintContainer } from "../../components/hintContainer/HintCotainer";
 import styles from "./Quiz.module.scss";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Timer from "../../components/timer/Timer.jsx";
 
 const QuizNameContainer = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -66,14 +67,20 @@ const QuizNameContainer = () => {
     </div>
   );
 };
-const TimerContainer = () => {
-  return <div>큰 타이머</div>;
-};
+
 export default function Quiz() {
+  const [isPause, setIsPause] = useState(false);
+
+  const handleTimerClick = () => {
+    setIsPause ? setIsPause(false) : setIsPause(true);
+  }
+
+  const 
+  
   return (
     <div className={styles.quizContainer}>
       <QuizNameContainer />
-      <TimerContainer />
+      <Timer initialMinutes={1} initialSeconds={10} onClick={handleTimerClick}/>
       <HintContainer
         hintTitle={"힌트 1"}
         hintContent={"풀어줘요"}
