@@ -1,3 +1,7 @@
+@import "../../styles/color.scss";
+* {
+  box-sizing: border-box;
+}
 .quizContainer {
   display: flex;
   flex-direction: column;
@@ -19,9 +23,9 @@
     justify-content: center;
     width: 17rem;
     .quizTitle {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
     }
     .quizPersonal {
       display: flex;
@@ -47,6 +51,51 @@
     cursor: pointer;
     > .div {
       font-size: 0.63rem;
+    }
+  }
+}
+.commentsContainer {
+  border-top: $border-color 2px solid;
+  margin-top: 1rem;
+  margin-bottom: 5rem;
+  width: 85%;
+  .commentTitle {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .commentBox {
+    margin-bottom: 1.25rem;
+    .userInfo {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 0.5rem;
+      .userImg {
+        width: 1.5rem;
+        height: 1.5rem;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $border-color;
+        border-radius: 50%;
+        img {
+          width: 100%;
+        }
+      }
+      .userName {
+        margin: 0;
+        margin-left: 0.5rem;
+      }
+    }
+  }
+  .commentInputContainer {
+    .commentInput {
+      width: 100%;
+      padding: 0.5rem;
+    }
+    .submitBtn {
+      margin-left: auto;
     }
   }
 }
