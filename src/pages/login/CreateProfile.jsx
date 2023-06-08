@@ -3,6 +3,8 @@ import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import PATH from "../../constants/path";
+import { VioletButton } from "../../components/buttons/VioletButton.jsx";
+import { UserInput } from "../../components/inputs/UserInput.jsx";
 
 export default function CreateProfile() {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ export default function CreateProfile() {
     }
   };
 
-  const handleOnChange_nameInput = (e) => {
+  const handleOnChangeNameInput = (e) => {
     const value = e.target.value;
 
     // if (value.includes(" ")) {
@@ -54,7 +56,7 @@ export default function CreateProfile() {
   };
 
   // 입력값이 조건에 부합해야 버튼이 활성화되게 만들어야겠음.
-  const handleOnClick_submitButton = (e) => {
+  const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
     if (!isNameValid(nameInputValue)) {
@@ -108,46 +110,54 @@ export default function CreateProfile() {
 
   return (
     <div className={styles.container_CreateProfile}>
-      <div>* 회원 가입 후 최초 프로필 설정 페이지 *</div>
-      <div>내 정보</div>
+      <div className={styles.topBar}>11:11</div>
+      <div className={styles.logo}>프로필 설정</div>
       <form>
-        <div>
-          사진
-          <input
-            type="file"
-            name="profileImage"
-            onChange={handleOnChange_profileImageInput}
-          />
-          {selectedFile && <img src={selectedFile} alt="Profile" />}
+        <div className={styles.wrapper_Inputs}>
+          <div>
+            사진
+            <input
+              type="file"
+              name="profileImage"
+              onChange={handleOnChange_profileImageInput}
+            />
+            {selectedFile && <img src={selectedFile} alt="Profile" />}
+          </div>
+          <div className={styles.wrapper_InputAndValidationMessage}>
+            <UserInput
+              type="text"
+              name="name"
+              id="nameInput"
+              maxLength="15"
+              placeholder="너구리와함께사라지다"
+              ref={nameInput}
+              onChange={handleOnChangeNameInput}
+              onKeyDown={(e) => {
+                if (e.key === " ") {
+                  e.preventDefault();
+                }
+              }}
+              value={nameInputValue}
+            />
+            <div className={styles.validationMessage}>
+              {nameValidationMessage}
+            </div>
+            <div className={styles.inputGuide}>
+              * 이름은 공백을 제외한 2~10자의 한글, 영문만 입력 가능합니다.
+            </div>
+          </div>
         </div>
-        <label htmlFor="nameInput">이름</label>
-        <input
-          type="text"
-          name="name"
-          id="nameInput"
-          maxLength="15"
-          placeholder="너구리와함께사라지다"
-          ref={nameInput}
-          onChange={handleOnChange_nameInput}
-          onKeyDown={(e) => {
-            if (e.key === " ") {
-              e.preventDefault();
-            }
-          }}
-          value={nameInputValue}
-        />
-        <div>{nameValidationMessage}</div>
-        <div>이름은 공백을 제외한 2~10자의 한글, 영문만 입력 가능합니다.</div>
-        <input
-          type="submit"
-          value="시작하기"
-          onClick={handleOnClick_submitButton}
-        />
-        <input
-          type="submit"
-          value="나중에 설정하기"
-          onClick={() => navigate(PATH.LOGIN)}
-        />
+
+        <div className={styles.wrapper_buttons}>
+          <VioletButton
+            children={"시작하기"}
+            onClick={handleOnClickSubmitButton}
+          />
+          <VioletButton
+            children={"나중에 설정하기"}
+            onClick={() => navigate(PATH.LOGIN)}
+          />
+        </div>
       </form>
     </div>
   );
