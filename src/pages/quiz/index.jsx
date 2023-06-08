@@ -1,4 +1,4 @@
-import { HintContainer } from "../../components/hintContainer/HintCotainer";
+import HintContainer from "../../components/hintContainer/HintCotainer";
 import styles from "./Quiz.module.scss";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
@@ -68,19 +68,19 @@ const QuizNameContainer = () => {
   );
 };
 
+//타이머를 누르면 일시정지 or 재생
+//타이머에 정지 및 새로고침도 있나? 
 export default function Quiz() {
-  const [isPause, setIsPause] = useState(false);
-
-  const handleTimerClick = () => {
-    setIsPause ? setIsPause(false) : setIsPause(true);
-  }
-
-  const 
   
+  const handleTimerComplete = () => {
+    console.log('타이머가 완료되었습니다!');
+    // 토스트 메시지 표시 등 원하는 동작 구현
+  };
+
   return (
     <div className={styles.quizContainer}>
       <QuizNameContainer />
-      <Timer initialMinutes={1} initialSeconds={10} onClick={handleTimerClick}/>
+      <Timer initialMinutes={1} initialSeconds={10} onComplete={handleTimerComplete}/>
       <HintContainer
         hintTitle={"힌트 1"}
         hintContent={"풀어줘요"}
