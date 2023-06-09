@@ -22,6 +22,7 @@ const HintContentBox = ({hintContent, isAdmin, isOpen}) => {
         </div>
     )
 }
+
 export default function HintContainer({hintTitle, hintContent, isAdmin = false, isOpen = false}) {
     return (
         <div className={styles.hintContainer}>
