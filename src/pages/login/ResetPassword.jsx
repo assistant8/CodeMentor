@@ -9,6 +9,8 @@ import {
   makePasswordValidationMessage,
   makePasswordConfirmValidationMessage,
 } from "../../hooks/useLogin.js";
+import { VioletButton } from "../../components/buttons/VioletButton.jsx";
+import { UserInput } from "../../components/inputs/UserInput.jsx";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
@@ -30,16 +32,16 @@ export default function ResetPassword() {
   });
   const navigate = useNavigate();
 
-  const handleOnChangePasswordInput = (e) => {
+  const handleOnChangeFormInput = (e) => {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleOnChangePasswordConfirmInput = (e) => {
-    setFormInputValue((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  // const handleOnChangePasswordConfirmInput = (e) => {
+  //   setFormInputValue((prev) => ({
+  //     ...prev,
+  //     [e.target.name]: e.target.value,
+  //   }));
+  // };
 
   const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
@@ -111,6 +113,8 @@ export default function ResetPassword() {
       passwordConfirm
     );
 
+    console.log(newMessage);
+
     setValidationMessage((oldMessage) => ({
       ...oldMessage,
       passwordConfirm: newMessage,
@@ -118,32 +122,53 @@ export default function ResetPassword() {
   }, [passwordConfirm]);
 
   return (
-    <>
-      <div>* 비밀번호 재설정 페이지 *</div>
-      <div>비밀번호 재설정</div>
+    <div className={styles.container_ResetPassword}>
+      <div className={styles.topBar}>11:11</div>
+      <div className={styles.logo}>비밀번호 재설정</div>
+
       <form>
-        <label htmlFor="password">새로운 비밀번호</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          ref={passwordInput}
-          placeholder="새로운 비밀번호를 입력해주세요."
-          onChange={handleOnChangePasswordInput}
-        />
-        <div>{validationMessage.password}</div>
-        <label htmlFor="passwordConfirm">비밀번호 확인</label>
-        <input
-          type="password"
-          name="passwordConfirm"
-          id="passwordConfirm"
-          ref={passwordConfirmInput}
-          placeholder="비밀번호를 확인해주세요."
-          onChange={handleOnChangePasswordConfirmInput}
-        />
-        <div>{validationMessage.passwordConfirm}</div>
-        <input type="submit" value="확인" onClick={handleOnClickSubmitButton} />
+        <div className={styles.wrapper_Inputs}>
+          <div className={styles.wrapper_InputAndValidationMessage}>
+            <UserInput
+              type="password"
+              name="password"
+              id="password"
+              ref={passwordInput}
+              placeholder="비밀번호를 입력해주세요."
+              onChange={handleOnChangeFormInput}
+            />
+            <div className={styles.validationMessage}>
+              {validationMessage.password}
+            </div>
+            <div
+              className={styles.inputGuide}
+              style={
+                validationMessage.password === "완벽합니다!"
+                  ? { display: "none" }
+                  : { display: "block" }
+              }
+            >
+              * 비밀번호는 영문 대문자가 하나 이상 포함된 8-12자리입니다.
+            </div>
+          </div>
+          <div className={styles.wrapper_InputAndValidationMessage}>
+            <UserInput
+              type="password"
+              name="passwordConfirm"
+              id="passwordConfirm"
+              ref={passwordConfirmInput}
+              placeholder="비밀번호를 확인해주세요."
+              onChange={handleOnChangeFormInput}
+            />
+            <div className={styles.validationMessage}>
+              {validationMessage.passwordConfirm}
+            </div>
+          </div>
+        </div>
+        <div className={styles.wrapper_submitButton}>
+          <VioletButton children={"확인"} onClick={handleOnClickSubmitButton} />
+        </div>
       </form>
-    </>
+    </div>
   );
 }

@@ -85,8 +85,7 @@ export default function VerifyEmail() {
       const newFormData = {
         ...formData,
         password: password.current,
-        name: "이름 기본값",
-        profileImage: "프로필 이미지 기본값",
+        name: "너구리와함께사라지다",
       };
 
       axios.post(url, newFormData).then((response) => {
