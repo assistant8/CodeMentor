@@ -2,7 +2,8 @@ import { headerTitleState } from '../../state/headerTitleState';
 import { useSetRecoilState } from 'recoil';
 import styles from './adminCreate.module.scss';
 import HintContainer from "../../components/hintContainer/HintCotainer";
-
+import { SmallVioletButton } from '../../components/buttons/smallVioletButton';
+import { useRef } from 'react';
 
 export default function ProblemCreatePage() {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -14,20 +15,21 @@ export default function ProblemCreatePage() {
   // 등록만 하는 경우는 get요청이 필요없어서 따로 두는 것이 최적화에 도움이 될 듯함
   // setHeaderTitle은 Header 컴포넌트에 있는 것인데 Outlet 컴포넌트에서 하는 게 맞는가?
 
-
-    const handleProblemCreate = () => {
-      // 위 입력된 데이터들을 데이터베이스의 problem에 추가시켜야 함
-    }
+  const buttonRef = useRef();
+  const handleProblemCreate = () => {
+    // 위 입력된 데이터들을 데이터베이스의 problem에 추가시켜야 함
+  }
 
   return (
-    <div className='styles.container'>
-      <div className="styles.problemContainer">
+    <div className='styles.adminCreate__wrapper'>
+      <div className="styles.adminCreate__problemContainer">
         <h2>문제 정보</h2>
         <div className='styles.problemInfo'>
           <input type="text" placeholder='문제 이름' />
           <input type="text" placeholder='문제 url' />
         </div>
         <div className='styles.category'>
+          // 카테고리 컴포넌트버튼 만들자
           <button type="button" value="백준" onClick={()=>{}}>백준</button> 
           <button type="button" value="프로그래머스" onClick={()=>{}}>프로그래머스</button> 
         </div>
@@ -55,7 +57,11 @@ export default function ProblemCreatePage() {
           isAdmin={true}
         />
       </div>
-      <button type='submit' onClick={handleProblemCreate} >등록</button>
+      <SmallVioletButton 
+        ref={buttonRef} 
+        onClick={handleProblemCreate}
+        children="등록"
+        />
     </div>
   );
 }
