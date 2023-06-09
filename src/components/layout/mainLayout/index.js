@@ -8,7 +8,7 @@ import { headerTitleState } from "../../../state/headerTitleState";
 
 
 const MainLayout = ({children}) => {
-  const [headerTitle, setHeaderTitle] = useRecoilState(headerTitleState)
+  const [headerTitle, setHeaderTitle] = useRecoilState(headerTitleState) //헤더로 전달안하고 헤더에서 직접 받아도 될 것
   
   return (
     <div className={styles.Full}>

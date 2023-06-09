@@ -31,4 +31,3 @@ export default function QuizListPage() {
     </div>
   ); 
 } 
-// 카테고리 넘김
