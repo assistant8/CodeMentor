@@ -107,28 +107,22 @@
 
     .validationMessage {
       width: 280px;
-      // align-self: start;
-
-      height: 30px;
-
-      line-height: 30px;
 
       color: #f16f6f;
 
-      // margin-top: 5px;
-      // margin-left: 50px;
+      margin: 10px 0 10px 0;
     }
 
     .inputGuide {
       width: 280px;
 
-      line-height: 30px;
+      margin: 0 0 10px 0;
     }
   }
 }
 
 .wrapper_buttons {
-  margin-top: 52px;
+  margin-top: 30px;
 
   button + button {
     margin-top: 20px;
