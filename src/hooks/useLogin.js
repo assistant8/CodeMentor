@@ -71,8 +71,6 @@ export function makePasswordConfirmValidationMessage(
 export function isPassValidation(formInputValue, validationMessage) {
   const { email, password, passwordConfirm } = formInputValue;
 
-  console.log(email, password, passwordConfirm);
-
   if ("email" in formInputValue && !isEmailValid(email)) {
     return false;
   }
@@ -144,7 +142,7 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
 export function axiosInterceptors() {
   axios.interceptors.request.use(
     (config) => {
-      console.log("요청 인터셉터: ", config.url, config.data);
+      console.log("요청 인터셉터: ", config);
       return config;
     },
     function (error) {

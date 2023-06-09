@@ -175,7 +175,7 @@ export default function VerifyEmail() {
   return (
     <div className={styles.container_VerifyEmail}>
       <div className={styles.topBar}>11:11</div>
-      <div className={styles.logo}>회원 가입</div>
+      <div className={styles.logo}>사용자 인증</div>
 
       <div className={styles.message}>
         {email}로 인증 번호가 발송되었습니다.
