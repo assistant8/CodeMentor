@@ -1,4 +1,4 @@
-import { HintContainer } from "../../components/hintContainer/HintCotainer";
+import HintContainer from "../../components/hintContainer/HintCotainer";
 import styles from "./Quiz.module.scss";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
