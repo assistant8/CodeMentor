@@ -44,6 +44,51 @@
 
   margin-top: 58px;
 
+  .profileImage {
+    width: 200px;
+    height: 200px;
+
+    position: relative;
+
+    border: 1px solid black;
+    border-radius: 100%;
+
+    margin-bottom: 30px;
+
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+
+      border-radius: 100%;
+    }
+
+    .editProfileImageButton {
+      width: 2rem;
+      height: 2rem;
+
+      position: absolute;
+      top: 70%;
+      left: 83%;
+
+      font-size: 90%;
+      color: white;
+
+      background-color: black;
+
+      border-radius: 100%;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      input {
+        display: none;
+      }
+    }
+  }
+
   .wrapper_InputAndValidationMessage {
     display: flex;
     flex-direction: column;

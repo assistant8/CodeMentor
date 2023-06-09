@@ -5,6 +5,7 @@ import axios from "axios";
 import PATH from "../../constants/path";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
+import defaultProfileImage from "../../image/defaultProfileImage.png";
 
 export default function CreateProfile() {
   const navigate = useNavigate();
@@ -14,7 +15,8 @@ export default function CreateProfile() {
   const [nameInputValue, setNameInputValue] = useState(defaultName);
   const [nameValidationMessage, setNameValidationMessage] = useState("");
   const nameInput = useRef();
-  const [selectedFile, setSelectedFile] = useState(defaultImage);
+  const profileImageInput = useRef();
+  const [selectedFile, setSelectedFile] = useState(defaultProfileImage);
 
   const handleOnChange_profileImageInput = (e) => {
     const file = e.target.files[0];
@@ -34,23 +36,6 @@ export default function CreateProfile() {
 
   const handleOnChangeNameInput = (e) => {
     const value = e.target.value;
-
-    // if (value.includes(" ")) {
-    //   const RegExp = / /g;
-    //   const newValue = value.replace(RegExp, "");
-
-    //   setNameInputValue(newValue);
-
-    //   return;
-    // }
-
-    // if (value.length > 10) {
-    //   const newValue = value.slice(0, 10);
-
-    //   setNameInputValue(newValue);
-
-    //   return;
-    // }
 
     setNameInputValue(value);
   };
@@ -110,17 +95,26 @@ export default function CreateProfile() {
 
   return (
     <div className={styles.container_CreateProfile}>
+      <img src="../../image/profileImage.png" alt="" />
       <div className={styles.topBar}>11:11</div>
       <div className={styles.logo}>프로필 설정</div>
       <form>
         <div className={styles.wrapper_Inputs}>
-          <div>
-            사진
-            <input
-              type="file"
-              name="profileImage"
-              onChange={handleOnChange_profileImageInput}
-            />
+          <div
+            className={styles.profileImage}
+            onClick={() => {
+              profileImageInput.current.click();
+            }}
+          >
+            <div className={styles.editProfileImageButton}>
+              img
+              <input
+                ref={profileImageInput}
+                type="file"
+                name="profileImage"
+                onChange={handleOnChange_profileImageInput}
+              />
+            </div>
             {selectedFile && <img src={selectedFile} alt="Profile" />}
           </div>
           <div className={styles.wrapper_InputAndValidationMessage}>
@@ -142,8 +136,15 @@ export default function CreateProfile() {
             <div className={styles.validationMessage}>
               {nameValidationMessage}
             </div>
-            <div className={styles.inputGuide}>
-              * 이름은 공백을 제외한 2~10자의 한글, 영문만 입력 가능합니다.
+            <div
+              className={styles.inputGuide}
+              style={
+                nameValidationMessage === "완벽합니다!"
+                  ? { display: "none" }
+                  : { display: "block" }
+              }
+            >
+              * 이름은 공백을 제외한 2~10자로 설정해주세요.
             </div>
           </div>
         </div>
@@ -168,7 +169,7 @@ function isNameValid(name) {
     return false;
   }
 
-  const nameRegex = /^[a-zA-Z가-힣]{2,10}$/;
+  const nameRegex = /^[a-zA-Z가-힣0-9]{2,10}$/;
   const result = nameRegex.test(name);
 
   return result;
