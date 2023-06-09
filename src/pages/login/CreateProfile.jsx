@@ -11,14 +11,15 @@ export default function CreateProfile() {
   const navigate = useNavigate();
   const location = useLocation();
   const defaultName = location.state.name;
-  const defaultImage = "기본 이미지";
   const [nameInputValue, setNameInputValue] = useState(defaultName);
   const [nameValidationMessage, setNameValidationMessage] = useState("");
   const nameInput = useRef();
   const profileImageInput = useRef();
-  const [selectedFile, setSelectedFile] = useState(defaultProfileImage);
+  const [selectedFile, setSelectedFile] = useState("");
 
   const handleOnChange_profileImageInput = (e) => {
+    e.preventDefault();
+
     const file = e.target.files[0];
 
     const reader = new FileReader();
@@ -27,6 +28,7 @@ export default function CreateProfile() {
       const fileDataURL = reader.result;
 
       setSelectedFile(fileDataURL);
+      profileImageInput.current.value = "";
     };
 
     if (file) {
@@ -53,10 +55,7 @@ export default function CreateProfile() {
     }
 
     const formData = new FormData();
-    formData.append(
-      "profileImg",
-      selectedFile !== defaultImage ? selectedFile : null
-    );
+    formData.append("image", selectedFile === "" ? "" : selectedFile);
     formData.append(
       "name",
       nameInputValue !== defaultName ? nameInputValue : null
@@ -107,7 +106,7 @@ export default function CreateProfile() {
             }}
           >
             <div className={styles.editProfileImageButton}>
-              img
+              edit
               <input
                 ref={profileImageInput}
                 type="file"
@@ -115,7 +114,31 @@ export default function CreateProfile() {
                 onChange={handleOnChange_profileImageInput}
               />
             </div>
-            {selectedFile && <img src={selectedFile} alt="Profile" />}
+
+            {selectedFile === "" ? (
+              <img src={defaultProfileImage} alt="Profile" />
+            ) : (
+              <img src={selectedFile} alt="Profile" />
+            )}
+          </div>
+          <div className={styles.buttons}>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                profileImageInput.current.click();
+              }}
+            >
+              편집
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+
+                setSelectedFile("");
+              }}
+            >
+              기본값
+            </button>
           </div>
           <div className={styles.wrapper_InputAndValidationMessage}>
             <UserInput
