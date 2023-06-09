@@ -10,15 +10,18 @@ import defaultProfileImage from "../../image/defaultProfileImage.png";
 export default function CreateProfile() {
   const navigate = useNavigate();
   const location = useLocation();
-  const defaultName = location.state.name;
-  const defaultImage = "기본 이미지";
+  const defaultName = location?.state?.name;
   const [nameInputValue, setNameInputValue] = useState(defaultName);
   const [nameValidationMessage, setNameValidationMessage] = useState("");
+  const email = location.state.email;
+  console.log(email);
   const nameInput = useRef();
   const profileImageInput = useRef();
-  const [selectedFile, setSelectedFile] = useState(defaultProfileImage);
+  const [selectedFile, setSelectedFile] = useState("");
 
   const handleOnChange_profileImageInput = (e) => {
+    e.preventDefault();
+
     const file = e.target.files[0];
 
     const reader = new FileReader();
@@ -27,6 +30,7 @@ export default function CreateProfile() {
       const fileDataURL = reader.result;
 
       setSelectedFile(fileDataURL);
+      profileImageInput.current.value = "";
     };
 
     if (file) {
@@ -40,7 +44,9 @@ export default function CreateProfile() {
     setNameInputValue(value);
   };
 
-  // 입력값이 조건에 부합해야 버튼이 활성화되게 만들어야겠음.
+  // * 소셜 로그인 기능을 넣는다면 이메일 회원 가입이랑 다른 결과를 줘야 할 것.
+  // - 소셜 -> 로그인 완료 상태로 홈으로 이동.
+  // - 이메일 -> 로그인 되지 않은 상태로 로그인 페이지로 이동.
   const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
@@ -53,10 +59,7 @@ export default function CreateProfile() {
     }
 
     const formData = new FormData();
-    formData.append(
-      "profileImg",
-      selectedFile !== defaultImage ? selectedFile : null
-    );
+    formData.append("image", selectedFile === "" ? "" : selectedFile);
     formData.append(
       "name",
       nameInputValue !== defaultName ? nameInputValue : null
@@ -80,6 +83,37 @@ export default function CreateProfile() {
       .catch((error) => {
         console.log(error);
         alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      });
+  };
+
+  const handleSetProfileLater = (e) => {
+    e.preventDefault();
+
+    const url = "https://eonaf45qzbokh52.m.pipedream.net";
+
+    const formData = {
+      email: email,
+      name: "",
+      image: "",
+    };
+
+    axios
+      .post(url, formData)
+      .then((response) => {
+        // if (response.data.result === "프로필 설정이 완료!") {
+        // 개발용 true 설정
+        if (true) {
+          alert("프로필 설정이 완료되었습니다. 로그인 페이지로 이동합니다.");
+
+          navigate(PATH.LOGIN);
+
+          return;
+        }
+      })
+      .catch((error) => {
+        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+        console.log(error);
       });
   };
 
@@ -107,7 +141,7 @@ export default function CreateProfile() {
             }}
           >
             <div className={styles.editProfileImageButton}>
-              img
+              edit
               <input
                 ref={profileImageInput}
                 type="file"
@@ -115,7 +149,31 @@ export default function CreateProfile() {
                 onChange={handleOnChange_profileImageInput}
               />
             </div>
-            {selectedFile && <img src={selectedFile} alt="Profile" />}
+
+            {selectedFile === "" ? (
+              <img src={defaultProfileImage} alt="Profile" />
+            ) : (
+              <img src={selectedFile} alt="Profile" />
+            )}
+          </div>
+          <div className={styles.buttons}>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                profileImageInput.current.click();
+              }}
+            >
+              편집
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+
+                setSelectedFile("");
+              }}
+            >
+              기본값
+            </button>
           </div>
           <div className={styles.wrapper_InputAndValidationMessage}>
             <UserInput
@@ -156,7 +214,7 @@ export default function CreateProfile() {
           />
           <VioletButton
             children={"나중에 설정하기"}
-            onClick={() => navigate(PATH.LOGIN)}
+            onClick={handleSetProfileLater}
           />
         </div>
       </form>
