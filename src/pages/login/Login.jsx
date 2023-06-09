@@ -12,7 +12,8 @@ import {
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import { LoginTextLink } from "../../components/links/LoginTextLink.jsx";
-
+import kakao from "../../image/kakao.png";
+import naver from "../../image/naver.png";
 // 구글 소셜 로그인
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 // Import the functions you need from the SDKs you need
@@ -42,15 +43,10 @@ const auth = getAuth();
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 export default function Login() {
-  // hook
   const navigate = useNavigate();
-
-  // ref(to focus)
   const emailInput = useRef();
   const passwordInput = useRef();
   const focusRef = { email: emailInput, password: passwordInput };
-
-  // state
   const [formInputValue, setFormInputValue] = useState({
     email: "",
     password: "",
@@ -98,7 +94,12 @@ export default function Login() {
           return;
         }
 
-        // 로그인 성공 시 해야 할 일들 추가(로그인 상태 키 발급, 토큰 발급받고 저장, 유저/관리자 판별 키 발급 등)
+        // 로그인 성공 시
+
+        // const token = response.data.token;
+        const authToken = "123";
+
+        localStorage.setItem("authToken", authToken);
 
         navigate("/");
       })
@@ -118,7 +119,6 @@ export default function Login() {
         // The signed-in user info.
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
-        // ...
 
         console.log(
           "result: ",
@@ -134,7 +134,7 @@ export default function Login() {
         );
 
         navigate("/login/create-profile", {
-          state: { name: user.displayName },
+          state: { email: user.email, name: user.displayName },
         });
       })
       .catch((error) => {
@@ -156,6 +156,16 @@ export default function Login() {
   const loginByNaver = () => {
     return;
   };
+
+  useEffect(() => {
+    const isAuthToken = localStorage.getItem("authToken");
+
+    if (isAuthToken) {
+      navigate("/");
+
+      return;
+    }
+  }, []);
 
   useEffect(() => {
     emailInput.current.focus();
@@ -196,7 +206,6 @@ export default function Login() {
             onChange={handleOnChangeFormInput}
           />
         </div>
-        {/* <div>{validationMessage.password}</div> */}
         <div className={styles.wrapper_submitButton}>
           <VioletButton
             children={"로그인"}
@@ -229,8 +238,8 @@ export default function Login() {
           구글
         </div>
 
-        <LoginOption optionName={"카카오"} />
-        <LoginOption optionName={"네이버"} />
+        <LoginOption optionName={kakao} />
+        <LoginOption optionName={naver} />
       </div>
     </div>
   );
@@ -238,17 +247,8 @@ export default function Login() {
 
 function LoginOption({ optionName }) {
   return (
-    <div
-      className={styles.loginOption}
-      style={{
-        border: "1px solid",
-      }}
-      onClick={() => {
-        console.log(optionName);
-      }}
-    >
-      {optionName}
-      {/* <img src={name} alt="" /> */}
+    <div className={styles.loginOption}>
+      <img src={optionName} alt="" />
     </div>
   );
 }
