@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import Timer from "../../components/timer/Timer.jsx";
 import Toast from "../../components/toast/Toast";
 import ReactDOM from 'react-dom';
-import { SmallVioletButton } from "../../components/buttons/SmallVioletButton";
+import { SmallVioletButton } from "../../components/buttons/smallVioletButton";
 
 const QuizNameContainer = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
