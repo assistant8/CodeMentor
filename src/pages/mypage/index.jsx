@@ -9,6 +9,10 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
 import { useEffect } from "react";
 import { Modal } from "../../components/modal";
+import bookmark from "../../image/bookmark.png";
+import check from "../../image/check.png";
+import chart from "../../image/chart-bar.png";
+import book from "../../image/book-account-outline.png";
 
 const User = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -96,18 +100,7 @@ const Menu = () => {
         className={styles.menuContent}
         onClick={() => navigate("/mypage/chart")}
       >
-        <svg
-          width="51"
-          height="47"
-          viewBox="0 0 51 47"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M50.9166 46.375H0.083313V0.625H5.16665V41.2917H10.25V18.4167H20.4166V41.2917H25.5V8.25H35.6666V41.2917H40.75V28.5833H50.9166V46.375Z"
-            fill="#3E3E3E"
-          />
-        </svg>
+        <img src={chart} alt="통계" />
 
         <p>통계</p>
       </div>
@@ -115,18 +108,7 @@ const Menu = () => {
         className={styles.menuContent}
         onClick={() => navigate("/mypage/mypost")}
       >
-        <svg
-          width="67"
-          height="67"
-          viewBox="0 0 67 67"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M50.25 5.58331C51.7308 5.58331 53.151 6.17156 54.198 7.21863C55.2451 8.26571 55.8334 9.68585 55.8334 11.1666V55.8333C55.8334 57.3141 55.2451 58.7342 54.198 59.7813C53.151 60.8284 51.7308 61.4166 50.25 61.4166H16.75C15.2692 61.4166 13.8491 60.8284 12.802 59.7813C11.7549 58.7342 11.1667 57.3141 11.1667 55.8333V11.1666C11.1667 9.68585 11.7549 8.26571 12.802 7.21863C13.8491 6.17156 15.2692 5.58331 16.75 5.58331H50.25ZM50.25 11.1666H36.2917V25.125L29.3125 18.7041L22.3334 25.125V11.1666H16.75V55.8333H50.25M36.2917 30.7083C37.396 30.7083 38.4754 31.0358 39.3936 31.6493C40.3118 32.2628 41.0274 33.1348 41.45 34.155C41.8726 35.1752 41.9832 36.2978 41.7677 37.3809C41.5523 38.464 41.0205 39.4588 40.2397 40.2397C39.4589 41.0205 38.464 41.5523 37.3809 41.7677C36.2979 41.9831 35.1753 41.8726 34.155 41.45C33.1348 41.0274 32.2628 40.3118 31.6493 39.3936C31.0358 38.4754 30.7084 37.3959 30.7084 36.2916C30.7084 34.8109 31.2966 33.3907 32.3437 32.3436C33.3908 31.2966 34.8109 30.7083 36.2917 30.7083ZM47.4584 53.0416H25.125V50.25C25.125 46.5371 32.5788 44.6666 36.2917 44.6666C40.0046 44.6666 47.4584 46.5371 47.4584 50.25V53.0416Z"
-            fill="#3E3E3E"
-          />
-        </svg>
+        <img src={book} alt="내가 작성한 글" />
 
         <p>내가 작성한 글</p>
       </div>

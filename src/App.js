@@ -25,6 +25,9 @@ import VerifyEmail from "./pages/login/VerifyEmail";
 import ResetPassword from "./pages/login/ResetPassword.jsx";
 import CreateProfile from "./pages/login/CreateProfile";
 import { useEffect, useMemo, useState } from "react";
+import ProblemAdminPage from './pages/admin'
+import ProblemCreatePage from './pages/adminCreate';
+import ProblemUpdatePage from './pages/adminUpdate';
 
 const AppLayout = () => {
   const location = useLocation();
@@ -76,6 +79,12 @@ function App() {
           <Route path="complete" element={<Complete />} />
           <Route path="chart" element={<Chart />} />
           <Route path="mypost" element={<MyPost />} />
+        </Route>
+
+        <Route path={PATH.ADMIN}>
+          <Route index element={<ProblemAdminPage />} />
+          <Route path={PATH.ADMIN_CREATE} element={<ProblemCreatePage />} />
+          <Route path={PATH.ADMIN_UPDATE} element={<ProblemUpdatePage />} />
         </Route>
       </Route>
     </Routes>

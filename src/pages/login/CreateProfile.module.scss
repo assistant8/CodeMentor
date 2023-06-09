@@ -1,16 +1,125 @@
+@import "../../constants/utils.scss";
+
 .container_CreateProfile {
   width: 100%;
+  height: 100vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  div {
+    // border: 1px solid;
+  }
 }
 
-form {
+.topBar {
+  width: 354.33px;
+  height: 20px;
+
+  margin-top: 15px;
+}
+
+.logo {
+  height: 20px;
+
+  margin-top: 134px;
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 20px;
+
+  text-align: center;
+  letter-spacing: 0.05em;
+
+  color: $violet-4;
+}
+
+.wrapper_Inputs {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  margin-top: 58px;
+
+  .profileImage {
+    width: 200px;
+    height: 200px;
+
+    position: relative;
+
+    border: 1px solid black;
+    border-radius: 100%;
+
+    margin-bottom: 30px;
+
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+
+      border-radius: 100%;
+    }
+
+    .editProfileImageButton {
+      width: 2rem;
+      height: 2rem;
+
+      position: absolute;
+      top: 70%;
+      left: 83%;
+
+      font-size: 90%;
+      color: white;
+
+      background-color: black;
+
+      border-radius: 100%;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      input {
+        display: none;
+      }
+    }
+  }
+
+  .wrapper_InputAndValidationMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .validationMessage {
+      width: 280px;
+      // align-self: start;
+
+      height: 30px;
+
+      line-height: 30px;
+
+      color: #f16f6f;
+
+      // margin-top: 5px;
+      // margin-left: 50px;
+    }
+
+    .inputGuide {
+      width: 280px;
+
+      line-height: 30px;
+    }
+  }
 }
 
-img {
-  width: 100px;
+.wrapper_buttons {
+  margin-top: 52px;
+
+  button + button {
+    margin-top: 20px;
+  }
 }
