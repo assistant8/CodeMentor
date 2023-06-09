@@ -12,7 +12,7 @@ export const QuizListContainer = ({ style, isImgNeed = true, searchKey, selected
       category: "백준", //백준
       title: "토마토",
     },
-    {
+    { ////////////////////////////부모 자식 프롭스로 함수 전달 익히기
       id: 2,
       category: "프로그래머스", //프로그래머스
       title: "사과",

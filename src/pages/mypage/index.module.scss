@@ -93,9 +93,10 @@
     flex-direction: column;
     border: 0.0625rem solid $border-color; /* 1px converted to rem */
 
-    svg,
-    path {
-      font-size: 3.125rem; /* 50px converted to rem */
+    img {
+      width: 3.5rem;
+      height: 3.5rem;
+      color: black;
     }
 
     p {
