@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+
+  .problemContainer {
+    display: flex;
+
+    input {
+      display: block;
+    }
+  }
+}
