@@ -28,7 +28,7 @@ import { useEffect, useMemo, useState } from "react";
 
 const AppLayout = () => {
   const location = useLocation();
-  const [isLoginPage, setIsLoginPage] = useState(false); //첫 화면 로그인인데 괜찮으려나
+  const [isLoginPage, setIsLoginPage] = useState(false); //첫 화면 로그인이니 수정
 
   useEffect(() => {
     if (location.pathname.includes("login")) {

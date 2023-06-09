@@ -38,7 +38,7 @@ const Timer = ({ initialMinutes, initialSeconds, onComplete }) => { //초기값
       setIsPause(true); //및 일시정지 표시 
       console.log("끝")
     }
-  }, [minutes, seconds, onComplete]);
+  }, [minutes, seconds]); //onComplete 넣으니까 3초에 한번 계속 불림
 
   const handleHover = () => {
     setIsHover(true)
