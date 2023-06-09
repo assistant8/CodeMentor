@@ -5,23 +5,30 @@ import { UserInput } from "../../components/inputs/UserInput";
 import { MenuContainer } from "../../components/menuContainer/MenuContainer";
 import { QuizListContainer } from "../../components/quizListContainer/QuizListContainer";
 import { QuizInput } from "../../components/inputs/QuizInput";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export default function QuizListPage() {
   const [searchKey, setSearchKey] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState('전체');
 
   const handleSearchClick = (e) => {
     console.log("page", e.target.previousElementSibling.value)
     setSearchKey(e.target.previousElementSibling.value);
     //퀴즈리스트에 보여질 quizs가 filter 됨 
   }
+
+  const handleCategoryClick = useCallback((c)=>{ 
+    setSelectedCategory(c);
+  }, [])
+  
   return (
     <div className={styles.container}>
       <div className={styles.searchContainer}>
         <QuizInput placeholder="문제 제목 검색" onClick={handleSearchClick}/>
       </div>
-      <MenuContainer />
-      <QuizListContainer searchKey={searchKey}/>
+      <MenuContainer onClick={handleCategoryClick} category={selectedCategory}/>
+      <QuizListContainer searchKey={searchKey} selectedCategory={selectedCategory}/> 
     </div>
-  );
-}
+  ); 
+} 
+// 카테고리 넘김

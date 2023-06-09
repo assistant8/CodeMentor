@@ -1,9 +1,12 @@
-import styles from "./MenuContainer.module.scss";
-import bookmark from "../../image/bookmark.png";
-import check from "../../image/check.png";
-import { useCallback, useEffect, useState } from "react";
+import styles from "./AdminMenuContainer.module.scss";
+import { useCallback, useEffect, useState, } from "react";
+import plus from '../../image/plus.png'
+import { useNavigate } from "react-router-dom";
+import PATH from "../../constants/path";
 
-export const MenuContainer = ({ style, isImgNeed = true, onClick, category }) => {
+export const AdminMenuContainer = ({ style, isImgNeed = true, onClick, category }) => {
+  const navigate = useNavigate();
+  
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [selectedFilter, setSelectedFilter] = useState();
 
@@ -43,18 +46,15 @@ export const MenuContainer = ({ style, isImgNeed = true, onClick, category }) =>
           </li>
         </ul>
       </div>
-      {isImgNeed && (
-        <div className={styles.imageContainer}>
-          <img src={bookmark} alt="bookmark" 
-            className={selectedFilter === 'bookmark' ? styles.selectedFilter : ''}
-            onClick={() => handleFilterClick('bookmark')}
+      <div className={styles.imageContainer}>
+          <img 
+            className={styles.image}
+            src={plus} alt="create"
+            onClick={() => {
+              navigate(PATH.ADMIN_CREATE);
+            }}
           />
-          <img src={check} alt="check" 
-            className={selectedFilter === 'check' ? styles.selectedFilter : ''}
-            onClick={() => handleFilterClick('check')}
-          />
-        </div>
-      )}
+      </div>
     </div>
   );
 };
