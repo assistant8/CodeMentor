@@ -3,7 +3,7 @@ import styles from "./Quiz.module.scss";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
 import { useEffect, useRef } from "react";
-import { smallVioletButton } from "../../components/buttons/smallVioletButton";
+import { SmallVioletButton } from "../../components/buttons/smallVioletButton";
 
 const QuizNameContainer = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -108,7 +108,7 @@ const CommentContainer = () => {
           placeholder="댓글을 입력해주세요"
         />
         <div className={styles.submitBtn}>
-          <smallVioletButton ref={buttonRef}>등록</smallVioletButton>
+          <SmallVioletButton ref={buttonRef}>등록</SmallVioletButton>
         </div>
       </div>
     </div>
