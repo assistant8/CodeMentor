@@ -71,9 +71,6 @@ const QuizNameContainer = () => {
   );
 };
 
-//타이머를 누르면 일시정지 or 재생
-//타이머에 정지 및 새로고침도 있나? 
-
 const CommentContainer = () => {
   const commentRef = useRef(null);
   const buttonRef = useRef(null);
@@ -117,6 +114,9 @@ const CommentContainer = () => {
     </div>
   );
 };
+
+//타이머를 누르면 일시정지 or 재생
+//타이머에 정지 및 새로고침도 있나? 
 export default function Quiz() {
   const [showToast, setShowToast] = useState(false);
   
@@ -137,7 +137,7 @@ export default function Quiz() {
     <div className={styles.quizContainer}>
       <QuizNameContainer />
       <Timer initialMinutes={0} initialSeconds={10} onComplete={handleTimerComplete}/>
-      {/* {showToast && <Toast message="끝" />} */}
+      {showToast && <Toast message="끝" />}
       <HintContainer
         hintTitle={"힌트 1"}
         hintContent={"풀어줘요"}
