@@ -1,5 +1,4 @@
 import HintContainer from "../../components/hintContainer/HintCotainer";
-import HintContainer from "../../components/hintContainer/HintCotainer";
 import styles from "./Quiz.module.scss";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
@@ -7,7 +6,6 @@ import { useEffect, useState, useRef } from "react";
 import Timer from "../../components/timer/Timer.jsx";
 import Toast from "../../components/toast/Toast";
 import ReactDOM from 'react-dom';
-
 import { SmallVioletButton } from "../../components/buttons/SmallVioletButton";
 
 const QuizNameContainer = () => {
