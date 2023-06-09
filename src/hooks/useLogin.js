@@ -37,7 +37,7 @@ export function makeEmailValidationMessage(email) {
     return "이메일 형식이 유효하지 않습니다.";
   }
 
-  return "";
+  return "완벽합니다!";
 }
 
 export function makePasswordValidationMessage(password) {
@@ -49,7 +49,7 @@ export function makePasswordValidationMessage(password) {
     return "비밀번호 형식이 유효하지 않습니다.";
   }
 
-  return "";
+  return "완벽합니다!";
 }
 
 export function makePasswordConfirmValidationMessage(
@@ -64,7 +64,7 @@ export function makePasswordConfirmValidationMessage(
     return "비밀번호가 일치하지 않습니다.";
   }
 
-  return "";
+  return "완벽합니다!";
 }
 
 // submit 시 유효성 검사 한 번에 & 통과 못 하면 다음 코드 진행 X.
@@ -93,7 +93,12 @@ export function isPassValidation(formInputValue, validationMessage) {
 
 // submit 시 유효성 검사 통과 못하면 경고창 띄우기.
 export function alertValidationMessage(validationMessage, focusRef = null) {
-  if (validationMessage.email) {
+  console.log(validationMessage);
+
+  if (
+    ("email" in validationMessage) &
+    (validationMessage.email !== "완벽합니다!")
+  ) {
     alert(validationMessage.email);
 
     if (focusRef !== null && focusRef?.email?.current) {
@@ -103,7 +108,10 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
     return;
   }
 
-  if (validationMessage.password) {
+  if (
+    ("password" in validationMessage) &
+    (validationMessage.password !== "완벽합니다!")
+  ) {
     alert(validationMessage.password);
 
     if (focusRef !== null && focusRef?.password?.current) {
@@ -113,7 +121,10 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
     return;
   }
 
-  if (validationMessage.passwordConfirm) {
+  if (
+    ("passwordConfirm" in validationMessage) &
+    (validationMessage.passwordConfirm !== "완벽합니다!")
+  ) {
     alert(validationMessage.passwordConfirm);
 
     if (focusRef !== null && focusRef?.passwordConfirm?.current) {

@@ -1,4 +1,4 @@
-@import '../mixins';
+@import "../mixins";
 
 .Full {
   @include common-layout;
@@ -13,8 +13,7 @@
 .Inner {
   width: 100%;
   display: flex;
-//   justify-content: center;
+  //   justify-content: center;
   position: relative;
-  // header , footer 높이만큼 padding 부여
   padding: 3.75rem 0 5rem 0;
 }

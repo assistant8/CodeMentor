@@ -2,7 +2,8 @@ import HintContainer from "../../components/hintContainer/HintCotainer";
 import styles from "./Quiz.module.scss";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { SmallVioletButton } from "../../components/buttons/smallVioletButton";
 
 const QuizNameContainer = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -44,7 +45,7 @@ const QuizNameContainer = () => {
                 fill="#C2BCCA"
               />
             </svg>
-            <div>품</div>
+            <div>풂</div>
           </div>
         </div>
       </div>
@@ -69,6 +70,50 @@ const QuizNameContainer = () => {
 const TimerContainer = () => {
   return <div>큰 타이머</div>;
 };
+
+const CommentContainer = () => {
+  const commentRef = useRef(null);
+  const buttonRef = useRef(null);
+  const commentData = [
+    {
+      username: "유저1",
+      userImg: "",
+      comment: "bfs 기본문제네요. 개념을 잘 이해하시면 금방 풀어요",
+    },
+    { username: "유저 2", userImg: "", comment: "저는 보자마자 풀었네요" },
+  ];
+  return (
+    <div className={styles.commentsContainer}>
+      <p className={styles.commentTitle}>유저 코멘트</p>
+      <div className={styles.commentList}>
+        {commentData.map((data) => {
+          return (
+            <div className={styles.commentBox}>
+              <div className={styles.userInfo}>
+                <div className={styles.userImg}>
+                  <img src={data.userImg} alt="프사" />
+                </div>
+                <p className={styles.userName}>{data.username}</p>
+              </div>
+              <div>{data.comment}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div className={styles.commentInputContainer}>
+        <textarea
+          className={styles.commentInput}
+          ref={commentRef}
+          rows="4"
+          placeholder="댓글을 입력해주세요"
+        />
+        <div className={styles.submitBtn}>
+          <SmallVioletButton ref={buttonRef}>등록</SmallVioletButton>
+        </div>
+      </div>
+    </div>
+  );
+};
 export default function Quiz() {
   return (
     <div className={styles.quizContainer}>
@@ -88,6 +133,7 @@ export default function Quiz() {
         hintContent={"컴포넌트 테스트용"}
         isAdmin={true}
       />
+      <CommentContainer />
     </div>
   );
 }
