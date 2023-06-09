@@ -29,7 +29,7 @@ export default function ProblemCreatePage() {
           <input type="text" placeholder='문제 url' />
         </div>
         <div className='styles.category'>
-          // 카테고리 컴포넌트버튼 만들자
+          {/* 카테고리 컴포넌트버튼 만들자 */}
           <button type="button" value="백준" onClick={()=>{}}>백준</button> 
           <button type="button" value="프로그래머스" onClick={()=>{}}>프로그래머스</button> 
         </div>
