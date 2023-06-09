@@ -7,12 +7,13 @@ import { FaPencilAlt } from "react-icons/fa";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
 import { useEffect } from "react";
+import { Modal } from "../../components/modal";
 
 const ModifyUser = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
-  useEffect(()=>{
-    setHeaderTitle("정보 수정")
+  useEffect(() => {
+    setHeaderTitle("정보 수정");
   }, [setHeaderTitle]);
 
   const [imgUrl, setImgUrl] = useState("");
@@ -37,6 +38,14 @@ const ModifyUser = () => {
     }
   };
   const buttonRef = useRef(null);
+  const nameRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
   return (
     <div className={styles.modifyContainer}>
       <FaPencilAlt className={styles.pencilIcon} onClick={modifyImg} />
@@ -54,6 +63,7 @@ const ModifyUser = () => {
       </div>
       <div className={styles.inputBox}>
         <UserInput
+          ref={nameRef}
           placeholder="유저_1B789RS"
           value={userName}
           onChange={onChange}
@@ -69,7 +79,18 @@ const ModifyUser = () => {
         >
           비밀번호 변경
         </p>
-        <p>회원 탈퇴</p>
+        <p onClick={openModal}>회원 탈퇴</p>
+        <div className={styles.modalWrapper}>
+          <Modal isOpen={isOpen} closeModal={closeModal}>
+            <div className={styles.modalMessage}>회원을 탈퇴하시겠습니까?</div>
+            <div className={styles.confirmBtns}>
+              <div className={styles.confirmBtn}>네</div>
+              <div className={styles.confirmBtn} onClick={closeModal}>
+                아니오
+              </div>
+            </div>
+          </Modal>
+        </div>
       </div>
     </div>
   );

@@ -1,14 +1,86 @@
-.container {
+@import "../../constants/utils.scss";
+
+.container_Login {
   width: 100%;
+  height: 100vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  div {
+    // border: 1px solid;
+  }
 }
 
-.wrapper_loginNav {
+.topBar {
+  width: 354.33px;
+  height: 20px;
+
+  margin-top: 15px;
+}
+
+.logo {
+  height: 20px;
+
+  margin-top: 134px;
+
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 20px;
+
+  text-align: center;
+  letter-spacing: 0.05em;
+
+  color: $violet-4;
+}
+
+.wrapper_Inputs {
+  margin-top: 64px;
+
+  input + input {
+    margin-top: 18px;
+  }
+}
+
+.wrapper_submitButton {
+  margin-top: 40px;
+}
+
+.wrapper_TextLinks {
+  width: 300px;
+
+  margin-top: 18px;
+
   display: flex;
+  justify-content: space-between;
 }
 
 .wrapper_loginOptions {
+  width: 264px;
+  height: 66px;
+
+  margin-top: 42px;
+
   display: flex;
+  align-items: center;
+
+  .loginOption {
+    width: 66px;
+    height: 66px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  div + div {
+    margin-left: 33px;
+  }
+
+  img {
+    width: 100%;
+  }
 }

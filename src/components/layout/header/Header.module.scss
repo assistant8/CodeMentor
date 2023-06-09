@@ -1,8 +1,11 @@
+@import '../mixins';
+
 .header {
+  @include common-layout;
   display: flex;
   position: fixed;
   width: 100%;
-  max-width: 390px; //width만을 통해 조절안되나 
+  // max-width: 390px; //width만을 통해 조절안되나 
   // flex: 0 0 auto;
   height: 3.75rem; /* 60px를 rem 단위로 변경 */
   left: 0;

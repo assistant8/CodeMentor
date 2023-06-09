@@ -8,8 +8,8 @@ import { useEffect } from "react";
 const Calendar = ({ startDate, endDate, studyData }) => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
-  useEffect(()=>{
-    setHeaderTitle("통계")
+  useEffect(() => {
+    setHeaderTitle("통계");
   }, [setHeaderTitle]);
 
   const days = eachDayOfInterval({ start: startDate, end: endDate });
@@ -50,7 +50,7 @@ const Calendar = ({ startDate, endDate, studyData }) => {
     <div className={styles.calendar}>
       {reversedRows.map((row, rowIndex) => (
         <div key={rowIndex} className={styles.calendarRow}>
-          {row.map((day, columnIndex) => {
+          {row.map((day) => {
             const studyInfo = studyData.find((data) =>
               isSameDay(data.date, day)
             );
@@ -127,8 +127,14 @@ const DayOfWeek = () => {
 };
 
 const Chart = () => {
-  const startDate = new Date("2023-01-01");
   const endDate = new Date();
+  const startDate = new Date();
+  startDate.setFullYear(endDate.getFullYear() - 1);
+  // 1년 전으로부터 일주일 전 날짜를 찾기 위해 반복문 사용
+  while (startDate.getDay() !== 0) {
+    // 일요일(0)이 아니면 startDate를 하루씩 이전 날짜로 설정
+    startDate.setDate(startDate.getDate() - 1);
+  }
   const studyData = [
     { date: new Date("2023-01-01"), duration: 2 },
     { date: new Date("2023-01-05"), duration: 1.5 },

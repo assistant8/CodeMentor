@@ -1,0 +1,12 @@
+.adminCreate__wrapper {
+  display: flex;
+  width: 100%;
+
+  .adminCreate__problemContainer {
+    display: flex;
+
+    input {
+      display: block;
+    }
+  }
+}
