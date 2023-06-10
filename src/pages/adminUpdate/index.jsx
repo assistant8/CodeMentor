@@ -1,7 +1,11 @@
 import styles from './adminUpdate.module.scss';
 import HintContainer from "../../components/hintContainer/HintCotainer";
+import { useRef } from 'react';
+import { SmallVioletButton } from '../../components/buttons/SmallVioletButton';
 
 export default function ProblemUpdatePage() {
+  
+  const buttonRef = useRef();
   const handleProblemUpdate = () => {
     // 위 입력된 데이터들을 데이터베이스의 problem에 추가시켜야 함
   }
@@ -40,7 +44,11 @@ export default function ProblemUpdatePage() {
           isAdmin={true}
         />
       </div>
-      <button type='submit' onClick={handleProblemUpdate} >등록</button>
+      <SmallVioletButton 
+        ref={buttonRef} 
+        onClick={handleProblemUpdate}
+        children="수정"
+        />
     </div>
   );
 }
