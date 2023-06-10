@@ -8,7 +8,85 @@ import Toast from "../../components/toast/Toast";
 import ReactDOM from 'react-dom';
 import { SmallVioletButton } from "../../components/buttons/SmallVioletButton";
 
-const QuizNameContainer = () => {
+
+export default function Quiz() {
+  const [showToast, setShowToast] = useState(false);
+  const [timerDuration, setTimerDuration] = useState(10);
+  const [toastMsg, setToastMsg] = useState("스스로 풀어보세요")
+  const [timerCount, setTimerCount] = useState(0)
+
+  useEffect(()=>{
+    console.log("timerCount", timerCount)
+  }, [timerCount])
+  
+  const handleTimerStart = () => { //토스트 메시지 내용 설정 및 show
+    if(timerCount===0) {
+      setShowToast(true);
+    } else if(timerCount===1) {
+      setToastMsg("힌트 보며 풀어보세요")
+      setShowToast(true);
+    } else if(timerCount===2) {
+      setToastMsg("해설 시간을 가져보세요")
+      setShowToast(true);
+    }
+  }
+
+  const handleTimerComplete = () => { //끝났을 때 다음 타이머 duration 설정해야될듯? / 토스트 메시지 / timerCOunt
+    if(timerCount===0) {
+      setToastMsg("스스로 푸는 시간 종료")
+      setShowToast(true);
+      setTimerCount((prev)=>prev+1) //이제 2
+      setTimerDuration(5) //2단계 시간 설정 해줌
+    } else if(timerCount===1) {
+      setToastMsg("힌트 풀이 시간 종료")
+      setShowToast(true);
+      setTimerCount((prev)=>prev+1) //이제 3
+      setTimerDuration(4) //3단계 시간 설정 해줌
+    } else if(timerCount===2) {
+      setToastMsg("해설 시간 종료")
+      setShowToast(true);
+    }
+  };
+
+  useEffect(() => { //타이머 머무는 시간 설정 
+    const timer = setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [showToast]);
+
+  const handleClickPass = () => {
+    setTimerDuration(0)
+  }
+
+
+  return (
+    <div className={styles.quizContainer}>
+      <QuizNameContainer onClick={handleClickPass} />
+      <Timer initialMinutes={0} initialSeconds={timerDuration} onComplete={handleTimerComplete} onStart={handleTimerStart}/>
+      {showToast && <Toast message={toastMsg} />}
+      <HintContainer
+        hintTitle={"힌트 1"}
+        hintContent={"풀어줘요"}
+        isOpen={true}
+      />
+      <HintContainer
+        hintTitle={"힌트 2"}
+        hintContent={"여기는무슨힌트가숨겨져이씅ㄹ까?"}
+      />
+      <HintContainer
+        hintTitle={"힌트 3"}
+        hintContent={"컴포넌트 테스트용"}
+        isAdmin={true}
+      />
+      <CommentContainer />
+    </div>
+  );
+}
+
+
+const QuizNameContainer = ({onClick, title}) => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
   useEffect(() => {
@@ -33,6 +111,7 @@ const QuizNameContainer = () => {
                 fill="#C2BCCA"
               />
             </svg>
+            {/* <img src={}></img> */}
             <div>찜</div>
           </div>
           <div className={styles.solved}>
@@ -52,7 +131,7 @@ const QuizNameContainer = () => {
           </div>
         </div>
       </div>
-      <div className={styles.timer}>
+      <div className={styles.timer} onClick={onClick}>
         <svg
           width="34"
           height="40"
@@ -114,78 +193,3 @@ const CommentContainer = () => {
     </div>
   );
 };
-
-//타이머를 누르면 일시정지 or 재생
-//타이머에 정지 및 새로고침도 있나? 
-export default function Quiz() {
-  const [showToast, setShowToast] = useState(false);
-  const [timerDuration, setTimerDuration] = useState(10);
-  const [toastMsg, setToastMsg] = useState("스스로 풀어보세요")
-  const [timerCount, setTimerCount] = useState(0)
-
-  useEffect(()=>{
-    console.log("timerCount", timerCount)
-
-  }, [timerCount])
-  
-  const handleTimerStart = () => { //토스트 메시지 내용 설정 및 show
-    if(timerCount===0) {
-      setShowToast(true);
-    } else if(timerCount===1) {
-      setToastMsg("힌트 보며 풀어보세요")
-      setShowToast(true);
-    } else if(timerCount===2) {
-      setToastMsg("해설 시간을 가져보세요")
-      setShowToast(true);
-    }
-  }
-
-  const handleTimerComplete = () => { //끝났을 때 다음 타이머 duration 설정해야될듯? / 토스트 메시지 / timerCOunt
-    if(timerCount===0) {
-      setToastMsg("스스로 푸는 시간 종료")
-      setShowToast(true);
-      setTimerCount((prev)=>prev+1) //이제 2
-      setTimerDuration(5) //2단계 시간 설정 해줌
-    } else if(timerCount===1) {
-      setToastMsg("힌트 풀이 시간 종료")
-      setShowToast(true);
-      setTimerCount((prev)=>prev+1) //이제 3
-      setTimerDuration(4) //3단계 시간 설정 해줌
-    } else if(timerCount===2) {
-      setToastMsg("해설 시간 종료")
-      setShowToast(true);
-    }
-  };
-
-  useEffect(() => { //타이머 머무는 시간 설정 
-    const timer = setTimeout(() => {
-      setShowToast(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [showToast]);
-
-
-  return (
-    <div className={styles.quizContainer}>
-      <QuizNameContainer />
-      <Timer initialMinutes={0} initialSeconds={timerDuration} onComplete={handleTimerComplete} onStart={handleTimerStart}/>
-      {showToast && <Toast message={toastMsg} />}
-      <HintContainer
-        hintTitle={"힌트 1"}
-        hintContent={"풀어줘요"}
-        isOpen={true}
-      />
-      <HintContainer
-        hintTitle={"힌트 2"}
-        hintContent={"여기는무슨힌트가숨겨져이씅ㄹ까?"}
-      />
-      <HintContainer
-        hintTitle={"힌트 3"}
-        hintContent={"컴포넌트 테스트용"}
-        isAdmin={true}
-      />
-      <CommentContainer />
-    </div>
-  );
-}
