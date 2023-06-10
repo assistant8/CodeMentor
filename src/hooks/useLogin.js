@@ -1,5 +1,3 @@
-import axios from "axios";
-
 // 유효성 검사
 export function isEmailValid(email) {
   if (email === "") return false;
@@ -27,7 +25,14 @@ export function isPasswordConfirmValid(password, passwordConfirm) {
   return true;
 }
 
+export function isVerificationCodeValid(verificationCode) {
+  return verificationCode.length === 6;
+}
+
 // 유효성 검사 메세지
+
+const validationMessageWhenPass = "완벽합니다!";
+
 export function makeEmailValidationMessage(email) {
   if (email === "") {
     return "이메일을 입력해주세요.";
@@ -37,7 +42,7 @@ export function makeEmailValidationMessage(email) {
     return "이메일 형식이 유효하지 않습니다.";
   }
 
-  return "완벽합니다!";
+  return validationMessageWhenPass;
 }
 
 export function makePasswordValidationMessage(password) {
@@ -49,7 +54,7 @@ export function makePasswordValidationMessage(password) {
     return "비밀번호 형식이 유효하지 않습니다.";
   }
 
-  return "완벽합니다!";
+  return validationMessageWhenPass;
 }
 
 export function makePasswordConfirmValidationMessage(
@@ -64,18 +69,37 @@ export function makePasswordConfirmValidationMessage(
     return "비밀번호가 일치하지 않습니다.";
   }
 
-  return "완벽합니다!";
+  return validationMessageWhenPass;
+}
+
+export function makeVerificationCodeVaildationMessage(verificationCode) {
+  if (verificationCode === "") {
+    return "인증 번호를 입력해주세요.";
+  }
+
+  if (!isVerificationCodeValid(verificationCode)) {
+    return "인증 번호는 6자리 숫자입니다.";
+  }
+
+  return validationMessageWhenPass;
 }
 
 // submit 시 유효성 검사 한 번에 & 통과 못 하면 다음 코드 진행 X.
 export function isPassValidation(formInputValue, validationMessage) {
-  const { email, password, passwordConfirm } = formInputValue;
+  const { email, password, passwordConfirm, verificationCode } = formInputValue;
 
   if ("email" in formInputValue && !isEmailValid(email)) {
     return false;
   }
 
-  if (formInputValue.hasOwnProperty("password") && !isPasswordValid(password)) {
+  if (
+    "verificationCode" in formInputValue &&
+    !isVerificationCodeValid(verificationCode)
+  ) {
+    return false;
+  }
+
+  if ("password" in formInputValue && !isPasswordValid(password)) {
     return false;
   }
 
@@ -95,7 +119,7 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
 
   if (
     ("email" in validationMessage) &
-    (validationMessage.email !== "완벽합니다!")
+    (validationMessage.email !== validationMessageWhenPass)
   ) {
     alert(validationMessage.email);
 
@@ -107,8 +131,21 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
   }
 
   if (
+    ("verificationCode" in validationMessage) &
+    (validationMessage.verificationCode !== validationMessageWhenPass)
+  ) {
+    alert(validationMessage.verificationCode);
+
+    if (focusRef !== null && focusRef?.verificationCode?.current) {
+      focusRef.verificationCode.current.focus();
+    }
+
+    return;
+  }
+
+  if (
     ("password" in validationMessage) &
-    (validationMessage.password !== "완벽합니다!")
+    (validationMessage.password !== validationMessageWhenPass)
   ) {
     alert(validationMessage.password);
 
@@ -121,7 +158,7 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
 
   if (
     ("passwordConfirm" in validationMessage) &
-    (validationMessage.passwordConfirm !== "완벽합니다!")
+    (validationMessage.passwordConfirm !== validationMessageWhenPass)
   ) {
     alert(validationMessage.passwordConfirm);
 
