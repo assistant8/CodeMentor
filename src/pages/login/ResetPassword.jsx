@@ -9,6 +9,7 @@ import {
   makePasswordValidationMessage,
   makePasswordConfirmValidationMessage,
 } from "../../hooks/useLogin.js";
+import { LoginHeader } from "../../components/headers/LoginHeader.jsx";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 
@@ -124,7 +125,9 @@ export default function ResetPassword() {
   return (
     <div className={styles.container_ResetPassword}>
       <div className={styles.topBar}>11:11</div>
-      <div className={styles.logo}>비밀번호 재설정</div>
+      <div className={styles.wrapper_header}>
+        <LoginHeader children={"비밀번호 재설정"} />
+      </div>
 
       <form>
         <div className={styles.wrapper_Inputs}>

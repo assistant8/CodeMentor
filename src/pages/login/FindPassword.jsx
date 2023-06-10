@@ -9,6 +9,7 @@ import {
   makeEmailValidationMessage,
   // axiosInterceptors,
 } from "../../hooks/useLogin.js";
+import { LoginHeader } from "../../components/headers/LoginHeader";
 import { UserInput } from "../../components/inputs/UserInput";
 import { VioletButton } from "../../components/buttons/VioletButton";
 
@@ -101,7 +102,9 @@ export default function FindPassword() {
   return (
     <div className={styles.container_FindPassword}>
       <div className={styles.topBar}>11:11</div>
-      <div className={styles.logo}>비밀번호 찾기</div>
+      <div className={styles.wrapper_header}>
+        <LoginHeader children={"비밀번호 찾기"} />
+      </div>
 
       <div className={styles.message}>가입했던 이메일을 입력해주세요.</div>
       <form>
