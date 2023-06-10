@@ -3,18 +3,10 @@ import pencil from "../../image/pencil.png";
 import deleteOutline from "../../image/delete-outline.png";
 import { useNavigate } from "react-router-dom";
 import PATH from "../../constants/path";
-import { Modal } from "../../components/modal";
 import { useState } from "react";
 
 export default function AdminQuizListContainer ({ style, isImgNeed = true, searchKey, selectedCategory }) {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  const openModal = () => {
-    setIsOpen(true);
-  };
-  const closeModal = () => {
-    setIsOpen(false);
-  };
 
   const quizs = [ //더미
     {
@@ -61,23 +53,7 @@ export default function AdminQuizListContainer ({ style, isImgNeed = true, searc
                   <img 
                     src={deleteOutline} 
                     alt="delete"
-                    onClick={openModal}
                     />
-                    <div className={styles.modalWrapper}>
-                      <Modal isOpen={isOpen} closeModal={closeModal}>
-                        <div 
-                          className={styles.modalMessage}
-                          // onClick={()=>{}} // 백엔드 데이터 삭제
-                          >{quiz.title}을 삭제하시겠습니까?
-                        </div>
-                        <div className={styles.confirmBtns}>
-                          <div className={styles.confirmBtn}>네</div>
-                          <div className={styles.confirmBtn} onClick={closeModal}>
-                            아니오
-                          </div>
-                        </div>
-                      </Modal>
-                    </div>
                 </div>
             </div>
           );
