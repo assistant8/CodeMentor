@@ -40,6 +40,10 @@
         align-items: center;
         margin: 0 0.5rem;
         cursor: pointer;
+        .bookmarkImage {
+          width: 2rem;
+          height: 2rem;
+        }
       }
     }
   }
@@ -49,8 +53,15 @@
     align-items: center;
     width: 3rem;
     cursor: pointer;
-    > .div {
-      font-size: 0.63rem;
+    div {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+    .skip {
+      width: 2.5rem;
+      height: 2.5rem;
     }
   }
 }
