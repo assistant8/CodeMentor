@@ -1,6 +1,6 @@
-.toast-message {
+.toastMessage {
     position: fixed;
-    top: 50%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #333;
@@ -8,14 +8,14 @@
     padding: 10px 20px;
     border-radius: 4px;
     z-index: 9999;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.3s ease-in-out;
   
-    &.visible {
-      opacity: 1;
-    }
+    // &.visible {
+    //   opacity: 1;
+    // }
     
-    .toast-content {
+    .toastContent {
       font-size: 16px;
       font-weight: bold;
     }
