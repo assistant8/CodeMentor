@@ -9,7 +9,8 @@ import {
   isPassValidation,
   alertValidationMessage,
 } from "../../hooks/useLogin.js";
-import axios from "axios";
+import { api } from "../../libs/utils/api.js";
+import { LoginHeader } from "../../components/headers/LoginHeader";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput";
 
@@ -35,6 +36,7 @@ export default function Register() {
     password: "",
     passwordConfirm: "",
   });
+  const [isPassEmailVerification, setIsPassEmailVerification] = useState(false);
 
   const handleOnChangeFormInput = (e) => {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -49,6 +51,8 @@ export default function Register() {
       return;
     }
 
+    setIsPassEmailVerification(true);
+
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
 
     const formData = {
@@ -56,7 +60,7 @@ export default function Register() {
       password,
     };
 
-    axios(url, formData);
+    api(url, formData);
 
     // 비밀번호 같은 걸 navigate에 담아서 다른 컴포넌트로 막 넘겨줘도 되나..?
     navigate(PATH.LOGIN + "/verify-email", {
@@ -115,8 +119,9 @@ export default function Register() {
   return (
     <div className={styles.container_Register}>
       <div className={styles.topBar}>11:11</div>
-      <div className={styles.logo}>회원 가입</div>
-
+      <div className={styles.wrapper_header}>
+        <LoginHeader children={"회원 가입"} />
+      </div>
       <form>
         <div className={styles.wrapper_Inputs}>
           <div className={styles.wrapper_InputAndValidationMessage}>
@@ -131,42 +136,47 @@ export default function Register() {
               {validationMessage.email}
             </div>
           </div>
-          <div className={styles.wrapper_InputAndValidationMessage}>
-            <UserInput
-              type={"password"}
-              name={"password"}
-              placeholder={"비밀번호"}
-              ref={passwordInput}
-              onChange={handleOnChangeFormInput}
-              maxLength={12}
-            />
-            <div className={styles.validationMessage}>
-              {validationMessage.password}
-            </div>
-            <div
-              className={styles.inputGuide}
-              style={
-                validationMessage.password === "완벽합니다!"
-                  ? { display: "none" }
-                  : { display: "block" }
-              }
-            >
-              * 이름은 공백을 제외한 2~10자로 설정해주세요.
-            </div>
-          </div>
-          <div className={styles.wrapper_InputAndValidationMessage}>
-            <UserInput
-              type={"password"}
-              name={"passwordConfirm"}
-              placeholder={"비밀번호 확인"}
-              ref={passwordConfirmInput}
-              onChange={handleOnChangeFormInput}
-              maxLength={12}
-            />
-            <div className={styles.validationMessage}>
-              {validationMessage.passwordConfirm}
-            </div>
-          </div>
+
+          {isPassEmailVerification ? (
+            <>
+              <div className={styles.wrapper_InputAndValidationMessage}>
+                <UserInput
+                  type={"password"}
+                  name={"password"}
+                  placeholder={"비밀번호"}
+                  ref={passwordInput}
+                  onChange={handleOnChangeFormInput}
+                  maxLength={12}
+                />
+                <div className={styles.validationMessage}>
+                  {validationMessage.password}
+                </div>
+                <div
+                  className={styles.inputGuide}
+                  style={
+                    validationMessage.password === "완벽합니다!"
+                      ? { display: "none" }
+                      : { display: "block" }
+                  }
+                >
+                  * 비밀번호를 영문 대문자 포함 8~12자리로 설정해주세요.
+                </div>
+              </div>
+              <div className={styles.wrapper_InputAndValidationMessage}>
+                <UserInput
+                  type={"password"}
+                  name={"passwordConfirm"}
+                  placeholder={"비밀번호 확인"}
+                  ref={passwordConfirmInput}
+                  onChange={handleOnChangeFormInput}
+                  maxLength={12}
+                />
+                <div className={styles.validationMessage}>
+                  {validationMessage.passwordConfirm}
+                </div>
+              </div>
+            </>
+          ) : null}
         </div>
         <div className={styles.wrapper_submitButton}>
           <VioletButton children={"확인"} onClick={handleOnClickSubmitButton} />

@@ -10,6 +10,7 @@ import {
   makeEmailValidationMessage,
   makePasswordValidationMessage,
 } from "../../hooks/useLogin.js";
+import { LoginHeader } from "../../components/headers/LoginHeader.jsx";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import { LoginTextLink } from "../../components/links/LoginTextLink.jsx";
@@ -208,7 +209,9 @@ export default function Login() {
   return (
     <div className={styles.container_Login}>
       <div className={styles.topBar}>11:11</div>
-      <div className={styles.logo}>/*CodeWhisper*/</div>
+      <div className={styles.wrapper_header}>
+        <LoginHeader children={"logo"} />
+      </div>
       <form>
         <div className={styles.wrapper_Inputs}>
           <UserInput
@@ -241,7 +244,7 @@ export default function Login() {
         <LoginTextLink children={"회원 가입"} onClick={handleOnClickSignUp} />
       </div>
       <div className={styles.wrapper_loginOptions}>
-        <LoginOption children={"구글"} />
+        <LoginOption children={"구글"} onClick={loginByGoogle} />
         <LoginOption children={"카카오"} />
         <LoginOption children={"네이버"} />
       </div>

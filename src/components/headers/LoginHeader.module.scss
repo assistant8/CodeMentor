@@ -1,0 +1,16 @@
+@import "../../constants/utils.scss";
+
+.LoginHeader {
+  height: 20px;
+
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 20px;
+
+  text-align: center;
+  letter-spacing: 0.05em;
+
+  color: $violet-4;
+}

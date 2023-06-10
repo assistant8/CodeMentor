@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PATH from "../../constants/path";
 import { set } from "immutable";
+import { LoginHeader } from "../../components/headers/LoginHeader";
 import { UserInput } from "../../components/inputs/UserInput";
 import { VioletButton } from "../../components/buttons/VioletButton";
 
@@ -172,7 +173,9 @@ export default function VerifyEmail() {
   return (
     <div className={styles.container_VerifyEmail}>
       <div className={styles.topBar}>11:11</div>
-      <div className={styles.logo}>사용자 인증</div>
+      <div className={styles.wrapper_header}>
+        <LoginHeader children={"이메일 인증"} />
+      </div>
 
       <div className={styles.message}>
         {email}로 인증 번호가 발송되었습니다.

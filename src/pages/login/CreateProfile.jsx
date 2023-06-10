@@ -1,8 +1,9 @@
 import styles from "./CreateProfile.module.scss";
 import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
-import axios from "axios";
+import { api } from "../../libs/utils/api.js";
 import PATH from "../../constants/path";
+import { LoginHeader } from "../../components/headers/LoginHeader";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import defaultProfileImage from "../../image/defaultProfileImage.png";
@@ -14,7 +15,7 @@ export default function CreateProfile() {
   const [nameInputValue, setNameInputValue] = useState(defaultName);
   const [nameValidationMessage, setNameValidationMessage] = useState("");
   const email = location.state.email;
-  console.log(email);
+
   const nameInput = useRef();
   const profileImageInput = useRef();
   const [selectedFile, setSelectedFile] = useState("");
@@ -67,7 +68,7 @@ export default function CreateProfile() {
 
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
 
-    axios
+    api
       .put(url, formData)
       .then((response) => {
         // if (response.data.result === "프로필 설정 완료") {
@@ -97,7 +98,7 @@ export default function CreateProfile() {
       image: "",
     };
 
-    axios
+    api
       .post(url, formData)
       .then((response) => {
         // if (response.data.result === "프로필 설정이 완료!") {
@@ -131,7 +132,9 @@ export default function CreateProfile() {
     <div className={styles.container_CreateProfile}>
       <img src="../../image/profileImage.png" alt="" />
       <div className={styles.topBar}>11:11</div>
-      <div className={styles.logo}>프로필 설정</div>
+      <div className={styles.wrapper_header}>
+        <LoginHeader children={"프로필 설정"} />
+      </div>
       <form>
         <div className={styles.wrapper_Inputs}>
           <div
