@@ -146,6 +146,16 @@ export default function Register() {
             <div className={styles.validationMessage}>
               {validationMessage.password}
             </div>
+            <div
+              className={styles.inputGuide}
+              style={
+                validationMessage.password === "완벽합니다!"
+                  ? { display: "none" }
+                  : { display: "block" }
+              }
+            >
+              * 이름은 공백을 제외한 2~10자로 설정해주세요.
+            </div>
           </div>
           <div className={styles.wrapper_InputAndValidationMessage}>
             <UserInput
