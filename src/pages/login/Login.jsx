@@ -1,7 +1,7 @@
 import styles from "./Login.module.scss";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import { api } from "../../libs/utils/api.js";
 import PATH from "../../constants/path";
 import {
   isPassValidation,
@@ -79,7 +79,7 @@ export default function Login() {
 
     const formData = { ...formInputValue };
 
-    axios
+    api
       .post(url, formData)
       .then((response) => {
         if (response.data.result === "이메일이 db에 등록되어 있지 않음.") {

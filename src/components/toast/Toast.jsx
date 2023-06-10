@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import styles from "./Toast.module.scss"
 
 const Toast = ({ message }) => {
-  const [isVisible, setIsVisible] = useState(true); //불리는 순간 true로 설정해서 일단 띄워짐
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(false); //일정 시간 지나게되면 안보이게 설정
-    }, 10000);
-
-    return () => clearTimeout(timer); //타이머 클리어
-  }, []);
-
-  return (
-    <div className={`toast-message ${isVisible ? 'visible' : ''}`}>
-      <div className="toast-content">{message}</div>
+  const content = (
+    <div className={styles.toastMessage}>
+      <div className={styles.toastContent}>{message}</div>
     </div>
+  )
+
+  //useRef 이용 방식은 좀 더 공부한 후에 수정하겠습니다
+  return (
+    ReactDOM.createPortal(content, document.getElementById("toast-container"))
   );
-    
+
 };
 
 export default Toast;
