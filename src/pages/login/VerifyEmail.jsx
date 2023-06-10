@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PATH from "../../constants/path";
 import { set } from "immutable";
-import { axiosInterceptors } from "../../hooks/useLogin.js";
 import { UserInput } from "../../components/inputs/UserInput";
 import { VioletButton } from "../../components/buttons/VioletButton";
 
@@ -27,8 +26,6 @@ export default function VerifyEmail() {
     useState("");
   const [validationMessage, setValidationMessage] = useState("");
   const verificationCodeInput = useRef();
-
-  axiosInterceptors();
 
   const handleOnChangeVerificationCodeInput = (e) => {
     const value = e.target.value;
