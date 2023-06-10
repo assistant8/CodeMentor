@@ -8,7 +8,6 @@ import {
   makePasswordConfirmValidationMessage,
   isPassValidation,
   alertValidationMessage,
-  axiosInterceptors,
 } from "../../hooks/useLogin.js";
 import axios from "axios";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
@@ -36,8 +35,6 @@ export default function Register() {
     password: "",
     passwordConfirm: "",
   });
-
-  axiosInterceptors();
 
   const handleOnChangeFormInput = (e) => {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
