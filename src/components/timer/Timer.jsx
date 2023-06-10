@@ -9,7 +9,7 @@ const Timer = ({ initialMinutes, initialSeconds, onComplete, onStart }) => { //�
   const [isPause, setIsPause] = useState(true);
   const [isHover, setIsHover] = useState(false);
   const [isAlive, setIsAlive] = useState(false); //0분0초 or 처음은 죽은걸로 간주, 일시정지는 true임
-
+  
   useEffect(()=>{
     console.log("isAlive", isAlive)
     console.log("isPause", isPause)
