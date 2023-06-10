@@ -1,4 +1,4 @@
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { LuSprout } from "react-icons/lu";
@@ -9,10 +9,9 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../state/headerTitleState";
 import { useEffect } from "react";
 import { Modal } from "../../components/modal";
-import bookmark from "../../image/bookmark.png";
-import check from "../../image/check.png";
 import chart from "../../image/chart-bar.png";
 import book from "../../image/book-account-outline.png";
+import axios from "axios";
 
 const User = () => {
   const setHeaderTitle = useSetRecoilState(headerTitleState);

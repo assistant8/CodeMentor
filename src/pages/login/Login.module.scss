@@ -55,7 +55,11 @@
   margin-top: 18px;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+
+  div + div {
+    margin-left: 100px;
+  }
 }
 
 .wrapper_loginOptions {
@@ -74,6 +78,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    cursor: pointer;
   }
 
   div + div {
