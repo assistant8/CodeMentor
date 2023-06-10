@@ -3,198 +3,252 @@ import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import PATH from "../../constants/path";
+import {
+  isPassValidation,
+  alertValidationMessage,
+  makeEmailValidationMessage,
+  makePasswordValidationMessage,
+} from "../../hooks/useLogin.js";
+import { VioletButton } from "../../components/buttons/VioletButton.jsx";
+import { UserInput } from "../../components/inputs/UserInput.jsx";
+import { LoginTextLink } from "../../components/links/LoginTextLink.jsx";
+import kakao from "../../image/kakao.png";
+import naver from "../../image/naver.png";
+// 구글 소셜 로그인
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-export default function ByEmail() {
+const firebaseConfig = {
+  apiKey: "AIzaSyDyOOsomlJCW3xSpNKNotjdSsaJM6mfNu0",
+  authDomain: "codewhisper.firebaseapp.com",
+  projectId: "codewhisper",
+  storageBucket: "codewhisper.appspot.com",
+  messagingSenderId: "22796198126",
+  appId: "1:22796198126:web:b38749a74faf3fbf66d3ff",
+  measurementId: "G-E633BRZQBL",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+const provider = new GoogleAuthProvider();
+const auth = getAuth();
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+export default function Login() {
   const navigate = useNavigate();
   const emailInput = useRef();
-
-  const [emailInputValue, setEmailInputValue] = useState("");
-  const [passwordInputValue, setPasswordInputValue] = useState("");
+  const passwordInput = useRef();
+  const focusRef = { email: emailInput, password: passwordInput };
+  const [formInputValue, setFormInputValue] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = formInputValue;
+  const [validationMessage, setValidationMessage] = useState({
+    email: "",
+    password: "",
+  });
 
   // 로그인 페이지에선 실시간 형식 검증 메세지 출력하지 않기?
   // - 페이지가 깔끔했으면 좋겠음.
   // - input 오른쪽에 체크 아이콘 같은 걸로 표시해주면 어떨까?
 
-  // const [emailVerificationMessage, setEmailVerificationMessage] =
-  //   useState("이메일을 입력해주세요.");
-  // const [passwordVerificationMessage, setPasswordVerificationMessage] =
-  //   useState("비밀번호를 입력해주세요");
-
-  const emailInput_handleOnChange = (e) => {
-    setEmailInputValue(e.target.value);
+  const handleOnChangeFormInput = (e) => {
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const passwordInput_handleOnChange = (e) => {
-    setPasswordInputValue(e.target.value);
-  };
-
-  const submitButton_handleOnClick = (e) => {
+  const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
-    if (emailInputValue === "") {
-      alert("이메일을 입력해주세요.");
-      return;
-    }
-
-    if (passwordInputValue === "") {
-      alert("비밀번호를 입력해주세요.");
-      return;
-    }
-
-    if (!isEmailValid(emailInputValue)) {
-      alert("이메일 형식이 올바르지 않습니다.");
-      return;
-    }
-
-    if (!isPasswordValid(passwordInputValue)) {
-      alert("비밀번호 형식이 올바르지 않습니다.");
-
-      // 비밀번호 형식 안내 메세지 살짝 보여주기?
-      // - 어떤 형식이었는지 알쏭달쏭할 때 있음. 애플 비밀번호엔 대문자 두 개 넣어야 됨.
+    if (!isPassValidation(formInputValue)) {
+      alertValidationMessage(validationMessage, focusRef);
 
       return;
     }
-
-    // formData 생성
-    const formData = {
-      email: emailInputValue,
-      password: passwordInputValue,
-    };
 
     // formData 서버로 전송(확인용 테스트 서버)
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
 
+    const formData = { ...formInputValue };
+
     axios
       .post(url, formData)
       .then((response) => {
-        console.log(response.status);
-        if (response.data.result === "이메일 불일치") {
+        if (response.data.result === "이메일이 db에 등록되어 있지 않음.") {
           alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
           return;
         }
 
-        if (response.data.result === "비밀번호 불일치") {
+        if (response.data.result === "db에 이메일은 있는데 비밀번호가 틀림.") {
           alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
 
           return;
         }
 
-        // 로그인 성공 시 해야 할 일들(토큰 저장, 로그인 상태 변경 등)
-        // - 쉽지 않음..
+        // 로그인 성공 시
+
+        // const token = response.data.token;
+        const authToken = "123";
+
+        localStorage.setItem("authToken", authToken);
 
         navigate("/");
       })
       .catch((error) => {
         console.log(error);
+
+        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
       });
   };
+
+  const loginByGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+
+        console.log(
+          "result: ",
+          result,
+          "\n",
+          "token: ",
+          token,
+          "\n",
+          "user: ",
+          user.displayName,
+          user.email,
+          user.emailVerified
+        );
+
+        navigate("/login/create-profile", {
+          state: { email: user.email, name: user.displayName },
+        });
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+        console.log("error: ", error);
+      });
+  };
+
+  const loginByKaKao = () => {
+    return;
+  };
+  const loginByNaver = () => {
+    return;
+  };
+
+  useEffect(() => {
+    const isAuthToken = localStorage.getItem("authToken");
+
+    if (isAuthToken) {
+      navigate("/");
+
+      return;
+    }
+  }, []);
 
   useEffect(() => {
     emailInput.current.focus();
   }, []);
 
-  // useEffect(() => {
-  //   if (emailInputValue === "") {
-  //     setEmailVerificationMessage("이메일을 입력해주세요.");
-  //   } else if (!isEmailCorrect(emailInputValue)) {
-  //     setEmailVerificationMessage("이메일 형식이 올바르지 않습니다.");
-  //   } else {
-  //     setEmailVerificationMessage("완벽합니다!");
-  //   }
-  // }, [emailInputValue]);
+  useEffect(() => {
+    setValidationMessage((prev) => ({
+      ...prev,
+      email: makeEmailValidationMessage(email),
+    }));
+  }, [email]);
 
-  // useEffect(() => {
-  //   if (passwordInputValue === "") {
-  //     setPasswordVerificationMessage("비밀번호를 입력해주세요.");
-  //   } else if (!isPasswordCorrect(passwordInputValue)) {
-  //     setPasswordVerificationMessage("비밀번호 형식이 올바르지 않습니다.");
-  //   } else {
-  //     setPasswordVerificationMessage("완벽합니다!");
-  //   }
-  // }, [passwordInputValue]);
+  useEffect(() => {
+    setValidationMessage((prev) => ({
+      ...prev,
+      password: makePasswordValidationMessage(password),
+    }));
+  }, [password]);
 
   return (
-    <div className={styles.container}>
-      <div>* 로그인 페이지 *</div>
-      <div>로고</div>
+    <div className={styles.container_Login}>
+      <div className={styles.topBar}>11:11</div>
+      <div className={styles.logo}>/*CodeWhisper*/</div>
       <form>
-        <label>이메일</label>
-        <input
-          type="text"
-          name="email"
-          placeholder="codeWhisper@gmail.com"
-          ref={emailInput}
-          onChange={emailInput_handleOnChange}
-        />
-        {/* <div>{emailVerificationMessage}</div> */}
-        <label>비밀번호</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="********"
-          onChange={passwordInput_handleOnChange}
-        />
-        {/* <div>{passwordVerificationMessage}</div> */}
-        <input
-          type="submit"
-          value="로그인"
-          onClick={submitButton_handleOnClick}
-        />
+        <div className={styles.wrapper_Inputs}>
+          <UserInput
+            type={"text"}
+            name={"email"}
+            placeholder={"이메일"}
+            ref={emailInput}
+            onChange={handleOnChangeFormInput}
+          />
+          <UserInput
+            type={"password"}
+            name={"password"}
+            placeholder={"비밀번호"}
+            ref={passwordInput}
+            onChange={handleOnChangeFormInput}
+          />
+        </div>
+        <div className={styles.wrapper_submitButton}>
+          <VioletButton
+            children={"로그인"}
+            onClick={handleOnClickSubmitButton}
+          />
+        </div>
       </form>
-      <div className={styles.wrapper_loginNav}>
-        <div
+      <div className={styles.wrapper_TextLinks}>
+        <LoginTextLink
+          children={"비밀번호 찾기"}
           onClick={() => {
             navigate(PATH.LOGIN + "/find-password");
           }}
-        >
-          👀비밀번호 찾기/
-        </div>
-        <div
+        />
+        <LoginTextLink
+          children={"회원 가입"}
           onClick={() => {
             navigate(PATH.LOGIN + "/register");
           }}
-        >
-          🏓회원 가입
-        </div>
+        />
       </div>
       <div className={styles.wrapper_loginOptions}>
         <div
-          onClick={() => {
-            console.log("구글");
+          className={styles.loginOption}
+          style={{
+            border: "1px solid",
           }}
+          onClick={loginByGoogle}
         >
-          🚬구글/
+          구글
         </div>
-        <div
-          onClick={() => {
-            console.log("네이버");
-          }}
-        >
-          🥝네이버/
-        </div>
-        <div
-          onClick={() => {
-            console.log("카카오");
-          }}
-        >
-          🍮카카오
-        </div>
+
+        <LoginOption optionName={kakao} />
+        <LoginOption optionName={naver} />
       </div>
     </div>
   );
 }
 
-function isEmailValid(email) {
-  const emailRegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-  const result = emailRegExp.test(email);
-
-  return result;
-}
-
-function isPasswordValid(password) {
-  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
-  const result = passwordRegExp.test(password);
-
-  return result;
+function LoginOption({ optionName }) {
+  return (
+    <div className={styles.loginOption}>
+      <img src={optionName} alt="" />
+    </div>
+  );
 }

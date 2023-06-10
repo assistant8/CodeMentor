@@ -3,6 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PATH from "../../constants/path";
+import { set } from "immutable";
+import { axiosInterceptors } from "../../hooks/useLogin.js";
+import { UserInput } from "../../components/inputs/UserInput";
+import { VioletButton } from "../../components/buttons/VioletButton";
 
 // 클릭 버튼을 없애는 게 사용자한테 더 편하려나.
 // - verification code랑 input 내용 평가해서 자동으로 다음 페이지로 넘어가게.
@@ -13,19 +17,20 @@ import PATH from "../../constants/path";
 // - 사용할 라이브러리 읽어보고 결정하기. node-mailer 같은 걸 쓴다고 함.
 
 export default function VerifyEmail() {
-  const navigate = useNavigate();
-  const [verificationCodeInputValue, setVerificationCodeInputValue] =
-    useState("");
   const location = useLocation();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const password = useRef("");
   const previousPageUrl = useRef("");
   const nextPageUrl = useRef("");
-  const password = useRef("");
+  const [verificationCodeInputValue, setVerificationCodeInputValue] =
+    useState("");
+  const [validationMessage, setValidationMessage] = useState("");
+  const verificationCodeInput = useRef();
 
-  // let previousPageUrl = "";
-  // let nextPageUrl = "";
+  axiosInterceptors();
 
-  const handleOnChange_verificationCodeInput = (e) => {
+  const handleOnChangeVerificationCodeInput = (e) => {
     const value = e.target.value;
 
     const RegExp = /\D/;
@@ -38,8 +43,16 @@ export default function VerifyEmail() {
   // 서버에서 인증 코드 검사.
   // 일치 -> 비밀번호 재설정 or 회원 가입 완료.
   // 불일치 -> alert.
-  const handleOnClick_submitButton = (e) => {
+  const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
+
+    if (!isVerificationCodeValid(verificationCodeInputValue)) {
+      alert(validationMessage);
+
+      verificationCodeInput.current.focus();
+
+      return;
+    }
 
     const formData = {
       email,
@@ -72,8 +85,7 @@ export default function VerifyEmail() {
       const newFormData = {
         ...formData,
         password: password.current,
-        name: "이름 기본값(겹치지 않게)",
-        profileImage: "프로필 이미지 기본값",
+        name: "너구리와함께사라지다",
       };
 
       axios.post(url, newFormData).then((response) => {
@@ -83,6 +95,7 @@ export default function VerifyEmail() {
           alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
 
           navigate(nextPageUrl.current, {
+            // 회원 가입에 어떤 정보가 필요한지 모르겠네.
             state: { email, name: newFormData.name },
           });
 
@@ -96,17 +109,22 @@ export default function VerifyEmail() {
     }
   };
 
-  // 이전 페이지서 navigate로 넘어온 데이터를 가지고 submit 다음에 렌더링될 페이지를 결정.
-  // - 회원 가입 -> 프로필 설정 페이지
-  // - 비밀번호 찾기 -> 비밀번호 재설정 페이지
   useEffect(() => {
-    // 회원 가입 페이지나 비밀번호 찾기 페이지에서 넘어온 경우에만 이 페이지를 렌더링.
+    verificationCodeInput.current.focus();
+  });
+
+  // * 다음 페이지 결정
+  // - 이전 페이지에서 넘어온 navigate state 데이터로 다음 렌더링 페이지를 결정.
+  // - 비밀번호 찾기 -> 비밀번호 재설정 페이지
+  // - 회원 가입 -> 프로필 설정 페이지
+  useEffect(() => {
+    // 회원 가입 페이지, 비밀번호 찾기 페이지에서 넘어온 경우에만 허용.
     // - 그 두 페이지에서 넘어온 경우에만 location.state가 존재할 테니까.
     // - 아니 근데 이걸로 되나? 다른 location.state.email/previousPageUrl 존재하는 페이지에서 넘어오면.. 특정 값이 없으면 버튼이 안 눌리게 해야 하나..?
     if (
-      location.state === null ||
-      location.state.email === undefined ||
-      location.state.previousPageUrl === undefined
+      !location.state ||
+      !location.state?.email ||
+      !location.state?.previousPageUrl
     ) {
       alert("잘못된 접근입니다.");
       navigate(PATH.MAIN);
@@ -146,29 +164,60 @@ export default function VerifyEmail() {
     return;
   }, []);
 
-  return (
-    <div className={styles.container}>
-      <div>* 이메일 인증 번호 확인 페이지 *</div>
+  useEffect(() => {
+    const newMessage = makeVerificationCodeVaildationMessage(
+      verificationCodeInputValue
+    );
 
-      <div>이메일 인증</div>
-      <div>{email}로 인증 번호가 발송되었습니다.</div>
+    setValidationMessage((oldMessage) => newMessage);
+  }, [verificationCodeInputValue]);
+
+  return (
+    <div className={styles.container_VerifyEmail}>
+      <div className={styles.topBar}>11:11</div>
+      <div className={styles.logo}>사용자 인증</div>
+
+      <div className={styles.message}>
+        {email}로 인증 번호가 발송되었습니다.
+      </div>
       <form>
-        <label htmlFor="verificationCodeInput">인증 번호</label>
-        <input
-          type="text"
-          name="verificationCode"
-          id="verificationCodeInput"
-          maxLength="6"
-          placeholder="인증 번호 6자리 숫자를 입력해주세요."
-          onInput={handleOnChange_verificationCodeInput}
-          value={verificationCodeInputValue}
-        />
-        <input
-          type="submit"
-          value="확인"
-          onClick={handleOnClick_submitButton}
-        ></input>
+        <div className={styles.wrapper_inputAndValidationMessage}>
+          <UserInput
+            type={"text"}
+            name={"verificationCode"}
+            placeholder={"인증 번호 6자리"}
+            maxLength="6"
+            ref={verificationCodeInput}
+            onChange={handleOnChangeVerificationCodeInput}
+            onKeyDown={(e) => {
+              if (e.key === " ") {
+                e.preventDefault();
+              }
+            }}
+            value={verificationCodeInputValue}
+          />
+          <div className={styles.validationMessage}>{validationMessage}</div>
+        </div>
+        <div className={styles.wrapper_submitButton}>
+          <VioletButton children={"확인"} onClick={handleOnClickSubmitButton} />
+        </div>
       </form>
     </div>
   );
+}
+
+function isVerificationCodeValid(verificationCode) {
+  return verificationCode.length === 6;
+}
+
+function makeVerificationCodeVaildationMessage(verificationCode) {
+  if (verificationCode === "") {
+    return "인증 번호를 입력해주세요.";
+  }
+
+  if (!isVerificationCodeValid(verificationCode)) {
+    return "인증 번호는 6자리 숫자입니다.";
+  }
+
+  return "";
 }

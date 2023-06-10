@@ -25,10 +25,13 @@ import VerifyEmail from "./pages/login/VerifyEmail";
 import ResetPassword from "./pages/login/ResetPassword.jsx";
 import CreateProfile from "./pages/login/CreateProfile";
 import { useEffect, useMemo, useState } from "react";
+import ProblemAdminPage from './pages/admin'
+import ProblemCreatePage from './pages/adminCreate';
+import ProblemUpdatePage from './pages/adminUpdate';
 
 const AppLayout = () => {
   const location = useLocation();
-  const [isLoginPage, setIsLoginPage] = useState(false); //첫 화면 로그인인데 괜찮으려나
+  const [isLoginPage, setIsLoginPage] = useState(false); //첫 화면 로그인이니 수정
 
   useEffect(() => {
     if (location.pathname.includes("login")) {
@@ -58,7 +61,7 @@ function App() {
         <Route path="/" element={<QuizList />} />
         <Route path={PATH.QUIZ} element={<Quiz />} />
         <Route path={PATH.QUIZLIST} element={<QuizList />} />
-        
+
         <Route path={PATH.LOGIN}>
           <Route index element={<Login />} />
           <Route path="find-password" element={<FindPassword />} />
@@ -67,7 +70,7 @@ function App() {
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="create-profile" element={<CreateProfile />} />
         </Route>
-        
+
         <Route path={PATH.MYPAGE}>
           <Route index element={<MyPage />} />
           <Route path="modify" element={<ModifyUser />} />
@@ -78,6 +81,11 @@ function App() {
           <Route path="mypost" element={<MyPost />} />
         </Route>
 
+        <Route path={PATH.ADMIN}>
+          <Route index element={<ProblemAdminPage />} />
+          <Route path={PATH.ADMIN_CREATE} element={<ProblemCreatePage />} />
+          <Route path={PATH.ADMIN_UPDATE} element={<ProblemUpdatePage />} />
+        </Route>
       </Route>
     </Routes>
   );

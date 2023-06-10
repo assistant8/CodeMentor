@@ -1,12 +1,70 @@
-.container {
+@import "../../constants/utils.scss";
+
+.container_VerifyEmail {
   width: 100%;
+  height: 100vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  div {
+    // border: 1px solid;
+  }
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.topBar {
+  width: 354.33px;
+  height: 20px;
+
+  margin-top: 15px;
+}
+
+.logo {
+  height: 20px;
+
+  margin-top: 147px;
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 20px;
+
+  text-align: center;
+  letter-spacing: 0.05em;
+
+  color: $violet-4;
+}
+
+.message {
+  width: 250px;
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+
+  color: #433a3a;
+
+  margin-top: 72px;
+}
+
+.wrapper_inputAndValidationMessage {
+  margin-top: 38px;
+
+  .validationMessage {
+    height: 30px;
+
+    color: #f16f6f;
+
+    line-height: 30px;
+
+    // margin-top: 5px;
+    margin-left: 20px;
+  }
+}
+
+.wrapper_submitButton {
+  margin-top: 22px;
 }

@@ -28,15 +28,19 @@ const PassWord = () => {
     console.log("제출됨");
   };
   const buttonRef = useRef(null);
+  const presentPwdRef = useRef(null);
+  const pwdRef = useRef(null);
+  const checkRef = useRef(null);
   return (
     <div className={styles.pwdContainer}>
       <p className={styles.pwdTitle}>비밀번호 변경</p>
       <div className={styles.inputsContainer}>
         <div className={styles.inputBox}>
-          <UserInput placeholder="현재 비밀번호" />
+          <UserInput ref={presentPwdRef} placeholder="현재 비밀번호" />
         </div>
         <div className={styles.inputBox}>
           <UserInput
+            ref={pwdRef}
             type="password"
             placeholder="비밀번호"
             value={newPwd}
@@ -46,19 +50,18 @@ const PassWord = () => {
         </div>
         <div className={styles.inputBox}>
           <UserInput
+            ref={checkRef}
             type="password"
             placeholder="비밀번호 확인"
             onChange={handleCheck}
           />
           {!checkPwd ? <p>비밀번호가 일치하지 않습니다</p> : null}
         </div>
-        <VioletButton
-          ref={buttonRef}
-          style={{ marginTop: "2.5rem" }}
-          onClick={onClick}
-        >
-          변경하기
-        </VioletButton>
+        <div className={styles.violetButtonWrapper}>
+          <VioletButton ref={buttonRef} onClick={onClick}>
+            변경하기
+          </VioletButton>
+        </div>
       </div>
     </div>
   );
