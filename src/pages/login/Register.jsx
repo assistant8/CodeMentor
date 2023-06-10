@@ -10,6 +10,7 @@ import {
   alertValidationMessage,
 } from "../../hooks/useLogin.js";
 import { api } from "../../libs/utils/api.js";
+import { InputWithIndicator } from "../../components/inputs/InputWithIndicator.jsx";
 import { LoginHeader } from "../../components/headers/LoginHeader";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput";
@@ -36,7 +37,10 @@ export default function Register() {
     password: "",
     passwordConfirm: "",
   });
-  const [isPassEmailVerification, setIsPassEmailVerification] = useState(false);
+  const step = useRef(0);
+
+  // const [step, setStep] = useState();
+  // const [isPassEmailVerification, setIsPassEmailVerification] = useState(false);
 
   const handleOnChangeFormInput = (e) => {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -50,8 +54,6 @@ export default function Register() {
 
       return;
     }
-
-    setIsPassEmailVerification(true);
 
     const url = "https://eonaf45qzbokh52.m.pipedream.net";
 
@@ -137,7 +139,20 @@ export default function Register() {
             </div>
           </div>
 
-          {isPassEmailVerification ? (
+          {step === 1 ? (
+            <>
+              <UserInput
+                type={"password"}
+                name={"password"}
+                placeholder={"비밀번호"}
+                ref={passwordInput}
+                onChange={handleOnChangeFormInput}
+                maxLength={12}
+              />
+            </>
+          ) : null}
+
+          {step === 2 ? (
             <>
               <div className={styles.wrapper_InputAndValidationMessage}>
                 <UserInput
