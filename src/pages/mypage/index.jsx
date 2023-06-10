@@ -14,11 +14,6 @@ import book from "../../image/book-account-outline.png";
 import axios from "axios";
 
 const User = () => {
-  const setHeaderTitle = useSetRecoilState(headerTitleState);
-
-  useEffect(() => {
-    setHeaderTitle("마이페이지");
-  }, [setHeaderTitle]);
 
   let navigate = useNavigate();
   return (

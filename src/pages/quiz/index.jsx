@@ -89,12 +89,7 @@ export default function Quiz() {
 
 
 const QuizNameContainer = ({onClick, title}) => {
-  const setHeaderTitle = useSetRecoilState(headerTitleState);
-
-  useEffect(() => {
-    setHeaderTitle("문제");
-  }, [setHeaderTitle]);
-
+  
   return (
     <div className={styles.quizNameContainer}>
       <div className={styles.quizInfo}>
