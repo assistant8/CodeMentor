@@ -2,7 +2,7 @@ import { headerTitleState } from '../../state/headerTitleState';
 import { useSetRecoilState } from 'recoil';
 import styles from './adminCreate.module.scss';
 import HintContainer from "../../components/hintContainer/HintCotainer";
-import { SmallVioletButton } from '../../components/buttons/smallVioletButton';
+import { SmallVioletButton } from '../../components/buttons/SmallVioletButton';
 import { useRef } from 'react';
 
 export default function ProblemCreatePage() {
