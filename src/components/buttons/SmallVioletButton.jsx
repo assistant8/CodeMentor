@@ -1,5 +1,5 @@
-import styles from "./SmallVioletButton.module.scss";
 import React from "react";
+import styles from './SmallVioletButton.module.scss';
 
 export const SmallVioletButton = React.forwardRef(
   ({ children, onClick }, ref) => {

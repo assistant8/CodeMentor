@@ -4,18 +4,10 @@ import { VioletButton } from "../../components/buttons/VioletButton";
 import { UserInput } from "../../components/inputs/UserInput";
 import { useState, useRef } from "react";
 import { FaPencilAlt } from "react-icons/fa";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { headerTitleState } from "../../state/headerTitleState";
 import { useEffect } from "react";
 import { Modal } from "../../components/modal";
 
 const ModifyUser = () => {
-  const setHeaderTitle = useSetRecoilState(headerTitleState);
-
-  useEffect(() => {
-    setHeaderTitle("정보 수정");
-  }, [setHeaderTitle]);
-
   const [imgUrl, setImgUrl] = useState("");
   const fileInputRef = useRef(null);
   const navigate = useNavigate();

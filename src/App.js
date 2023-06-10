@@ -83,8 +83,8 @@ function App() {
 
         <Route path={PATH.ADMIN}>
           <Route index element={<ProblemAdminPage />} />
-          <Route path={PATH.ADMIN_CREATE} element={<ProblemCreatePage />} />
-          <Route path={PATH.ADMIN_UPDATE} element={<ProblemUpdatePage />} />
+          <Route path="create" element={<ProblemCreatePage />} />
+          <Route path="update" element={<ProblemUpdatePage />} />
         </Route>
       </Route>
     </Routes>

@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Header.module.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import mapPathnameToTitle from '../../../constants/mapPathnameToTitle';
 
-const Header = ({ headerTitle }) => {
+const Header = () => {
+  const location = useLocation();
+  const [title, setTitle] = useState("문제리스트");
+  
+  useEffect(() => {
+    const pathname = location.pathname;
+    setTitle(() => mapPathnameToTitle[pathname]);
+  }, [location.pathname]);
+
   const navigate = useNavigate();
   return (
     <div className={styles.header}>
@@ -33,7 +42,7 @@ const Header = ({ headerTitle }) => {
           />
         </svg>
       </div>
-      <div className="header-title">{headerTitle}</div>
+      <div className="header-title">{title}</div>
       <div className={styles.settingsIcon}>
         <svg
           width="5"
