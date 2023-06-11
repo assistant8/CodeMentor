@@ -238,7 +238,7 @@ export default function Register() {
       ...oldMessage,
       passwordConfirm: newMessage,
     }));
-  }, [passwordConfirm]);
+  }, [password, passwordConfirm]);
 
   useEffect(() => {
     if (step === 0) {
