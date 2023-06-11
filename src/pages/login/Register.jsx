@@ -61,6 +61,19 @@ export default function Register() {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: newValue }));
   };
 
+  // const handleOnChangeFormInput = (e) => {
+  //   let inputName = e.target.name;
+  //   let inputValue = e.target.value;
+
+  //   if ((inputName = "verificationCode")) {
+  //     const RegExp = /\D/;
+
+  //     inputValue = inputValue.replace(RegExp, "");
+  //   }
+
+  //   setFormInputValue((prev) => ({ ...prev, [inputName]: inputValue }));
+  // };
+
   const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
@@ -161,10 +174,9 @@ export default function Register() {
           </div>
 
           {/* {step === 1 ? (<>인증 코드 입력 인풋</>) : null} */}
-
           {/* {step === 2 ? (<>비밀번호들 입력 인풋</>) : null} */}
 
-          <div className={styles.wrapper_inputAndValidationMessage}>
+          <div className={styles.wrapper_InputAndValidationMessage}>
             <UserInput
               type={"text"}
               name={"verificationCode"}
