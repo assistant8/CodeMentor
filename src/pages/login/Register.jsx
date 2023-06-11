@@ -15,6 +15,7 @@ import {
   alertValidationMessage,
 } from "../../hooks/useLogin.js";
 import { api } from "../../libs/utils/api.js";
+import { InputWithEditButton } from "../../components/inputs/InputWithEditButton.jsx";
 import { InputWithIndicator } from "../../components/inputs/InputWithIndicator.jsx";
 import { LoginHeader } from "../../components/headers/LoginHeader";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
@@ -47,6 +48,7 @@ export default function Register() {
     password: "",
     passwordConfirm: "",
   });
+  const [showEditButtonState, setShowEditButtonState] = useState(false);
 
   // 이메일 인증 페이지랑 합칠까..
 
@@ -66,19 +68,6 @@ export default function Register() {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: newValue }));
   };
 
-  // const handleOnChangeFormInput = (e) => {
-  //   let inputName = e.target.name;
-  //   let inputValue = e.target.value;
-
-  //   if ((inputName = "verificationCode")) {
-  //     const RegExp = /\D/;
-
-  //     inputValue = inputValue.replace(RegExp, "");
-  //   }
-
-  //   setFormInputValue((prev) => ({ ...prev, [inputName]: inputValue }));
-  // };
-
   const handleOnClickSubmitButton = async (e) => {
     e.preventDefault();
 
@@ -96,7 +85,7 @@ export default function Register() {
       };
 
       try {
-        const response = await api.post("/이메일-인증", formData);
+        const response = await api.post("/email-verification", formData);
         const result = response.data.result;
 
         if (result === "이미 가입된 이메일.") {
@@ -106,7 +95,6 @@ export default function Register() {
         }
 
         // if (result === "인증 메일 발송 성공.") {
-
         if (true) {
           setStep(1);
 
@@ -136,7 +124,7 @@ export default function Register() {
       };
 
       try {
-        const response = await api.post("/이메일-인증-확인", formData);
+        const response = await api.post("/verification-code-confirm", formData);
         const result = await response.data.result;
 
         if (result === "인증 코드가 일치하지 않습니다.") {
@@ -253,14 +241,32 @@ export default function Register() {
   }, [passwordConfirm]);
 
   useEffect(() => {
+    if (step === 0) {
+      focusRef.email.current.focus();
+
+      setFormInputValue((prev) => ({
+        ...prev,
+        verificationCode: "",
+        password: "",
+        passwordConfirm: "",
+      }));
+
+      setShowEditButtonState(false);
+
+      return;
+    }
     if (step === 1) {
       focusRef.verificationCode.current.focus();
+
+      setShowEditButtonState(true);
 
       return;
     }
 
     if (step === 2) {
       focusRef.password.current.focus();
+
+      setShowEditButtonState(true);
 
       return;
     }
@@ -275,13 +281,40 @@ export default function Register() {
       <form>
         <div className={styles.wrapper_Inputs}>
           <div className={styles.wrapper_InputAndValidationMessage}>
-            <UserInput
+            <InputWithEditButton
               type={"text"}
               name={"email"}
               placeholder={"이메일"}
               ref={emailInput}
               onChange={handleOnChangeFormInput}
               disabled={step !== 0}
+              showEditButtonState={showEditButtonState}
+              buttonOnClick={async (e) => {
+                e.preventDefault();
+
+                try {
+                  const response = await api.post(
+                    "/email-verification-cancle",
+                    {
+                      email,
+                    }
+                  );
+                  const result = await response.data.result;
+
+                  // if (response.data.result === "발송된 인증 번호 폐기 성공.") {
+                  if (true) {
+                    setStep(0);
+
+                    return;
+                  }
+                } catch (error) {
+                  alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+                  console.log(error);
+
+                  return;
+                }
+              }}
             />
             <div className={styles.validationMessage}>
               {validationMessage.email}
@@ -358,26 +391,6 @@ export default function Register() {
         <div className={styles.wrapper_submitButton}>
           <VioletButton children={"확인"} onClick={handleOnClickSubmitButton} />
         </div>
-        {step !== 0 ? (
-          <>
-            <div className={styles.wrapper_submitButton}>
-              <VioletButton
-                children={"이메일 재설정"}
-                onClick={(e) => {
-                  e.preventDefault();
-
-                  setStep(0);
-                  setFormInputValue((prev) => ({
-                    ...prev,
-                    verificationCode: "",
-                    password: "",
-                    passwordConfirm: "",
-                  }));
-                }}
-              />
-            </div>
-          </>
-        ) : null}
       </form>
     </div>
   );
