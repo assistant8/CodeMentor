@@ -5,8 +5,8 @@ import { LuSprout } from "react-icons/lu";
 import { FaGraduationCap } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import React, { useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { headerTitleState } from "../../state/headerTitleState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userState } from "../../state/userState";
 import { useEffect } from "react";
 import { Modal } from "../../components/modal";
 import chart from "../../image/chart-bar.png";
@@ -16,15 +16,30 @@ import check from "../../image/check.svg";
 import axios from "axios";
 
 const User = () => {
+  const [user, setUser] = useRecoilState(userState);
+  useEffect(() => {
+    const fetchUserInfo = () => {
+      // Mock 데이터를 사용하여 유저 정보를 설정하는 코드
+      const userInfo = {
+        name: "낭니",
+        email: "nangni@elice.com",
+        image: "account-circle.png",
+      };
+      setUser(userInfo);
+    };
+
+    fetchUserInfo();
+  }, []);
+
   let navigate = useNavigate();
   return (
     <div className={styles.userInfo}>
       <div className={styles.profileImg}>
-        <img src="" alt="프사" />
+        <img src={user.image} alt="프사" />
       </div>
       <div style={{ display: "flex" }}>
-        <h3>코드의 신,</h3>
-        <h3>낭니</h3>
+        <h3>{user.admin ? "코드 멘토, " : "코드 멘티, "}</h3>
+        <h3>{user.name}</h3>
       </div>
       <button>
         <MdOutlineKeyboardArrowRight
@@ -36,10 +51,15 @@ const User = () => {
 };
 
 const Grade = ({ openModal }) => {
+  const user = useRecoilValue(userState);
   return (
     <div className={styles.gradeInfo}>
       <div className={styles.gradeImg}>
-        <img src="" alt="등급 아이콘" />
+        {user.admin ? (
+          <FaGraduationCap className={styles.gradeIcon} />
+        ) : (
+          <LuSprout className={styles.gradeIcon} />
+        )}
       </div>
       <h3>등급별 혜택보기</h3>
       <button onClick={openModal}>
