@@ -23,6 +23,7 @@ const User = () => {
       const userInfo = {
         name: "낭니",
         email: "nangni@elice.com",
+        password: "Asdfasdf",
         image: "account-circle.png",
       };
       setUser(userInfo);
