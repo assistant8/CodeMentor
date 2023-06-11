@@ -1,6 +1,6 @@
 import styles from "./ResetPassword.module.scss";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import { api } from "../../libs/utils/api.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import PATH from "../../constants/path";
 import {
@@ -14,8 +14,8 @@ import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 
 export default function ResetPassword() {
-  const [email, setEmail] = useState("");
   const location = useLocation();
+  const email = location?.state?.email;
   const passwordInput = useRef();
   const passwordConfirmInput = useRef();
   const focusRef = {
@@ -37,14 +37,7 @@ export default function ResetPassword() {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // const handleOnChangePasswordConfirmInput = (e) => {
-  //   setFormInputValue((prev) => ({
-  //     ...prev,
-  //     [e.target.name]: e.target.value,
-  //   }));
-  // };
-
-  const handleOnClickSubmitButton = (e) => {
+  const handleOnClickSubmitButton = async (e) => {
     e.preventDefault();
 
     if (!isPassValidation(formInputValue)) {
@@ -53,34 +46,32 @@ export default function ResetPassword() {
       return;
     }
 
-    const data = {
-      // 사용자가 인증 링크를 클릭하고 비밀번호 재설정 페이지로 리다이렉트 된다면 사용자 email은 어떻게 가져와야 할까..?
-      // - 몰라..
-      password: password,
-    };
+    const fromData = { email, password };
 
-    const url = "https://eonaf45qzbokh52.m.pipedream.net";
+    try {
+      const response = await api.post("/user/reset-password", fromData);
+      const result = response.data.result;
 
-    axios
-      .post(url, data)
-      .then((response) => {
-        // if (response.data.result === "비밀번호 재설정 완료") {
-        // 개발용 true 임시 설정
-        if (true) {
-          alert(
-            "비밀번호 재설정이 완료되었습니다. 로그인 페이지로 이동합니다."
-          );
-          navigate(PATH.LOGIN);
+      // 이게 서버에서 구현이 될까?
+      if (result === "이전과 같은 비밀번호.") {
+        alert("이전과 같은 비밀번호입니다. 다시 입력해주세요.");
 
-          return;
-        }
+        return;
+      }
 
-        alert("비밀번호 재설정에 실패했습니다. 비밀번호를 다시 확인해주세요.");
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("서버 문제로 비밀번호 재설정에 실패했습니다. 다시 시도해주세요.");
-      });
+      // if (result === "비밀번호 재설정 완료") {
+      if (true) {
+        alert("비밀번호 재설정이 완료되었습니다. 로그인 페이지로 이동합니다.");
+
+        navigate(PATH.LOGIN);
+
+        return;
+      }
+    } catch (error) {
+      alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -90,9 +81,6 @@ export default function ResetPassword() {
 
       return;
     }
-
-    setEmail(location.state.email);
-    return;
   }, []);
 
   useEffect(() => {
@@ -113,8 +101,6 @@ export default function ResetPassword() {
       password,
       passwordConfirm
     );
-
-    console.log(newMessage);
 
     setValidationMessage((oldMessage) => ({
       ...oldMessage,
