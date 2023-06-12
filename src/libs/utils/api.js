@@ -10,3 +10,8 @@ import axios from "axios";
 axios.defaults.baseURL = "/api";
 
 export const api = axios.create();
+
+api.interceptors.request.use((req) => {
+  console.log(req);
+  return req;
+});
