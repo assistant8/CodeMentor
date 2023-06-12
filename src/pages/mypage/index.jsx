@@ -100,7 +100,40 @@ const Menu = () => {
 };
 
 const LogOut = () => {
-  return <p className={styles.logout}>로그아웃</p>;
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+  const [modalContent, setModalContent] = useState(""); // 상태 변수 추가
+
+  const onClick = () => {
+    axios
+      .post("http://localhost:3000/api/users/logout", {})
+      .then((res) => {
+        // 로그아웃 처리 성공
+        navigate("/login");
+      })
+      .catch((error) => {
+        // 로그아웃 처리 실패
+        openModal();
+        setModalContent(error + "로그아웃에 실패했습니다.");
+      });
+  };
+
+  return (
+    <>
+      <p className={styles.logout} onClick={onClick}>
+        로그아웃
+      </p>
+      <Modal isOpen={isOpen} closeModal={closeModal}>
+        {modalContent}
+      </Modal>
+    </>
+  );
 };
 
 const MyPage = () => {
