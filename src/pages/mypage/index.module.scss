@@ -1,11 +1,4 @@
-$border-color: #c2bcca;
-$violet-1: #e4d2fa;
-$violet-2: #c79aff;
-$violet-3: #a256ff;
-$violet-4: #6700e6;
-* {
-  box-sizing: border-box;
-}
+@import "../../constants/utils.scss";
 
 .container {
   width: 100%;
@@ -64,7 +57,8 @@ $violet-4: #6700e6;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background-color: $border-color;
+    background-color: $violet-4;
+    color: white;
     width: 3.229375rem; /* 51.67px converted to rem */
     height: 3.229375rem; /* 51.67px converted to rem */
     border-radius: 50%;
@@ -89,9 +83,8 @@ $violet-4: #6700e6;
 .menuContainer {
   display: grid;
   width: 100%;
-  height: 17.5rem; /* 280px converted to rem */
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 50% 50%;
+  height: 8.75rem; /* 140px converted to rem */
+  grid-template-columns: 1fr 1fr 1fr;
 
   .menuContent {
     display: flex;
@@ -100,9 +93,10 @@ $violet-4: #6700e6;
     flex-direction: column;
     border: 0.0625rem solid $border-color; /* 1px converted to rem */
 
-    svg,
-    path {
-      font-size: 3.125rem; /* 50px converted to rem */
+    img {
+      width: 3.5rem;
+      height: 3.5rem;
+      color: black;
     }
 
     p {
@@ -115,65 +109,48 @@ $violet-4: #6700e6;
 .logout {
   text-align: right;
   margin-right: 0.3125rem; /* 5px converted to rem */
+  font-weight: bold;
 }
 
-.reactModal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border-radius: 4px;
-  padding: 1.25rem;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
-  width: 80%;
-}
-.reactModalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .gradeContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   font-weight: bold;
-  .gradeBox {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 1rem 0;
-    width: 90%;
-    .gradeProfile {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 5rem;
-      height: 5rem;
-      background-color: $violet-4;
-      border-radius: 50%;
-      color: white;
-      margin-right: 1rem;
-      .gradeIcon {
-        font-size: 1.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      p {
-        margin: 0;
-      }
-    }
+}
+
+.gradeBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem 0;
+  width: 90%;
+}
+
+.gradeProfile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  height: 5rem;
+  background-color: $violet-4;
+  border-radius: 50%;
+  color: white;
+  margin-right: 1rem;
+  p {
+    margin: 0;
   }
 }
+
+.gradeIcon {
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .closeBtn {
   font-size: 1.5rem;
   margin: 0;

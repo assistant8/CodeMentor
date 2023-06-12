@@ -1,13 +1,11 @@
 import React from "react";
-import "./LoginLayout.module.scss";
+import styles from "./LoginLayout.module.scss";
 import { Outlet } from "react-router-dom";
 
-const LoginLayout = () => {
+const LoginLayout = ({ children }) => {
   return (
-    <div className="FullLogin">
-      <div className="InnerLogin">
-        <Outlet />
-      </div>
+    <div className={styles.FullLogin}>
+      <div className={styles.InnerLogin}>{children}</div>
     </div>
   );
 };

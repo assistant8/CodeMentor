@@ -1,96 +1,273 @@
 import styles from "./FindPassword.module.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import { api } from "../../libs/utils/api.js";
 import PATH from "../../constants/path.js";
+import {
+  isEmailValid,
+  isVerificationCodeValid,
+  isPassValidation,
+  alertValidationMessage,
+  makeEmailValidationMessage,
+  makeVerificationCodeVaildationMessage,
+} from "../../hooks/useLogin.js";
+import { InputWithEditButton } from "../../components/inputs/InputWithEditButton";
+import { LoginHeader } from "../../components/headers/LoginHeader";
+import { UserInput } from "../../components/inputs/UserInput";
+import { VioletButton } from "../../components/buttons/VioletButton";
+import { is } from "immutable";
 
 export default function FindPassword() {
   const navigate = useNavigate();
   const location = useLocation();
-  // let emailInputValue = "";
-  const emailInputValue = useRef("");
-
-  // 재랜더링이 필요 없어도 state를 쓰는 게 좋은가??
-  // - 변수의 값은 계속해서 재할당되지만 그 변화가 화면에 출력되지 않아도 되는 상황에서는 state를 쓰지 않는 게 좋을 듯.
-  // - state를 쓰면 state를 사용하는 컴포넌트가 불필요하게 재랜더링 되기 때문.
-  //  - 성는에 막 엄청 큰 영향을 미칠 것 같진 않지만.
-  // - 근데 나중에 state를 사용해야 할 요소가 추가될 수도 있고.. 그럴 때까지 대비해서 미리 state를 쓰자니 과한 것 같고..
-  // - 뭔가를 명확하게 아는 수준이 되지 않으면 선택이 어려워져버림. 맞딱뜨릴 때마다 각각의 방법을 저울질해야 해서 스트레스.
-  // - 그니까 제대로 알아두는 게 중요한 것 같음. 프로그래밍이라는 게 해결 방법을 찾는 일들의 연쇄니까. 아닐지도 모름.
-  // - 일단 냅두기~
-
-  // const [emailInputValue, setEmailInputValue] = useState("");
   const emailInput = useRef();
+  const verificationCodeInput = useRef();
+  const focusRef = {
+    email: emailInput,
+    verificationCode: verificationCodeInput,
+  };
+  const [formInputValue, setFormInputValue] = useState({
+    email: "",
+    verificationCode: "",
+  });
+  const { email, verificationCode } = formInputValue;
+  const [validationMessage, setValidationMessage] = useState({
+    email: "",
+    verificationCode: "",
+  });
+  const [step, setStep] = useState(0);
+  const [showEditButtonState, setShowEditButtonState] = useState(false);
 
-  const handleOnChange_emailInput = (e) => {
-    // setEmailInputValue(e.target.value);
-    // emailInputValue = e.target.value;
-    emailInputValue.current = e.target.value;
+  const handleOnChangeFormInput = (e) => {
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleOnClick_submitButton = (e) => {
+  const handleOnChangeVerificationCodeInput = (e) => {
+    const value = e.target.value;
+
+    const RegExp = /\D/;
+
+    const newValue = value.replace(RegExp, "");
+
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: newValue }));
+  };
+
+  const handleOnClickSubmitButton = async (e) => {
     e.preventDefault();
 
-    if (emailInputValue.current === "") {
-      alert("이메일을 입력해주세요.");
+    if (step === 0) {
+      if (!isEmailValid(email)) {
+        alert(validationMessage.email);
 
-      return;
-    }
-
-    if (!isEmailValid(emailInputValue.current)) {
-      alert("이메일 형식이 올바르지 않습니다.");
-
-      return;
-    }
-
-    // 임시 서버(데이터 전송 확인용)
-    const url = "https://eonaf45qzbokh52.m.pipedream.net";
-
-    axios.post(url, { email: emailInputValue.current }).then((response) => {
-      if (response.data.result === "이메일 불일치") {
-        alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
+        focusRef.email.current.focus();
 
         return;
       }
 
-      navigate(PATH.LOGIN + "/verify-email", {
-        state: {
-          email: emailInputValue.current,
-          previousPageUrl: location.pathname,
-        },
-      });
-    });
+      const formData = { email };
+
+      try {
+        const response = await api.post("/uesr/check-email", formData);
+        const result = await response.data.result;
+
+        if (result === "db에 이메일 없음.") {
+          alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
+
+          return;
+        }
+
+        // if (result === "db에 이메일 있음.") {
+        if (true) {
+          setStep(1);
+
+          return;
+        }
+      } catch (error) {
+        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+        console.log(error);
+
+        return;
+      }
+    }
+
+    if (step === 1) {
+      if (!isVerificationCodeValid(verificationCode)) {
+        alert(validationMessage.verificationCode);
+
+        return;
+      }
+
+      const formData = { email, verificationCode };
+
+      try {
+        const resaponse = await api.post(
+          "/user/check-verification-code",
+          formData
+        );
+        const result = await resaponse.data.result;
+
+        if (result === "인증 번호가 일치하지 않음.") {
+          alert(
+            "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
+          );
+
+          return;
+        }
+
+        // if (result === "인증 번호 일치.") {
+        if (true) {
+          navigate(PATH.LOGIN + "/reset-password", { state: { email } });
+
+          return;
+        }
+      } catch (error) {
+        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+        console.log(error);
+
+        return;
+      }
+    }
   };
 
   useEffect(() => {
     emailInput.current.focus();
   }, []);
 
+  useEffect(() => {
+    const newMessage = makeEmailValidationMessage(email);
+
+    setValidationMessage((prev) => ({
+      ...prev,
+      email: newMessage,
+    }));
+  }, [email]);
+
+  useEffect(() => {
+    const newMessage = makeVerificationCodeVaildationMessage(verificationCode);
+
+    setValidationMessage((oldMessage) => ({
+      ...oldMessage,
+      verificationCode: newMessage,
+    }));
+  }, [verificationCode]);
+
+  useEffect(() => {
+    if (step === 0) {
+      focusRef.email.current.focus();
+
+      setFormInputValue((prev) => ({
+        ...prev,
+        verificationCode: "",
+        password: "",
+        passwordConfirm: "",
+      }));
+
+      setShowEditButtonState(false);
+
+      return;
+    }
+    if (step === 1) {
+      focusRef.verificationCode.current.focus();
+
+      setShowEditButtonState(true);
+
+      return;
+    }
+  }, [step]);
+
   return (
-    <div className={styles.container}>
-      <div>* 비밀번호 찾기 페이지 *</div>
-      <div>비밀번호 찾기</div>
+    <div className={styles.container_FindPassword}>
+      <div className={styles.topBar}>11:11</div>
+      <div className={styles.wrapper_header}>
+        <LoginHeader children={"비밀번호 찾기"} />
+      </div>
+      {step == 0 ? (
+        <>
+          <div className={styles.message}>
+            가입 시 사용한 이메일을 입력해주세요.
+          </div>
+        </>
+      ) : null}
+
       <form>
-        <label>이메일</label>
-        <input
-          type="text"
-          placeholder="가입 시 사용한 이메일을 입력해주세요"
-          ref={emailInput}
-          onChange={handleOnChange_emailInput}
-        />{" "}
-        <input
-          type="submit"
-          value="확인"
-          onClick={handleOnClick_submitButton}
-        ></input>
+        <div className={styles.wrapper_inputAndValidationMessage}>
+          <InputWithEditButton
+            type="text"
+            name="email"
+            id="emailInput"
+            placeholder="이메일"
+            ref={emailInput}
+            onChange={handleOnChangeFormInput}
+            disabled={step !== 0}
+            showEditButtonState={showEditButtonState}
+            buttonOnClick={async (e) => {
+              e.preventDefault();
+
+              try {
+                const response = await api.post("/email-verification-cancle", {
+                  email,
+                });
+                const result = await response.data.result;
+
+                // if (response.data.result === "발송된 인증 번호 폐기 성공.") {
+                if (true) {
+                  setStep(0);
+
+                  return;
+                }
+              } catch (error) {
+                alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+                console.log(error);
+
+                return;
+              }
+            }}
+          />
+          {/* <UserInput
+            type="text"
+            name="email"
+            id="emailInput"
+            placeholder="이메일"
+            ref={emailInput}
+            onChange={handleOnChangeFormInput}
+          /> */}
+          <div className={styles.validationMessage}>
+            {validationMessage.email}
+          </div>
+        </div>
+        {step === 1 ? (
+          <>
+            <div className={styles.wrapper_inputAndValidationMessage}>
+              <div className={styles.message}>
+                {email}로 인증 번호가 발송되었습니다.
+              </div>
+              <UserInput
+                type={"text"}
+                name={"verificationCode"}
+                placeholder={"인증 번호 6자리"}
+                maxLength="6"
+                ref={verificationCodeInput}
+                onChange={handleOnChangeVerificationCodeInput}
+                onKeyDown={(e) => {
+                  if (e.key === " ") {
+                    e.preventDefault();
+                  }
+                }}
+                value={verificationCode}
+              />
+              <div className={styles.validationMessage}>
+                {validationMessage.verificationCode}
+              </div>
+            </div>
+          </>
+        ) : null}
+        <div className={styles.wrapper_submitButton}>
+          <VioletButton children={"확인"} onClick={handleOnClickSubmitButton} />
+        </div>
       </form>
     </div>
   );
-}
-
-function isEmailValid(email) {
-  const emailRegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-  const result = emailRegExp.test(email);
-
-  return result;
 }

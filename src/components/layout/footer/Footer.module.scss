@@ -1,4 +1,7 @@
+@import '../mixins';
+
 .footer {
+  @include common-layout;
   display: flex;
   position: fixed;
   width: 100%;

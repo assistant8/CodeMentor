@@ -1,9 +1,10 @@
 import styles from "./VioletButton.module.scss";
+import React from "react";
 
-export const VioletButton = ({ children, style, onClick }) => {
+export const VioletButton = React.forwardRef(({ children, onClick }, ref) => {
   return (
-    <button className={styles.violetButton} style={style} onClick={onClick}>
+    <button ref={ref} className={styles.violetButton} onClick={onClick}>
       {children}
     </button>
   );
-};
+});

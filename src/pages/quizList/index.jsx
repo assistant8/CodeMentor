@@ -6,8 +6,10 @@ import { MenuContainer } from "../../components/menuContainer/MenuContainer";
 import { QuizListContainer } from "../../components/quizListContainer/QuizListContainer";
 import { QuizInput } from "../../components/inputs/QuizInput";
 import QuizListPage from "../../components/quizListPage/quizListPage";
+import { useEffect } from "react";
 
 export default function QuizList() {
+
   return (
     <>
       <QuizListPage />

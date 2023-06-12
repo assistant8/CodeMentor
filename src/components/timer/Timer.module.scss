@@ -1,0 +1,47 @@
+@mixin timerPosition {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.timerContainer {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin-bottom: 3rem;
+  margin-top: 1rem;
+
+
+
+  .timerRing {
+    width: 100%;
+  }
+
+  .timerString {
+    @include timerPosition;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.5rem;
+  }
+
+  .hoverPlayImage,
+  .hoverPauseImage {
+    @include timerPosition;
+    width: 4rem;
+    height: 4rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .hoverPlayImage {
+    background-image: url(../../image/play.png);
+    left: 53%;
+    width: 3rem;
+    height: 3rem;
+  }
+  .hoverPauseImage {
+    background-image: url(../../image/pause.png);
+  }
+}

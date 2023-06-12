@@ -1,9 +1,4 @@
-$border-color: #c2bcca;
-$font-color: #3e3e3e;
-$violet-1: #e4d2fa;
-$violet-2: #c79aff;
-$violet-3: #a256ff;
-$violet-4: #6700e6;
+@import "../../constants/utils.scss";
 
 * {
   box-sizing: border-box;
@@ -16,6 +11,7 @@ $violet-4: #6700e6;
   align-items: center;
   flex-direction: column;
   position: relative;
+  margin-top: 5rem;
 
   .pencilIcon {
     position: absolute;
@@ -42,8 +38,9 @@ $violet-4: #6700e6;
     align-items: center;
     background-color: $border-color;
     border-radius: 50%;
-    background-size: cover;
-    background-position: center;
+    img {
+      width: 100%;
+    }
   }
 
   .inputBox {
@@ -96,6 +93,29 @@ $violet-4: #6700e6;
       font-size: 0.9375rem; /* 15px converted to rem */
       color: $font-color;
       font-weight: bold;
+    }
+  }
+}
+.modalWrapper {
+  z-index: 2;
+  .modalMessage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+    margin-bottom: 1.25rem;
+  }
+  .confirmBtns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+    font-weight: bold;
+    .confirmBtn {
+      border-top: 1px solid black;
+      padding-top: 10px;
+      &:first-child {
+        border-right: 1px solid black;
+      }
     }
   }
 }

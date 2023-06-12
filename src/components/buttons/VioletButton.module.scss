@@ -1,3 +1,4 @@
+@import "../../constants/utils.scss";
 .violetButton {
   width: 20.625rem; /* 330px converted to rem */
   height: 3.75rem; /* 60px converted to rem */
@@ -5,9 +6,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #6700e6;
+  background-color: $violet-4;
   color: white;
   font-size: 1.25rem; /* 20px converted to rem */
   border: none;
   margin: auto;
+  cursor: pointer;
 }

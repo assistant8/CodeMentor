@@ -1,0 +1,41 @@
+@import "../../constants/utils.scss";
+
+.wrapper {
+  position: relative;
+
+  .input {
+    width: 20.625rem; /* 330px converted to rem */
+    height: 3.75rem; /* 60px converted to rem */
+
+    font-size: 1.25rem; /* 20px converted to rem */
+
+    padding-left: 1.875rem; /* 30px converted to rem */
+
+    border: 0.0625rem solid $border-color; /* 1px converted to rem */
+    border-radius: 1.875rem; /* 30px converted to rem */
+
+    display: flex;
+    align-items: center;
+  }
+
+  .indicator {
+    position: absolute;
+
+    top: calc(3.75rem / 2 - 30px / 2);
+    left: 85%;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .indicator_image {
+      width: 60%;
+      height: 60%;
+    }
+  }
+}

@@ -2,9 +2,10 @@ import styles from "./ModifyUser.module.scss";
 import { useNavigate } from "react-router-dom";
 import { VioletButton } from "../../components/buttons/VioletButton";
 import { UserInput } from "../../components/inputs/UserInput";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { FaPencilAlt } from "react-icons/fa";
-import { useRef } from "react";
+import { useEffect } from "react";
+import { Modal } from "../../components/modal";
 
 const ModifyUser = () => {
   const [imgUrl, setImgUrl] = useState("");
@@ -28,6 +29,15 @@ const ModifyUser = () => {
       reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
     }
   };
+  const buttonRef = useRef(null);
+  const nameRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
   return (
     <div className={styles.modifyContainer}>
       <FaPencilAlt className={styles.pencilIcon} onClick={modifyImg} />
@@ -45,13 +55,14 @@ const ModifyUser = () => {
       </div>
       <div className={styles.inputBox}>
         <UserInput
+          ref={nameRef}
           placeholder="유저_1B789RS"
           value={userName}
           onChange={onChange}
         />
         <p>중복된 유저명입니다</p>
       </div>
-      <VioletButton>저장하기</VioletButton>
+      <VioletButton ref={buttonRef}>저장하기</VioletButton>
       <div className={styles.btns}>
         <p
           onClick={() => {
@@ -60,7 +71,18 @@ const ModifyUser = () => {
         >
           비밀번호 변경
         </p>
-        <p>회원 탈퇴</p>
+        <p onClick={openModal}>회원 탈퇴</p>
+        <div className={styles.modalWrapper}>
+          <Modal isOpen={isOpen} closeModal={closeModal}>
+            <div className={styles.modalMessage}>회원을 탈퇴하시겠습니까?</div>
+            <div className={styles.confirmBtns}>
+              <div className={styles.confirmBtn}>네</div>
+              <div className={styles.confirmBtn} onClick={closeModal}>
+                아니오
+              </div>
+            </div>
+          </Modal>
+        </div>
       </div>
     </div>
   );
