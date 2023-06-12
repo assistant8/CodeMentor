@@ -4,10 +4,12 @@ import { useLocation, useNavigate } from "react-router";
 import { api } from "../../libs/utils/api.js";
 import PATH from "../../constants/path";
 import { LoginHeader } from "../../components/headers/LoginHeader";
+import { SmallVioletButton } from "../../components/buttons/SmallVioletButton.jsx";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import defaultProfileImage from "../../image/defaultProfileImage.png";
 import { set } from "date-fns";
+import { is } from "immutable";
 
 export default function CreateProfile() {
   const navigate = useNavigate();
@@ -18,12 +20,15 @@ export default function CreateProfile() {
   const profileImageInput = useRef();
 
   const [profileImageInputFile, setProfileImageInputFile] = useState("");
+  console.log("profileImageInputFile: ", profileImageInputFile.name);
   const [profileImageFileURL, setProfileImageFileURL] = useState("");
+  console.log("profileImageFileURL: ", profileImageFileURL.split(",")[0]);
   const [formInputValue, setFormInputValue] = useState({
     userName: "",
   });
   const { userName } = formInputValue;
   const [validationMessage, setValidationMessage] = useState({ userName: "" });
+  const [VioletButtonDisabled, setVioletButtonDisabled] = useState(false);
 
   const handleOnChangeFormInput = (e) => {
     const value = e.target.value;
@@ -36,25 +41,27 @@ export default function CreateProfile() {
   const handleOnChangeProfileImageInput = (e) => {
     const file = e.target.files[0];
 
-    setProfileImageInputFile(file);
+    if (file) {
+      setProfileImageInputFile(file);
 
-    const reader = new FileReader();
+      const reader = new FileReader();
 
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
 
-    reader.onloadend = () => {
-      const fileURL = reader.result;
+      reader.onloadend = () => {
+        const fileURL = reader.result;
 
-      setProfileImageFileURL(fileURL);
+        setProfileImageFileURL(fileURL);
 
-      return;
-    };
+        return;
+      };
+    }
   };
 
   // * 소셜 로그인 기능을 넣는다면 이메일 회원 가입이랑 다른 결과를 줘야 할 것.
   // - 소셜 -> 로그인 완료 상태로 홈으로 이동.
   // - 이메일 -> 로그인 되지 않은 상태로 로그인 페이지로 이동.
-  const handleOnClickSubmitButton = (e) => {
+  const handleOnClickSubmitButton = async (e) => {
     e.preventDefault();
 
     if (!isUserNameValid(userName)) {
@@ -67,15 +74,21 @@ export default function CreateProfile() {
 
     const formData = new FormData();
 
-    formData.append("image", profileImageInputFile);
+    formData.append("email", email);
     formData.append("userName", userName);
+    formData.append("image", profileImageInputFile);
+
+    const axiosOption = { headers: { "Content-Type": "multipart/form-data" } };
 
     try {
-      const response = api.put("/user/profile", formData);
-      const result = response.data.result;
+      const response = await api.post("/user/profile", formData, axiosOption);
 
-      if (result === "프로필 생성 성공") {
-        if ("소셜-회원-가입") {
+      const result = await response.data.result;
+
+      // if (result === "프로필 생성 성공") {
+      if (true) {
+        // 소셜 로그인은 아마 안 될 듯.. 프론트에서라도 구현해봐야지.
+        if (result === "소셜 회원 가입 프로필 생성 완료") {
           alert("프로필 생성이 완료되었습니다.");
 
           navigate(PATH.HOME);
@@ -83,7 +96,7 @@ export default function CreateProfile() {
           return;
         }
 
-        // if ("이메일-회원-가입") {
+        // if (result ===  '이메일 회원 가입 프로필 생성 완료') {
         if (true) {
           alert("프로필 생성이 완료되었습니다. 로그인 페이지로 이동합니다.");
 
@@ -101,11 +114,18 @@ export default function CreateProfile() {
     }
   };
 
+  const handleSetProfileLater = () => {
+    alert("기본 프로필을 사용합니다. 로그인 페이지로 이동합니다.");
+    navigate(PATH.LOGIN);
+  };
+
   useEffect(() => {
     userNameInput.current.focus();
   }, []);
 
   useEffect(() => {
+    setVioletButtonDisabled(!isUserNameValid(userName));
+
     const newMessage = makeUserNameValidationMessage(userName);
 
     setValidationMessage((oldMessage) => ({
@@ -116,7 +136,6 @@ export default function CreateProfile() {
 
   return (
     <div className={styles.container_CreateProfile}>
-      <img src="../../image/profileImage.png" alt="" />
       <div className={styles.topBar}>11:11</div>
       <div className={styles.wrapper_header}>
         <LoginHeader children={"프로필 설정"} />
@@ -129,40 +148,41 @@ export default function CreateProfile() {
               profileImageInput.current.click();
             }}
           >
-            <div className={styles.editProfileImageButton}>
-              edit
-              <input
-                ref={profileImageInput}
-                type="file"
-                name="profileImage"
-                onChange={handleOnChangeProfileImageInput}
-              />
-            </div>
+            {/* <div className={styles.editProfileImageButton}>
+              edit */}
+            <input
+              style={{ display: "none" }}
+              ref={profileImageInput}
+              type="file"
+              name="profileImage"
+              onChange={handleOnChangeProfileImageInput}
+            />
+            {/* </div> */}
 
             {profileImageFileURL === "" ? (
-              <img src={defaultProfileImage} alt="Profile" />
+              <img src={defaultProfileImage} alt="defaultProfileImage" />
             ) : (
-              <img src={profileImageFileURL} alt="Profile" />
+              <img src={profileImageFileURL} alt="profileImageFileURL" />
             )}
           </div>
           <div className={styles.buttons}>
-            <button
+            <SmallVioletButton
+              children={"수정"}
               onClick={(e) => {
                 e.preventDefault();
+
                 profileImageInput.current.click();
               }}
-            >
-              편집
-            </button>
-            <button
+            />
+            <SmallVioletButton
+              children={"기본값"}
               onClick={(e) => {
                 e.preventDefault();
 
                 setProfileImageInputFile("");
+                setProfileImageFileURL("");
               }}
-            >
-              기본값
-            </button>
+            />
           </div>
           <div className={styles.wrapper_InputAndValidationMessage}>
             <UserInput
@@ -197,13 +217,24 @@ export default function CreateProfile() {
 
         <div className={styles.wrapper_buttons}>
           <VioletButton
-            children={"시작하기"}
+            children={"프로필 설정 완료"}
             onClick={handleOnClickSubmitButton}
+            disabled={VioletButtonDisabled}
+            style={
+              VioletButtonDisabled
+                ? { backgroundColor: "lightgray", cursor: "default" }
+                : { backgroundColor: "#6700e6" }
+            }
           />
-          {/* <VioletButton
+          <VioletButton
             children={"나중에 설정하기"}
             onClick={handleSetProfileLater}
-          /> */}
+            style={
+              isUserNameValid(userName)
+                ? { display: "none" }
+                : { display: "block" }
+            }
+          />
         </div>
       </form>
     </div>

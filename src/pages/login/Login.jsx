@@ -14,7 +14,7 @@ import { LoginHeader } from "../../components/headers/LoginHeader.jsx";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import { LoginTextLink } from "../../components/links/LoginTextLink.jsx";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { userState } from "../../state/userState";
 import kakao from "../../image/kakao.png";
 import naver from "../../image/naver.png";
@@ -111,8 +111,6 @@ export default function Login() {
       };
 
       setUser((prev) => ({ ...prev, ...userInfo }));
-
-      console.log(user);
 
       navigate("/");
     } catch (error) {
