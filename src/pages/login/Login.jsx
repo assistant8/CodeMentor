@@ -14,6 +14,8 @@ import { LoginHeader } from "../../components/headers/LoginHeader.jsx";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import { LoginTextLink } from "../../components/links/LoginTextLink.jsx";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userState } from "../../state/userState";
 import kakao from "../../image/kakao.png";
 import naver from "../../image/naver.png";
 // 구글 소셜 로그인
@@ -62,6 +64,7 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const [user, setUser] = useRecoilState(userState);
 
   // state destructuring
   const { email, password } = formInputValue;
@@ -97,6 +100,19 @@ export default function Login() {
 
         return;
       }
+
+      const userInfo = {
+        email,
+        password,
+        userName: "낭니",
+        image: "account-circle.png",
+        grade: "고수",
+        point: 100,
+      };
+
+      setUser((prev) => ({ ...prev, ...userInfo }));
+
+      console.log(user);
 
       navigate("/");
     } catch (error) {
@@ -144,7 +160,8 @@ export default function Login() {
           .then((response) => {
             const result = response.data.result;
 
-            if (result === "db에 이메일 없음.") {
+            // if (result === "db에 이메일 없음.") {
+            if (true) {
               navigate(PATH.LOGIN + "/create-profile", {
                 state: { email: user.email, name: user.displayName },
               });

@@ -29,6 +29,15 @@ export function isVerificationCodeValid(verificationCode) {
   return verificationCode.length === 6;
 }
 
+export function isUserNameValid(userName) {
+  if (userName === "") return false;
+
+  const userNameRegex = /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]{2,10}$/;
+  const result = userNameRegex.test(userName);
+
+  return result;
+}
+
 // 유효성 검사 메세지
 
 const validationMessageWhenPass = "완벽합니다!";
@@ -84,9 +93,22 @@ export function makeVerificationCodeVaildationMessage(verificationCode) {
   return validationMessageWhenPass;
 }
 
+function makeUserNameValidationMessage(userName) {
+  if (userName === "") {
+    return "사용할 이름을 입력해주세요.";
+  }
+
+  if (!isUserNameValid(userName)) {
+    return "유효하지 않은 이름입니다.";
+  }
+
+  return "완벽합니다!";
+}
+
 // submit 시 유효성 검사 한 번에 & 통과 못 하면 다음 코드 진행 X.
 export function isPassValidation(formInputValue, validationMessage) {
-  const { email, password, passwordConfirm, verificationCode } = formInputValue;
+  const { email, password, passwordConfirm, verificationCode, userName } =
+    formInputValue;
 
   if ("email" in formInputValue && !isEmailValid(email)) {
     return false;
@@ -110,13 +132,15 @@ export function isPassValidation(formInputValue, validationMessage) {
     return false;
   }
 
+  if ("userName" in formInputValue && !isUserNameValid(userName)) {
+    return false;
+  }
+
   return true;
 }
 
 // submit 시 유효성 검사 통과 못하면 경고창 띄우기.
 export function alertValidationMessage(validationMessage, focusRef = null) {
-  console.log(validationMessage);
-
   if (
     ("email" in validationMessage) &
     (validationMessage.email !== validationMessageWhenPass)
@@ -152,8 +176,6 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
     if (focusRef !== null && focusRef?.password?.current) {
       focusRef.password.current.focus();
     }
-
-    return;
   }
 
   if (
@@ -164,6 +186,19 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
 
     if (focusRef !== null && focusRef?.passwordConfirm?.current) {
       focusRef.passwordConfirm.current.focus();
+    }
+
+    return;
+  }
+
+  if (
+    ("userName" in validationMessage) &
+    (validationMessage.userName !== validationMessageWhenPass)
+  ) {
+    alert(validationMessage.userName);
+
+    if (focusRef !== null && focusRef?.userName?.current) {
+      focusRef.userName.current.focus();
     }
 
     return;
