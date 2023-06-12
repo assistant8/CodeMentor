@@ -17,7 +17,6 @@ import PassWord from "./pages/mypage/Password";
 import BookMark from "./pages/mypage/BookMark";
 import Complete from "./pages/mypage/Complete";
 import Chart from "./pages/mypage/Chart";
-import MyPost from "./pages/mypage/MyPost";
 import Login from "./pages/login/Login";
 import FindPassword from "./pages/login/FindPassword";
 import Register from "./pages/login/Register";
@@ -25,9 +24,10 @@ import VerifyEmail from "./pages/login/VerifyEmail";
 import ResetPassword from "./pages/login/ResetPassword.jsx";
 import CreateProfile from "./pages/login/CreateProfile";
 import { useEffect, useMemo, useState } from "react";
-import ProblemAdminPage from './pages/admin'
-import ProblemCreatePage from './pages/adminCreate';
-import ProblemUpdatePage from './pages/adminUpdate';
+import ProblemAdminPage from "./pages/admin";
+import ProblemCreatePage from "./pages/adminCreate";
+import ProblemUpdatePage from "./pages/adminUpdate";
+import Home from "./pages/home";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -62,6 +62,8 @@ function App() {
         <Route path={PATH.QUIZ} element={<Quiz />} />
         <Route path={PATH.QUIZLIST} element={<QuizList />} />
 
+        <Route path={PATH.HOME} element={<Home />} />
+
         <Route path={PATH.LOGIN}>
           <Route index element={<Login />} />
           <Route path="find-password" element={<FindPassword />} />
@@ -78,7 +80,6 @@ function App() {
           <Route path="bookmark" element={<BookMark />} />
           <Route path="complete" element={<Complete />} />
           <Route path="chart" element={<Chart />} />
-          <Route path="mypost" element={<MyPost />} />
         </Route>
 
         <Route path={PATH.ADMIN}>

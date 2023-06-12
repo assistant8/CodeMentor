@@ -11,7 +11,7 @@ const PassWord = () => {
   const [newPwd, setNewPwd] = useState("");
   const [comparePresent, setComparePresent] = useState(false);
   const [checkPattern, setCheckPattern] = useState(false);
-  const [checkPwd, setCheckPwd] = useState(true);
+  const [checkPwd, setCheckPwd] = useState(false);
   const handleCompare = () => {
     if (user.password === presentPwdRef.current.value) {
       setComparePresent(true);
@@ -30,14 +30,11 @@ const PassWord = () => {
   };
   const handleCheck = (e) => {
     setCheckPwd(e.target.value);
-    if (e.target.value === newPwd) {
+    if ((e.target.value === newPwd) & (e.target.value !== "")) {
       setCheckPwd(true);
     } else {
       setCheckPwd(false);
     }
-  };
-  const onClick = () => {
-    console.log("제출됨");
   };
   const buttonRef = useRef(null);
   const presentPwdRef = useRef(null);
@@ -61,8 +58,13 @@ const PassWord = () => {
     } else if (!checkPwd) {
       setModalContent("비밀번호가 일치하지 않습니다.");
     } else {
-      setModalContent("제출됨");
+      setModalContent("비밀번호가 변경되었습니다.");
     }
+  };
+
+  const onClick = () => {
+    handleModalContent();
+    openModal();
   };
   return (
     <div className={styles.pwdContainer}>
@@ -97,13 +99,7 @@ const PassWord = () => {
           {!checkPwd ? <p>비밀번호가 일치하지 않습니다</p> : null}
         </div>
         <div className={styles.violetButtonWrapper}>
-          <VioletButton
-            ref={buttonRef}
-            onClick={() => {
-              handleModalContent();
-              openModal();
-            }}
-          >
+          <VioletButton ref={buttonRef} onClick={onClick}>
             변경하기
           </VioletButton>
         </div>

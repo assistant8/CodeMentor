@@ -83,9 +83,8 @@
 .menuContainer {
   display: grid;
   width: 100%;
-  height: 17.5rem; /* 280px converted to rem */
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 50% 50%;
+  height: 8.75rem; /* 140px converted to rem */
+  grid-template-columns: 1fr 1fr 1fr;
 
   .menuContent {
     display: flex;

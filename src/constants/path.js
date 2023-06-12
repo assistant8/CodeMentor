@@ -6,6 +6,7 @@ const PATH = {
   QUIZ: "/quiz",
   QUIZLIST: "/quizlist",
   ADMIN: "/admin",
+  HOME: "/home",
 };
 
 export default PATH;
