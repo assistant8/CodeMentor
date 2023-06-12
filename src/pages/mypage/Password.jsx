@@ -1,7 +1,7 @@
 import styles from "./Password.module.scss";
 import { VioletButton } from "../../components/buttons/VioletButton";
 import { UserInput } from "../../components/inputs/UserInput";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Modal } from "../../components/modal";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
@@ -12,13 +12,13 @@ const PassWord = () => {
   const [comparePresent, setComparePresent] = useState(false);
   const [checkPattern, setCheckPattern] = useState(false);
   const [checkPwd, setCheckPwd] = useState(false);
-  const handleCompare = () => {
+  const handleCompare = useCallback(() => {
     if (user.password === presentPwdRef.current.value) {
       setComparePresent(true);
     } else {
       setComparePresent(false);
     }
-  };
+  }, [user.password, setComparePresent]);
   const handlePwd = (e) => {
     setNewPwd(e.target.value);
     const pattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;

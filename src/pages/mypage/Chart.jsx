@@ -1,25 +1,9 @@
 import { eachDayOfInterval, isSameDay, getDay, format } from "date-fns";
 import styles from "./Chart.module.scss";
 import { useState } from "react";
-import { useEffect } from "react";
+import { useMemo } from "react";
 
-const Calendar = ({ startDate, endDate, studyData }) => {
-
-  const days = eachDayOfInterval({ start: startDate, end: endDate });
-
-  const [tooltipDate, setTooltipDate] = useState(null); // 말풍선에 표시할 날짜 정보 상태
-
-  const handleMouseEnter = (date) => {
-    setTooltipDate(date);
-  };
-  const handleMouseLeave = () => {
-    setTooltipDate(null);
-  };
-
-  const Tooltip = ({ date }) => {
-    return <div className={styles.tooltip}>{format(date, "yyyy-MM-dd")}</div>;
-  };
-
+const getRows = (days) => {
   const rows = [];
   let currentRow = [];
   days.forEach((day) => {
@@ -36,8 +20,29 @@ const Calendar = ({ startDate, endDate, studyData }) => {
   if (currentRow.length !== 0) {
     rows.push(currentRow);
   }
-
   const reversedRows = rows.reverse();
+  return reversedRows;
+};
+
+const Calendar = ({ startDate, endDate, studyData }) => {
+  const days = useMemo(
+    () => eachDayOfInterval({ start: startDate, end: endDate }),
+    [startDate, endDate]
+  );
+  const reversedRows = useMemo(() => getRows(days), [days]); // days가 변할때만 getRows를 통해 rows 값 할당
+
+  const [tooltipDate, setTooltipDate] = useState(null); // 말풍선에 표시할 날짜 정보 상태
+
+  const handleMouseEnter = (date) => {
+    setTooltipDate(date);
+  };
+  const handleMouseLeave = () => {
+    setTooltipDate(null);
+  };
+
+  const Tooltip = ({ date }) => {
+    return <div className={styles.tooltip}>{format(date, "yyyy-MM-dd")}</div>;
+  };
 
   return (
     <div className={styles.calendar}>
