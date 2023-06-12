@@ -25,9 +25,10 @@ import VerifyEmail from "./pages/login/VerifyEmail";
 import ResetPassword from "./pages/login/ResetPassword.jsx";
 import CreateProfile from "./pages/login/CreateProfile";
 import { useEffect, useMemo, useState } from "react";
-import ProblemAdminPage from './pages/admin'
-import ProblemCreatePage from './pages/adminCreate';
-import ProblemUpdatePage from './pages/adminUpdate';
+import ProblemAdminPage from "./pages/admin";
+import ProblemCreatePage from "./pages/adminCreate";
+import ProblemUpdatePage from "./pages/adminUpdate";
+import Home from "./pages/home";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -61,6 +62,8 @@ function App() {
         <Route path="/" element={<QuizList />} />
         <Route path={PATH.QUIZ} element={<Quiz />} />
         <Route path={PATH.QUIZLIST} element={<QuizList />} />
+
+        <Route path={PATH.HOME} element={<Home />} />
 
         <Route path={PATH.LOGIN}>
           <Route index element={<Login />} />
