@@ -7,42 +7,55 @@ import { LoginHeader } from "../../components/headers/LoginHeader";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import defaultProfileImage from "../../image/defaultProfileImage.png";
+import { set } from "date-fns";
 
 export default function CreateProfile() {
   const navigate = useNavigate();
   const location = useLocation();
+  const email = location?.state?.email;
   const defaultName = location?.state?.name;
-  const [nameInputValue, setNameInputValue] = useState(defaultName);
-  const [nameValidationMessage, setNameValidationMessage] = useState("");
-  const email = location.state.email;
-
-  const nameInput = useRef();
+  const userNameInput = useRef();
   const profileImageInput = useRef();
-  const [selectedFile, setSelectedFile] = useState("");
 
-  const handleOnChange_profileImageInput = (e) => {
-    e.preventDefault();
+  // const [formInputValue, setFormInputValue] = useState({
+  //   image: "",
+  //   userName: "",
+  // });
 
+  // const { image, userName } = formInputValue;
+
+  const [profileImageInputFile, setProfileImageInputFile] = useState("");
+  const [profileImageFileURL, setProfileImageFileURL] = useState("");
+  const [formInputValue, setFormInputValue] = useState({
+    userName: "",
+  });
+  const { userName } = formInputValue;
+  const [validationMessage, setValidationMessage] = useState({ userName: "" });
+
+  const handleOnChangeFormInput = (e) => {
+    const value = e.target.value;
+
+    setFormInputValue((prev) => ({ ...prev, userName: value }));
+
+    return;
+  };
+
+  const handleOnChangeProfileImageInput = (e) => {
     const file = e.target.files[0];
+
+    setProfileImageInputFile(file);
 
     const reader = new FileReader();
 
+    reader.readAsDataURL(file);
+
     reader.onloadend = () => {
-      const fileDataURL = reader.result;
+      const fileURL = reader.result;
 
-      setSelectedFile(fileDataURL);
-      profileImageInput.current.value = "";
+      setProfileImageFileURL(fileURL);
+
+      return;
     };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleOnChangeNameInput = (e) => {
-    const value = e.target.value;
-
-    setNameInputValue(value);
   };
 
   // * 소셜 로그인 기능을 넣는다면 이메일 회원 가입이랑 다른 결과를 줘야 할 것.
@@ -51,82 +64,93 @@ export default function CreateProfile() {
   const handleOnClickSubmitButton = (e) => {
     e.preventDefault();
 
-    if (!isNameValid(nameInputValue)) {
-      alert(nameValidationMessage);
+    if (!isUserNameValid(userName)) {
+      alert(validationMessage.userName);
 
-      nameInput.current.focus();
+      userNameInput.current.focus();
 
       return;
     }
 
     const formData = new FormData();
-    formData.append("image", selectedFile === "" ? "" : selectedFile);
-    formData.append(
-      "name",
-      nameInputValue !== defaultName ? nameInputValue : null
-    );
 
-    const url = "https://eonaf45qzbokh52.m.pipedream.net";
+    formData.append("image", profileImageInputFile);
+    formData.append("userName", userName);
 
-    api
-      .put(url, formData)
-      .then((response) => {
-        // if (response.data.result === "프로필 설정 완료") {
-        // 개발용 true 설정
+    try {
+      const response = api.post("/user/profile", formData);
+      const result = response.data.result;
+
+      if (result === "프로필 생성 성공") {
+        if ("소셜-회원-가입") {
+          alert("프로필 생성이 완료되었습니다.");
+
+          navigate(PATH.HOME);
+
+          return;
+        }
+
+        // if ("이메일-회원-가입") {
         if (true) {
-          alert("프로필 설정이 완료되었습니다. 로그인 페이지로 이동합니다.");
+          alert("프로필 생성이 완료되었습니다. 로그인 페이지로 이동합니다.");
 
           navigate(PATH.LOGIN);
 
           return;
         }
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
-      });
+      }
+    } catch (error) {
+      alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+      console.log(error);
+
+      return;
+    }
   };
 
-  const handleSetProfileLater = (e) => {
-    e.preventDefault();
+  // const handleSetProfileLater = (e) => {
+  //   e.preventDefault();
 
-    const url = "https://eonaf45qzbokh52.m.pipedream.net";
+  //   const url = "https://eonaf45qzbokh52.m.pipedream.net";
 
-    const formData = {
-      email: email,
-      name: "",
-      image: "",
-    };
+  //   const formData = {
+  //     email: email,
+  //     name: "",
+  //     image: "",
+  //   };
 
-    api
-      .post(url, formData)
-      .then((response) => {
-        // if (response.data.result === "프로필 설정이 완료!") {
-        // 개발용 true 설정
-        if (true) {
-          alert("프로필 설정이 완료되었습니다. 로그인 페이지로 이동합니다.");
+  //   api
+  //     .post(url, formData)
+  //     .then((response) => {
+  //       // if (response.data.result === "프로필 설정이 완료!") {
+  //       // 개발용 true 설정
+  //       if (true) {
+  //         alert("프로필 설정이 완료되었습니다. 로그인 페이지로 이동합니다.");
 
-          navigate(PATH.LOGIN);
+  //         navigate(PATH.LOGIN);
 
-          return;
-        }
-      })
-      .catch((error) => {
-        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+  //         return;
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
-        console.log(error);
-      });
-  };
+  //       console.log(error);
+  //     });
+  // };
 
   useEffect(() => {
-    nameInput.current.focus();
+    userNameInput.current.focus();
   }, []);
 
   useEffect(() => {
-    const newValidationMessage = makeNameValidationMessage(nameInputValue);
+    const newMessage = makeUserNameValidationMessage(userName);
 
-    setNameValidationMessage(newValidationMessage);
-  }, [nameInputValue]);
+    setValidationMessage((oldMessage) => ({
+      ...oldMessage,
+      userName: newMessage,
+    }));
+  }, [userName]);
 
   return (
     <div className={styles.container_CreateProfile}>
@@ -149,7 +173,7 @@ export default function CreateProfile() {
                 ref={profileImageInput}
                 type="file"
                 name="profileImage"
-                onChange={handleOnChange_profileImageInput}
+                onChange={handleOnChangeProfileImageInput}
               />
             </div>
 
@@ -181,26 +205,25 @@ export default function CreateProfile() {
           <div className={styles.wrapper_InputAndValidationMessage}>
             <UserInput
               type="text"
-              name="name"
-              id="nameInput"
+              name="userName"
               maxLength="15"
-              placeholder="너구리와함께사라지다"
-              ref={nameInput}
-              onChange={handleOnChangeNameInput}
+              placeholder="이름"
+              ref={userNameInput}
+              onChange={handleOnChangeFormInput}
               onKeyDown={(e) => {
                 if (e.key === " ") {
                   e.preventDefault();
                 }
               }}
-              value={nameInputValue}
+              value={userName}
             />
             <div className={styles.validationMessage}>
-              {nameValidationMessage}
+              {validationMessage.userName}
             </div>
             <div
               className={styles.inputGuide}
               style={
-                nameValidationMessage === "완벽합니다!"
+                validationMessage.userName === "완벽합니다!"
                   ? { display: "none" }
                   : { display: "block" }
               }
@@ -225,23 +248,23 @@ export default function CreateProfile() {
   );
 }
 
-function isNameValid(name) {
-  if (name === "") {
+function isUserNameValid(userName) {
+  if (userName === "") {
     return false;
   }
 
-  const nameRegex = /^[a-zA-Z가-힣0-9]{2,10}$/;
-  const result = nameRegex.test(name);
+  const userNameRegex = /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]{2,10}$/;
+  const result = userNameRegex.test(userName);
 
   return result;
 }
 
-function makeNameValidationMessage(nameInputValue) {
-  if (nameInputValue === "") {
+function makeUserNameValidationMessage(userName) {
+  if (userName === "") {
     return "사용할 이름을 입력해주세요.";
   }
 
-  if (!isNameValid(nameInputValue)) {
+  if (!isUserNameValid(userName)) {
     return "유효하지 않은 이름입니다.";
   }
 

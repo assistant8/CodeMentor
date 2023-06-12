@@ -144,7 +144,8 @@ export default function Login() {
           .then((response) => {
             const result = response.data.result;
 
-            if (result === "db에 이메일 없음.") {
+            // if (result === "db에 이메일 없음.") {
+            if (true) {
               navigate(PATH.LOGIN + "/create-profile", {
                 state: { email: user.email, name: user.displayName },
               });
