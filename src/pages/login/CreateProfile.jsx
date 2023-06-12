@@ -17,13 +17,6 @@ export default function CreateProfile() {
   const userNameInput = useRef();
   const profileImageInput = useRef();
 
-  // const [formInputValue, setFormInputValue] = useState({
-  //   image: "",
-  //   userName: "",
-  // });
-
-  // const { image, userName } = formInputValue;
-
   const [profileImageInputFile, setProfileImageInputFile] = useState("");
   const [profileImageFileURL, setProfileImageFileURL] = useState("");
   const [formInputValue, setFormInputValue] = useState({
@@ -78,7 +71,7 @@ export default function CreateProfile() {
     formData.append("userName", userName);
 
     try {
-      const response = api.post("/user/profile", formData);
+      const response = api.put("/user/profile", formData);
       const result = response.data.result;
 
       if (result === "프로필 생성 성공") {
@@ -107,37 +100,6 @@ export default function CreateProfile() {
       return;
     }
   };
-
-  // const handleSetProfileLater = (e) => {
-  //   e.preventDefault();
-
-  //   const url = "https://eonaf45qzbokh52.m.pipedream.net";
-
-  //   const formData = {
-  //     email: email,
-  //     name: "",
-  //     image: "",
-  //   };
-
-  //   api
-  //     .post(url, formData)
-  //     .then((response) => {
-  //       // if (response.data.result === "프로필 설정이 완료!") {
-  //       // 개발용 true 설정
-  //       if (true) {
-  //         alert("프로필 설정이 완료되었습니다. 로그인 페이지로 이동합니다.");
-
-  //         navigate(PATH.LOGIN);
-
-  //         return;
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
-
-  //       console.log(error);
-  //     });
-  // };
 
   useEffect(() => {
     userNameInput.current.focus();
@@ -177,10 +139,10 @@ export default function CreateProfile() {
               />
             </div>
 
-            {selectedFile === "" ? (
+            {profileImageFileURL === "" ? (
               <img src={defaultProfileImage} alt="Profile" />
             ) : (
-              <img src={selectedFile} alt="Profile" />
+              <img src={profileImageFileURL} alt="Profile" />
             )}
           </div>
           <div className={styles.buttons}>
@@ -196,7 +158,7 @@ export default function CreateProfile() {
               onClick={(e) => {
                 e.preventDefault();
 
-                setSelectedFile("");
+                setProfileImageInputFile("");
               }}
             >
               기본값
@@ -238,10 +200,10 @@ export default function CreateProfile() {
             children={"시작하기"}
             onClick={handleOnClickSubmitButton}
           />
-          <VioletButton
+          {/* <VioletButton
             children={"나중에 설정하기"}
             onClick={handleSetProfileLater}
-          />
+          /> */}
         </div>
       </form>
     </div>
