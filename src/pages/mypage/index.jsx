@@ -95,13 +95,6 @@ const Menu = () => {
         <img src={chart} alt="통계" />
         <p>통계</p>
       </div>
-      <div
-        className={styles.menuContent}
-        onClick={() => navigate("/mypage/mypost")}
-      >
-        <img src={book} alt="내가 작성한 글" />
-        <p>내가 작성한 글</p>
-      </div>
     </div>
   );
 };

@@ -17,7 +17,6 @@ import PassWord from "./pages/mypage/Password";
 import BookMark from "./pages/mypage/BookMark";
 import Complete from "./pages/mypage/Complete";
 import Chart from "./pages/mypage/Chart";
-import MyPost from "./pages/mypage/MyPost";
 import Login from "./pages/login/Login";
 import FindPassword from "./pages/login/FindPassword";
 import Register from "./pages/login/Register";
@@ -81,7 +80,6 @@ function App() {
           <Route path="bookmark" element={<BookMark />} />
           <Route path="complete" element={<Complete />} />
           <Route path="chart" element={<Chart />} />
-          <Route path="mypost" element={<MyPost />} />
         </Route>
 
         <Route path={PATH.ADMIN}>
