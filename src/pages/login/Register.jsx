@@ -11,8 +11,6 @@ import {
   makeVerificationCodeVaildationMessage,
   makePasswordValidationMessage,
   makePasswordConfirmValidationMessage,
-  isPassValidation,
-  alertValidationMessage,
 } from "../../hooks/useLogin.js";
 import { api } from "../../libs/utils/api.js";
 import { InputWithEditButton } from "../../components/inputs/InputWithEditButton.jsx";
@@ -24,7 +22,6 @@ import { set } from "date-fns";
 
 export default function Register() {
   const navigate = useNavigate();
-  const location = useLocation();
   const emailInput = useRef();
   const verificationCodeInput = useRef();
   const passwordInput = useRef();
@@ -49,23 +46,31 @@ export default function Register() {
     passwordConfirm: "",
   });
   const [showEditButtonState, setShowEditButtonState] = useState(false);
-
-  // 이메일 인증 페이지랑 합칠까..
-
   const [step, setStep] = useState(0);
 
   const handleOnChangeFormInput = (e) => {
+    const inputName = e.target.name;
+    const inputValue = e.target.value;
+
+    // if (inputName === "verificationCode") {
+    //   const RegExp = /\D/;
+
+    //   inputValue = inputValue.replace(RegExp, "");
+    // }
+
+    setFormInputValue((prev) => ({ ...prev, [inputName]: inputValue }));
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleOnChangeVerificationCodeInput = (e) => {
-    const value = e.target.value;
+    const inputName = e.target.name;
+    const inputValue = e.target.value;
 
     const RegExp = /\D/;
 
-    const newValue = value.replace(RegExp, "");
+    const newInputValue = inputValue.replace(RegExp, "");
 
-    setFormInputValue((prev) => ({ ...prev, [e.target.name]: newValue }));
+    setFormInputValue((prev) => ({ ...prev, [inputName]: newInputValue }));
   };
 
   const handleOnClickSubmitButton = async (e) => {
@@ -85,7 +90,7 @@ export default function Register() {
       };
 
       try {
-        const response = await api.post("/email-verification", formData);
+        const response = await api.post("/users/check-email", formData);
         const result = response.data.result;
 
         if (result === "이미 가입된 이메일.") {
@@ -124,7 +129,7 @@ export default function Register() {
       };
 
       try {
-        const response = await api.post("/verification-code-confirm", formData);
+        const response = await api.post("/users/verify", formData);
         const result = await response.data.result;
 
         if (result === "인증 코드가 일치하지 않습니다.") {
@@ -171,12 +176,11 @@ export default function Register() {
         password,
         userName: "",
         image: "",
-        grade: "",
         point: "",
       };
 
       try {
-        const response = await api.post("/user/sign-up", formData);
+        const response = await api.post("/users/signup", formData);
         const result = await response.data.result;
 
         // if (result === "회원 가입 완료") {
@@ -293,12 +297,9 @@ export default function Register() {
                 e.preventDefault();
 
                 try {
-                  const response = await api.post(
-                    "/email-verification-cancle",
-                    {
-                      email,
-                    }
-                  );
+                  const response = await api.post("/user/verify-cancle", {
+                    email,
+                  });
                   const result = await response.data.result;
 
                   // if (response.data.result === "발송된 인증 번호 폐기 성공.") {
