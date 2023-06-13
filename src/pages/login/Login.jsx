@@ -82,7 +82,7 @@ export default function Login() {
       password,
       userName: "낭니",
       image: "account-circle.png",
-      grade: "고수",
+      grade: "general",
       point: 100,
     };
 

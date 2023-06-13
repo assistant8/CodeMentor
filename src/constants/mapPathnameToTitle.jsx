@@ -1,5 +1,6 @@
 const mapPathnameToTitle = {
   // location.path로 작동시키기 위해 앞에 /를 붙임
+  //"location.path": "headerTitle"
   "/": "문제리스트",
   "/quiz": "문제",
   "/quizlist": "문제리스트",
