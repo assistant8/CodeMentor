@@ -10,27 +10,12 @@ import { userState } from "../../state/userState";
 import { useEffect } from "react";
 import { Modal } from "../../components/modal";
 import chart from "../../image/chart-bar.png";
-import book from "../../image/book-account-outline.png";
 import bookmark from "../../image/bookmark.svg";
 import check from "../../image/check.svg";
 import axios from "axios";
 
 const User = () => {
   const [user, setUser] = useRecoilState(userState);
-  useEffect(() => {
-    const fetchUserInfo = () => {
-      // Mock 데이터를 사용하여 유저 정보를 설정하는 코드
-      const userInfo = {
-        name: "낭니",
-        email: "nangni@elice.com",
-        password: "Asdfasdf",
-        image: "account-circle.png",
-      };
-      setUser(userInfo);
-    };
-
-    fetchUserInfo();
-  }, []);
 
   let navigate = useNavigate();
   return (
@@ -39,8 +24,8 @@ const User = () => {
         <img src={user.image} alt="프사" />
       </div>
       <div style={{ display: "flex" }}>
-        <h3>{user.admin ? "코드 멘토, " : "코드 멘티, "}</h3>
-        <h3>{user.name}</h3>
+        <h3>{user.grade === "admin" ? "코드 멘토, " : "코드 멘티, "}</h3>
+        <h3>{user.userName}</h3>
       </div>
       <button>
         <MdOutlineKeyboardArrowRight
@@ -56,7 +41,7 @@ const Grade = ({ openModal }) => {
   return (
     <div className={styles.gradeInfo}>
       <div className={styles.gradeImg}>
-        {user.admin ? (
+        {user.grade === "admin" ? (
           <FaGraduationCap className={styles.gradeIcon} />
         ) : (
           <LuSprout className={styles.gradeIcon} />
