@@ -5,7 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useState, useCallback, useEffect } from "react";
 
 export default function AdminQuizListContainer ({ searchKey, selectedCategory }) {
-  
+
+  // [코드리뷰] quizs 데이터 같은경우 이제 더미가 아닌 실제 백엔드로부터 데이터를 받아와야되는 것 같네요.
+  // 아래 filter를 통해 selectedCategory, searchKey 일치시키는 데이터는 return 위 쪽에서 useState를 통해 상태를 관리해주시면 좋을 듯합니다.
+
 // problem reserved schema
 const dummyTest =  [
   {
@@ -52,7 +55,7 @@ const dummyTest =  [
     <div className={styles.quizListContainer}>
       {quizes
         .map((quiz) => {
-          return (
+          return (  // [오피스아워 질문] quiz 정보를 update버튼 눌렀을 시 어떻게 전달하지요?
             <div className={styles.quizList} key={quiz.id}>
               <div
                 className={styles.quizListTitle}
@@ -62,7 +65,7 @@ const dummyTest =  [
               <div className={styles.imageContainer}>
                   <img 
                     src={pencil} 
-                    alt="create"
+                    alt="update"
                     onClick={() => navigate('/admin/update')} 
                     />
                     
