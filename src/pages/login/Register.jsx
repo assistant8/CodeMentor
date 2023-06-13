@@ -7,6 +7,7 @@ import {
   isVerificationCodeValid,
   isPasswordValid,
   isPasswordConfirmValid,
+  makeValidationMessage,
   makeEmailValidationMessage,
   makeVerificationCodeVaildationMessage,
   makePasswordValidationMessage,
@@ -43,29 +44,53 @@ export default function Register() {
   });
   const { email, verificationCode, password, passwordConfirm } = formInputValue;
   const [validationMessage, setValidationMessage] = useState({
-    email: "",
-    verificationCode: "",
-    password: "",
-    passwordConfirm: "",
+    email: "이메일을 입력해주세요.",
+    verificationCode: "인증 번호를 입력해주세요.",
+    password: "비밀번호를 입력해주세요.",
+    passwordConfirm: "비밀번호를 확인해주세요.",
   });
   const [showEditButtonState, setShowEditButtonState] = useState(false);
-
-  // 이메일 인증 페이지랑 합칠까..
 
   const [step, setStep] = useState(0);
 
   const handleOnChangeFormInput = (e) => {
-    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const inputName = e.target.name;
+    let inputValue = e.target.value;
+
+    if (inputName === "verificationCode") {
+      const RegExp = /\D/;
+
+      inputValue = inputValue.replace(RegExp, "");
+    }
+
+    setFormInputValue((prev) => ({ ...prev, [inputName]: inputValue }));
+
+    // if(inputName === "passwordConfirm") {
+
+    // }
+
+    const copy = { ...validationMessage };
+
+    copy[inputName] = makeValidationMessage(inputName, inputValue);
+
+    setValidationMessage(copy);
   };
 
   const handleOnChangeVerificationCodeInput = (e) => {
-    const value = e.target.value;
+    const inputName = e.target.name;
+    const inputValue = e.target.value;
 
     const RegExp = /\D/;
 
-    const newValue = value.replace(RegExp, "");
+    const newInputValue = inputValue.replace(RegExp, "");
 
-    setFormInputValue((prev) => ({ ...prev, [e.target.name]: newValue }));
+    setFormInputValue((prev) => ({ ...prev, [inputName]: newInputValue }));
+
+    const copy = { ...validationMessage };
+
+    copy[inputName] = makeValidationMessage(inputName, inputValue);
+
+    setValidationMessage(copy);
   };
 
   const handleOnClickSubmitButton = async (e) => {
@@ -201,44 +226,44 @@ export default function Register() {
     emailInput.current.focus();
   }, []);
 
-  useEffect(() => {
-    const newMessage = makeEmailValidationMessage(email);
+  // useEffect(() => {
+  //   const newMessage = makeEmailValidationMessage(email);
 
-    setValidationMessage((oldMessage) => ({
-      ...oldMessage,
-      email: newMessage,
-    }));
-  }, [email]);
+  //   setValidationMessage((oldMessage) => ({
+  //     ...oldMessage,
+  //     email: newMessage,
+  //   }));
+  // }, [email]);
 
-  useEffect(() => {
-    const newMessage = makeVerificationCodeVaildationMessage(verificationCode);
+  // useEffect(() => {
+  //   const newMessage = makeVerificationCodeVaildationMessage(verificationCode);
 
-    setValidationMessage((oldMessage) => ({
-      ...oldMessage,
-      verificationCode: newMessage,
-    }));
-  }, [verificationCode]);
+  //   setValidationMessage((oldMessage) => ({
+  //     ...oldMessage,
+  //     verificationCode: newMessage,
+  //   }));
+  // }, [verificationCode]);
 
-  useEffect(() => {
-    const newMessage = makePasswordValidationMessage(password);
+  // useEffect(() => {
+  //   const newMessage = makePasswordValidationMessage(password);
 
-    setValidationMessage((oldMessage) => ({
-      ...oldMessage,
-      password: newMessage,
-    }));
-  }, [password]);
+  //   setValidationMessage((oldMessage) => ({
+  //     ...oldMessage,
+  //     password: newMessage,
+  //   }));
+  // }, [password]);
 
-  useEffect(() => {
-    const newMessage = makePasswordConfirmValidationMessage(
-      password,
-      passwordConfirm
-    );
+  // useEffect(() => {
+  //   const newMessage = makePasswordConfirmValidationMessage(
+  //     password,
+  //     passwordConfirm
+  //   );
 
-    setValidationMessage((oldMessage) => ({
-      ...oldMessage,
-      passwordConfirm: newMessage,
-    }));
-  }, [password, passwordConfirm]);
+  //   setValidationMessage((oldMessage) => ({
+  //     ...oldMessage,
+  //     passwordConfirm: newMessage,
+  //   }));
+  // }, [password, passwordConfirm]);
 
   useEffect(() => {
     if (step === 0) {
@@ -332,7 +357,7 @@ export default function Register() {
                   placeholder={"인증 번호 6자리"}
                   maxLength="6"
                   ref={verificationCodeInput}
-                  onChange={handleOnChangeVerificationCodeInput}
+                  onChange={handleOnChangeFormInput}
                   onKeyDown={(e) => {
                     if (e.key === " ") {
                       e.preventDefault();
