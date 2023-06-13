@@ -1,5 +1,4 @@
 import styles from "./AdminMenuContainer.module.scss";
-import { useCallback, useEffect, useState, } from "react";
 import plus from '../../image/plus.png'
 import { useNavigate } from "react-router-dom";
 
@@ -17,14 +16,14 @@ export const AdminMenuContainer = ({ onClick, category }) => {
             전체
           </li>
           <li
-            className={category === '백준' ? styles.selected : ''}
-            onClick={() => onClick('백준')}
+            className={category === 0 ? styles.selected : ''}
+            onClick={() => onClick(0)}  // category === 0
           >
             백준
           </li>
           <li
-            className={category === '프로그래머스' ? styles.selected : ''}
-            onClick={() => onClick('프로그래머스')}
+            className={category === 1 ? styles.selected : ''}
+            onClick={() => onClick(1)}  // category === 1
           >
             프로그래머스
           </li>
