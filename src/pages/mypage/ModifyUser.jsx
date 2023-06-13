@@ -37,7 +37,7 @@ const ModifyUser = () => {
         const foundUser = data.filter(
           (user) => user.userName === nameRef.current.value
         );
-        if (foundUser) {
+        if (foundUser.length > 0) {
           // 닉네임 중복
           setExist(true);
         } else {
@@ -74,13 +74,16 @@ const ModifyUser = () => {
   };
   const closeModal = () => {
     setIsOpen(false);
+    setModalContent(""); // 모달 내용 비우기
   };
-  const signOut = () => {
+  const signOutConfirm = () => {
     setModalContent(
       <>
         <div className={styles.modalMessage}>회원을 탈퇴하시겠습니까?</div>
         <div className={styles.confirmBtns}>
-          <div className={styles.confirmBtn}>네</div>
+          <div className={styles.confirmBtn} onClick={signOut}>
+            네
+          </div>
           <div className={styles.confirmBtn} onClick={closeModal}>
             아니오
           </div>
@@ -88,6 +91,15 @@ const ModifyUser = () => {
       </>
     );
     openModal();
+  };
+  const signOut = () => {
+    axios
+      .delete(`http://localhost:3000/api/user/profile/${user.email}`)
+      .then(navigate("/login"))
+      .catch((error) => {
+        setModalContent(error + "회원 탈퇴에 실패했습니다.");
+        openModal();
+      });
   };
   return (
     <div className={styles.modifyContainer}>
@@ -116,7 +128,7 @@ const ModifyUser = () => {
         >
           비밀번호 변경
         </p>
-        <p onClick={signOut}>회원 탈퇴</p>
+        <p onClick={signOutConfirm}>회원 탈퇴</p>
         <div className={styles.modalWrapper}>
           <Modal isOpen={isOpen} closeModal={closeModal}>
             {modalContent}
