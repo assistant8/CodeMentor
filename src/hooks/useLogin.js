@@ -1,3 +1,5 @@
+import { set } from "date-fns";
+
 // 유효성 검사
 export function isEmailValid(email) {
   if (email === "") return false;
@@ -103,19 +105,6 @@ function makeUserNameValidationMessage(userName) {
   }
 
   return "완벽합니다!";
-}
-
-export function makeValidationMessage(inputName, inputValue) {
-  switch (inputName) {
-    case "email":
-      return makeEmailValidationMessage(inputValue);
-    case "password":
-      return makePasswordValidationMessage(inputValue);
-    case "verificationCode":
-      return makeVerificationCodeVaildationMessage(inputValue);
-    case "userName":
-      return makeUserNameValidationMessage(inputValue);
-  }
 }
 
 // submit 시 유효성 검사 한 번에 & 통과 못 하면 다음 코드 진행 X.

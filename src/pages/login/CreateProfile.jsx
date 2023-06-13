@@ -20,9 +20,7 @@ export default function CreateProfile() {
   const profileImageInput = useRef();
 
   const [profileImageInputFile, setProfileImageInputFile] = useState("");
-  console.log("profileImageInputFile: ", profileImageInputFile.name);
   const [profileImageFileURL, setProfileImageFileURL] = useState("");
-  console.log("profileImageFileURL: ", profileImageFileURL.split(",")[0]);
   const [formInputValue, setFormInputValue] = useState({
     userName: "",
   });

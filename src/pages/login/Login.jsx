@@ -103,25 +103,34 @@ export default function Login() {
     const formData = { ...formInputValue };
 
     try {
-      const response = await api.post("/user/login", formData);
-      const result = await response.data.result;
+      const response = await api.post("/users/login", formData);
+      const result = await response.data;
 
-      if (result === "db에 이메일 없음.") {
-        alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
+      if (result?.error) {
+        const errorMessage = result.error;
+
+        if (errorMessage === "User not found with the given emai") {
+          alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
+
+          return;
+        }
+
+        if (errorMessage === "Incorrect password") {
+          alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
+
+          return;
+        }
+
+        alert(`등록되지 않은 에러 메세지: ${errorMessage}`);
 
         return;
       }
 
-      if (result === "비밀번호가 틀림.") {
-        alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
+      const userInfomation = result;
 
-        return;
-      }
+      setUser(userInfomation);
 
-      // if(result === "로그인 성공."){
-      if (true) {
-        navigate("/");
-      }
+      navigate("/");
     } catch (error) {
       alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 

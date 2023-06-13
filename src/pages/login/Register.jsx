@@ -7,13 +7,10 @@ import {
   isVerificationCodeValid,
   isPasswordValid,
   isPasswordConfirmValid,
-  makeValidationMessage,
   makeEmailValidationMessage,
   makeVerificationCodeVaildationMessage,
   makePasswordValidationMessage,
   makePasswordConfirmValidationMessage,
-  isPassValidation,
-  alertValidationMessage,
 } from "../../hooks/useLogin.js";
 import { api } from "../../libs/utils/api.js";
 import { InputWithEditButton } from "../../components/inputs/InputWithEditButton.jsx";
@@ -25,7 +22,6 @@ import { set } from "date-fns";
 
 export default function Register() {
   const navigate = useNavigate();
-  const location = useLocation();
   const emailInput = useRef();
   const verificationCodeInput = useRef();
   const passwordInput = useRef();
@@ -44,36 +40,26 @@ export default function Register() {
   });
   const { email, verificationCode, password, passwordConfirm } = formInputValue;
   const [validationMessage, setValidationMessage] = useState({
-    email: "이메일을 입력해주세요.",
-    verificationCode: "인증 번호를 입력해주세요.",
-    password: "비밀번호를 입력해주세요.",
-    passwordConfirm: "비밀번호를 확인해주세요.",
+    email: "",
+    verificationCode: "",
+    password: "",
+    passwordConfirm: "",
   });
   const [showEditButtonState, setShowEditButtonState] = useState(false);
-
   const [step, setStep] = useState(0);
 
   const handleOnChangeFormInput = (e) => {
     const inputName = e.target.name;
-    let inputValue = e.target.value;
+    const inputValue = e.target.value;
 
-    if (inputName === "verificationCode") {
-      const RegExp = /\D/;
+    // if (inputName === "verificationCode") {
+    //   const RegExp = /\D/;
 
-      inputValue = inputValue.replace(RegExp, "");
-    }
-
-    setFormInputValue((prev) => ({ ...prev, [inputName]: inputValue }));
-
-    // if(inputName === "passwordConfirm") {
-
+    //   inputValue = inputValue.replace(RegExp, "");
     // }
 
-    const copy = { ...validationMessage };
-
-    copy[inputName] = makeValidationMessage(inputName, inputValue);
-
-    setValidationMessage(copy);
+    setFormInputValue((prev) => ({ ...prev, [inputName]: inputValue }));
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleOnChangeVerificationCodeInput = (e) => {
@@ -85,12 +71,6 @@ export default function Register() {
     const newInputValue = inputValue.replace(RegExp, "");
 
     setFormInputValue((prev) => ({ ...prev, [inputName]: newInputValue }));
-
-    const copy = { ...validationMessage };
-
-    copy[inputName] = makeValidationMessage(inputName, inputValue);
-
-    setValidationMessage(copy);
   };
 
   const handleOnClickSubmitButton = async (e) => {
@@ -110,7 +90,7 @@ export default function Register() {
       };
 
       try {
-        const response = await api.post("/email-verification", formData);
+        const response = await api.post("/users/check-email", formData);
         const result = response.data.result;
 
         if (result === "이미 가입된 이메일.") {
@@ -149,7 +129,7 @@ export default function Register() {
       };
 
       try {
-        const response = await api.post("/verification-code-confirm", formData);
+        const response = await api.post("/users/verify", formData);
         const result = await response.data.result;
 
         if (result === "인증 코드가 일치하지 않습니다.") {
@@ -196,12 +176,11 @@ export default function Register() {
         password,
         userName: "",
         image: "",
-        grade: "",
         point: "",
       };
 
       try {
-        const response = await api.post("/user/sign-up", formData);
+        const response = await api.post("/users/signup", formData);
         const result = await response.data.result;
 
         // if (result === "회원 가입 완료") {
@@ -227,6 +206,33 @@ export default function Register() {
   }, []);
 
   useEffect(() => {
+    const newMessage = makeEmailValidationMessage(email);
+
+    setValidationMessage((oldMessage) => ({
+      ...oldMessage,
+      email: newMessage,
+    }));
+  }, [email]);
+
+  useEffect(() => {
+    const newMessage = makeVerificationCodeVaildationMessage(verificationCode);
+
+    setValidationMessage((oldMessage) => ({
+      ...oldMessage,
+      verificationCode: newMessage,
+    }));
+  }, [verificationCode]);
+
+  useEffect(() => {
+    const newMessage = makePasswordValidationMessage(password);
+
+    setValidationMessage((oldMessage) => ({
+      ...oldMessage,
+      password: newMessage,
+    }));
+  }, [password]);
+
+  useEffect(() => {
     const newMessage = makePasswordConfirmValidationMessage(
       password,
       passwordConfirm
@@ -237,45 +243,6 @@ export default function Register() {
       passwordConfirm: newMessage,
     }));
   }, [password, passwordConfirm]);
-
-  // useEffect(() => {
-  //   const newMessage = makeEmailValidationMessage(email);
-
-  //   setValidationMessage((oldMessage) => ({
-  //     ...oldMessage,
-  //     email: newMessage,
-  //   }));
-  // }, [email]);
-
-  // useEffect(() => {
-  //   const newMessage = makeVerificationCodeVaildationMessage(verificationCode);
-
-  //   setValidationMessage((oldMessage) => ({
-  //     ...oldMessage,
-  //     verificationCode: newMessage,
-  //   }));
-  // }, [verificationCode]);
-
-  // useEffect(() => {
-  //   const newMessage = makePasswordValidationMessage(password);
-
-  //   setValidationMessage((oldMessage) => ({
-  //     ...oldMessage,
-  //     password: newMessage,
-  //   }));
-  // }, [password]);
-
-  // useEffect(() => {
-  //   const newMessage = makePasswordConfirmValidationMessage(
-  //     password,
-  //     passwordConfirm
-  //   );
-
-  //   setValidationMessage((oldMessage) => ({
-  //     ...oldMessage,
-  //     passwordConfirm: newMessage,
-  //   }));
-  // }, [password, passwordConfirm]);
 
   useEffect(() => {
     if (step === 0) {
@@ -330,12 +297,9 @@ export default function Register() {
                 e.preventDefault();
 
                 try {
-                  const response = await api.post(
-                    "/email-verification-cancle",
-                    {
-                      email,
-                    }
-                  );
+                  const response = await api.post("/user/verify-cancle", {
+                    email,
+                  });
                   const result = await response.data.result;
 
                   // if (response.data.result === "발송된 인증 번호 폐기 성공.") {
@@ -369,7 +333,7 @@ export default function Register() {
                   placeholder={"인증 번호 6자리"}
                   maxLength="6"
                   ref={verificationCodeInput}
-                  onChange={handleOnChangeFormInput}
+                  onChange={handleOnChangeVerificationCodeInput}
                   onKeyDown={(e) => {
                     if (e.key === " ") {
                       e.preventDefault();
