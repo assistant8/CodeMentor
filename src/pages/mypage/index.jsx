@@ -7,7 +7,6 @@ import { GiCancel } from "react-icons/gi";
 import React, { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
-import { useEffect } from "react";
 import { Modal } from "../../components/modal";
 import chart from "../../image/chart-bar.png";
 import bookmark from "../../image/bookmark.svg";
