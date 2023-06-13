@@ -111,8 +111,6 @@ export function makeValidationMessage(inputName, inputValue) {
       return makeEmailValidationMessage(inputValue);
     case "password":
       return makePasswordValidationMessage(inputValue);
-    // case "passwordConfirm":
-    //   return makePasswordConfirmValidationMessage(password, inputValue);
     case "verificationCode":
       return makeVerificationCodeVaildationMessage(inputValue);
     case "userName":

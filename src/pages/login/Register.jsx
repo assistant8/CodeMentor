@@ -226,6 +226,18 @@ export default function Register() {
     emailInput.current.focus();
   }, []);
 
+  useEffect(() => {
+    const newMessage = makePasswordConfirmValidationMessage(
+      password,
+      passwordConfirm
+    );
+
+    setValidationMessage((oldMessage) => ({
+      ...oldMessage,
+      passwordConfirm: newMessage,
+    }));
+  }, [password, passwordConfirm]);
+
   // useEffect(() => {
   //   const newMessage = makeEmailValidationMessage(email);
 
