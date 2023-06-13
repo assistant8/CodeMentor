@@ -253,6 +253,8 @@ export default function Login() {
         </div>
         <button
           onClick={(e) => {
+            e.preventDefault();
+
             const userInfo = {
               email,
               password,
