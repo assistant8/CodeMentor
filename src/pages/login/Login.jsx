@@ -74,6 +74,23 @@ export default function Login() {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const localLogin = (e) => {
+    e.preventDefault();
+
+    const userInfo = {
+      email,
+      password,
+      userName: "낭니",
+      image: "account-circle.png",
+      grade: "고수",
+      point: 100,
+    };
+
+    setUser((prev) => ({ ...prev, ...userInfo }));
+
+    navigate("/");
+  };
+
   const handleOnClickSubmitButton = async (e) => {
     e.preventDefault();
 
@@ -101,18 +118,10 @@ export default function Login() {
         return;
       }
 
-      const userInfo = {
-        email,
-        password,
-        userName: "낭니",
-        image: "account-circle.png",
-        grade: "고수",
-        point: 100,
-      };
-
-      setUser((prev) => ({ ...prev, ...userInfo }));
-
-      navigate("/");
+      // if(result === "로그인 성공."){
+      if (true) {
+        navigate("/");
+      }
     } catch (error) {
       alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
@@ -227,6 +236,7 @@ export default function Login() {
       <div className={styles.wrapper_header}>
         <LoginHeader children={"logo"} />
       </div>
+
       <form>
         <div className={styles.wrapper_Inputs}>
           <UserInput
@@ -250,6 +260,12 @@ export default function Login() {
             onClick={handleOnClickSubmitButton}
           />
         </div>
+        <button
+          onClick={localLogin}
+          style={{ display: "block", margin: "20px auto" }}
+        >
+          로컬 로그인
+        </button>
       </form>
       <div className={styles.wrapper_TextLinks}>
         <LoginTextLink
