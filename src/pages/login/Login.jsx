@@ -227,6 +227,7 @@ export default function Login() {
       <div className={styles.wrapper_header}>
         <LoginHeader children={"logo"} />
       </div>
+
       <form>
         <div className={styles.wrapper_Inputs}>
           <UserInput
@@ -250,6 +251,26 @@ export default function Login() {
             onClick={handleOnClickSubmitButton}
           />
         </div>
+        <button
+          onClick={(e) => {
+            const userInfo = {
+              email,
+              password,
+              userName: "낭니",
+              image: "account-circle.png",
+              grade: "고수",
+              point: 100,
+            };
+
+            setUser((prev) => ({ ...prev, ...userInfo }));
+
+            console.log(user);
+
+            navigate("/");
+          }}
+        >
+          로컬 로그인
+        </button>
       </form>
       <div className={styles.wrapper_TextLinks}>
         <LoginTextLink
