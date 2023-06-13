@@ -1,25 +1,9 @@
 import { eachDayOfInterval, isSameDay, getDay, format } from "date-fns";
 import styles from "./Chart.module.scss";
 import { useState } from "react";
-import { useEffect } from "react";
+import { useMemo } from "react";
 
-const Calendar = ({ startDate, endDate, studyData }) => {
-
-  const days = eachDayOfInterval({ start: startDate, end: endDate });
-
-  const [tooltipDate, setTooltipDate] = useState(null); // 말풍선에 표시할 날짜 정보 상태
-
-  const handleMouseEnter = (date) => {
-    setTooltipDate(date);
-  };
-  const handleMouseLeave = () => {
-    setTooltipDate(null);
-  };
-
-  const Tooltip = ({ date }) => {
-    return <div className={styles.tooltip}>{format(date, "yyyy-MM-dd")}</div>;
-  };
-
+const getRows = (days) => {
   const rows = [];
   let currentRow = [];
   days.forEach((day) => {
@@ -36,8 +20,34 @@ const Calendar = ({ startDate, endDate, studyData }) => {
   if (currentRow.length !== 0) {
     rows.push(currentRow);
   }
-
   const reversedRows = rows.reverse();
+  return reversedRows;
+};
+
+const Calendar = ({ startDate, endDate, studyData }) => {
+  const days = useMemo(
+    () => eachDayOfInterval({ start: startDate, end: endDate }),
+    [startDate, endDate]
+  );
+  const reversedRows = useMemo(() => getRows(days), [days]); // days가 변할때만 getRows를 통해 rows 값 할당
+
+  const [tooltipDate, setTooltipDate] = useState(null); // 말풍선에 표시할 날짜 정보 상태
+
+  const handleMouseEnter = (date) => {
+    setTooltipDate(date);
+  };
+  const handleMouseLeave = () => {
+    setTooltipDate(null);
+  };
+
+  const Tooltip = ({ date, duration }) => {
+    return (
+      <div className={styles.tooltip}>{`${format(
+        date,
+        "yyyy-MM-dd"
+      )}, ${duration}`}</div>
+    );
+  };
 
   return (
     <div className={styles.calendar}>
@@ -48,7 +58,17 @@ const Calendar = ({ startDate, endDate, studyData }) => {
               isSameDay(data.date, day)
             );
             const duration = studyInfo ? studyInfo.duration : 0;
-            const color = duration > 0 ? "#c79aff" : "#c2bcca";
+            let color = "#c2bcca";
+
+            if (duration === 1) {
+              color = "#e4d2fa";
+            } else if (duration === 2) {
+              color = "#c79aff";
+            } else if (duration === 3) {
+              color = "#a256ff";
+            } else if (duration >= 4) {
+              color = "#6700e6";
+            }
 
             return (
               <div
@@ -59,7 +79,7 @@ const Calendar = ({ startDate, endDate, studyData }) => {
                 onMouseLeave={handleMouseLeave}
               >
                 {tooltipDate && isSameDay(day, tooltipDate) && (
-                  <Tooltip date={tooltipDate} />
+                  <Tooltip date={tooltipDate} duration={duration} />
                 )}
               </div>
             );
@@ -129,8 +149,10 @@ const Chart = () => {
     startDate.setDate(startDate.getDate() - 1);
   }
   const studyData = [
-    { date: new Date("2023-01-01"), duration: 2 },
-    { date: new Date("2023-01-05"), duration: 1.5 },
+    { date: new Date("2023-04-01"), duration: 2 },
+    { date: new Date("2023-05-02"), duration: 1 },
+    { date: new Date("2023-06-03"), duration: 3 },
+    { date: new Date("2023-06-09"), duration: 5 },
     // ...
   ];
 

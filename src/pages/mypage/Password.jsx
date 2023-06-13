@@ -1,10 +1,11 @@
 import styles from "./Password.module.scss";
 import { VioletButton } from "../../components/buttons/VioletButton";
 import { UserInput } from "../../components/inputs/UserInput";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Modal } from "../../components/modal";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
+import axios from "axios";
 
 const PassWord = () => {
   const user = useRecoilValue(userState);
@@ -12,13 +13,13 @@ const PassWord = () => {
   const [comparePresent, setComparePresent] = useState(false);
   const [checkPattern, setCheckPattern] = useState(false);
   const [checkPwd, setCheckPwd] = useState(false);
-  const handleCompare = () => {
+  const handleCompare = useCallback(() => {
     if (user.password === presentPwdRef.current.value) {
       setComparePresent(true);
     } else {
       setComparePresent(false);
     }
-  };
+  }, [user.password, setComparePresent]);
   const handlePwd = (e) => {
     setNewPwd(e.target.value);
     const pattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
@@ -58,7 +59,17 @@ const PassWord = () => {
     } else if (!checkPwd) {
       setModalContent("비밀번호가 일치하지 않습니다.");
     } else {
-      setModalContent("비밀번호가 변경되었습니다.");
+      axios
+        .put(`http://localhost:3000/api/users/profile/${user.email}`, {
+          ...user,
+          password: pwdRef.current.value,
+        })
+        .then(() => {
+          setModalContent("비밀번호가 변경되었습니다.");
+        })
+        .catch((error) => {
+          setModalContent(error + "오류가 발생했습니다.");
+        });
     }
   };
 
