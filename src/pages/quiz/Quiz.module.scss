@@ -26,6 +26,11 @@
         font-size: 1.25rem;
         font-weight: 600;
         margin-bottom: 1rem;
+
+        a {
+          color: inherit; /* 링크의 색상을 상속받습니다. */
+          text-decoration: none;
+        }
       }
       .quizPersonal {
         display: flex;
@@ -118,5 +123,3 @@
     }
   }
 }
-
-
