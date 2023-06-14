@@ -8,12 +8,16 @@ import { SmallVioletButton } from "../../components/buttons/SmallVioletButton";
 import bookmark from "../../image/bookmark.png";
 import check from "../../image/check.png";
 import skip from "../../image/skip2.png";
+import { useLocation, useNavigate } from "react-router";
 
 export default function Quiz() {
   const [showToast, setShowToast] = useState(false);
   const [timerDuration, setTimerDuration] = useState(10);
   const [toastMsg, setToastMsg] = useState("스스로 풀어보세요");
   const [timerCount, setTimerCount] = useState(0);
+
+  const { state } = useLocation();
+  console.log(state);
 
   useEffect(() => {
     console.log("timerCount", timerCount);
@@ -65,7 +69,7 @@ export default function Quiz() {
 
   return (
     <div className={styles.quizContainer}>
-      <QuizNameContainer onClick={handleClickPass} />
+      <QuizNameContainer onClick={handleClickPass} quizInfo={state}/>
       <Timer
         initialMinutes={0}
         initialSeconds={timerDuration}
@@ -95,11 +99,11 @@ export default function Quiz() {
   );
 }
 
-const QuizNameContainer = ({ onClick, title }) => {
+const QuizNameContainer = ({ onClick, quizInfo }) => {
   return (
     <div className={styles.quizNameContainer}>
       <div className={styles.quizInfo}>
-        <div className={styles.quizTitle}>문제제목</div>
+        <div className={styles.quizTitle} ><a href={quizInfo.problemUrl}>{quizInfo.title}</a></div>
         <div className={styles.quizPersonal}>
           <div className={styles.bookmark}>
             <img src={bookmark} alt="찜" className={styles.bookmarkImage}></img>
