@@ -3,54 +3,55 @@ import styles from "./Quiz.module.scss";
 import { useEffect, useState, useRef } from "react";
 import Timer from "../../components/timer/Timer.jsx";
 import Toast from "../../components/toast/Toast";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 import { SmallVioletButton } from "../../components/buttons/SmallVioletButton";
-import bookmark from "../../image/bookmark.png"
-import check from "../../image/check.png"
-import skip from "../../image/skip2.png"
-
-
+import bookmark from "../../image/bookmark.png";
+import check from "../../image/check.png";
+import skip from "../../image/skip2.png";
 
 export default function Quiz() {
   const [showToast, setShowToast] = useState(false);
   const [timerDuration, setTimerDuration] = useState(10);
-  const [toastMsg, setToastMsg] = useState("스스로 풀어보세요")
-  const [timerCount, setTimerCount] = useState(0)
+  const [toastMsg, setToastMsg] = useState("스스로 풀어보세요");
+  const [timerCount, setTimerCount] = useState(0);
 
-  useEffect(()=>{
-    console.log("timerCount", timerCount)
-  }, [timerCount])
-  
-  const handleTimerStart = () => { //토스트 메시지 내용 설정 및 show
-    if(timerCount===0) {
-      setShowToast(true);
-    } else if(timerCount===1) {
-      setToastMsg("힌트 보며 풀어보세요")
-      setShowToast(true);
-    } else if(timerCount===2) {
-      setToastMsg("해설 시간을 가져보세요")
-      setShowToast(true);
-    }
-  }
+  useEffect(() => {
+    console.log("timerCount", timerCount);
+  }, [timerCount]);
 
-  const handleTimerComplete = () => { //끝났을 때 다음 타이머 duration 설정해야될듯? / 토스트 메시지 / timerCOunt
-    if(timerCount===0) {
-      setToastMsg("스스로 푸는 시간 종료")
+  const handleTimerStart = () => {
+    //토스트 메시지 내용 설정 및 show
+    if (timerCount === 0) {
       setShowToast(true);
-      setTimerCount((prev)=>prev+1) //이제 2
-      setTimerDuration(5) //2단계 시간 설정 해줌
-    } else if(timerCount===1) {
-      setToastMsg("힌트 풀이 시간 종료")
+    } else if (timerCount === 1) {
+      setToastMsg("힌트 보며 풀어보세요");
       setShowToast(true);
-      setTimerCount((prev)=>prev+1) //이제 3
-      setTimerDuration(4) //3단계 시간 설정 해줌
-    } else if(timerCount===2) {
-      setToastMsg("해설 시간 종료")
+    } else if (timerCount === 2) {
+      setToastMsg("해설 시간을 가져보세요");
       setShowToast(true);
     }
   };
 
-  useEffect(() => { //타이머 머무는 시간 설정 
+  const handleTimerComplete = () => {
+    //끝났을 때 다음 타이머 duration 설정해야될듯? / 토스트 메시지 / timerCOunt
+    if (timerCount === 0) {
+      setToastMsg("스스로 푸는 시간 종료");
+      setShowToast(true);
+      setTimerCount((prev) => prev + 1); //이제 2
+      setTimerDuration(5); //2단계 시간 설정 해줌
+    } else if (timerCount === 1) {
+      setToastMsg("힌트 풀이 시간 종료");
+      setShowToast(true);
+      setTimerCount((prev) => prev + 1); //이제 3
+      setTimerDuration(4); //3단계 시간 설정 해줌
+    } else if (timerCount === 2) {
+      setToastMsg("해설 시간 종료");
+      setShowToast(true);
+    }
+  };
+
+  useEffect(() => {
+    //타이머 머무는 시간 설정
     const timer = setTimeout(() => {
       setShowToast(false);
     }, 3000);
@@ -59,37 +60,42 @@ export default function Quiz() {
   }, [showToast]);
 
   const handleClickPass = () => {
-    setTimerDuration(0)
-  }
-
+    setTimerDuration(0);
+  };
 
   return (
     <div className={styles.quizContainer}>
       <QuizNameContainer onClick={handleClickPass} />
-      <Timer initialMinutes={0} initialSeconds={timerDuration} onComplete={handleTimerComplete} onStart={handleTimerStart}/>
+      <Timer
+        initialMinutes={0}
+        initialSeconds={timerDuration}
+        onComplete={handleTimerComplete}
+        onStart={handleTimerStart}
+      />
       {showToast && <Toast message={toastMsg} />}
-      <HintContainer
-        hintTitle={"힌트 1"}
-        hintContent={"풀어줘요"}
-        isOpen={true}
-      />
-      <HintContainer
-        hintTitle={"힌트 2"}
-        hintContent={"여기는무슨힌트가숨겨져이씅ㄹ까?"}
-      />
-      <HintContainer
-        hintTitle={"힌트 3"}
-        hintContent={"컴포넌트 테스트용"}
-        isAdmin={true}
-      />
+      <div className={styles.hindWrapper}>
+        <HintContainer
+          hintTitle={"힌트 1"}
+          hintContent={"풀어줘요"}
+          isOpen={true}
+        />
+        <HintContainer
+          hintTitle={"힌트 2"}
+          hintContent={"여기는무슨힌트가숨겨져이씅ㄹ까?"}
+        />
+        <HintContainer
+          hintTitle={"힌트 3"}
+          hintContent={"컴포넌트 테스트용"}
+          isAdmin={true}
+        />
+      </div>
+
       <CommentContainer />
     </div>
   );
 }
 
-
-const QuizNameContainer = ({onClick, title}) => {
-  
+const QuizNameContainer = ({ onClick, title }) => {
   return (
     <div className={styles.quizNameContainer}>
       <div className={styles.quizInfo}>
