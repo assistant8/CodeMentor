@@ -1,5 +1,5 @@
 import styles from "./Register.module.scss";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PATH from "../../constants/path";
 import {
@@ -14,11 +14,9 @@ import {
 } from "../../hooks/useLogin.js";
 import { api } from "../../libs/utils/api.js";
 import { InputWithEditButton } from "../../components/inputs/InputWithEditButton.jsx";
-import { InputWithIndicator } from "../../components/inputs/InputWithIndicator.jsx";
 import { LoginHeader } from "../../components/headers/LoginHeader";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput";
-import { set } from "date-fns";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -50,28 +48,27 @@ export default function Register() {
 
   const handleOnChangeFormInput = (e) => {
     const inputName = e.target.name;
-    const inputValue = e.target.value;
+    let inputValue = e.target.value;
 
-    // if (inputName === "verificationCode") {
-    //   const RegExp = /\D/;
+    if (inputName === "verificationCode") {
+      const RegExp = /\D/;
 
-    //   inputValue = inputValue.replace(RegExp, "");
-    // }
+      inputValue = inputValue.replace(RegExp, "");
+    }
 
     setFormInputValue((prev) => ({ ...prev, [inputName]: inputValue }));
-    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleOnChangeVerificationCodeInput = (e) => {
-    const inputName = e.target.name;
-    const inputValue = e.target.value;
+  // const handleOnChangeVerificationCodeInput = (e) => {
+  //   const inputName = e.target.name;
+  //   const inputValue = e.target.value;
 
-    const RegExp = /\D/;
+  //   const RegExp = /\D/;
 
-    const newInputValue = inputValue.replace(RegExp, "");
+  //   const newInputValue = inputValue.replace(RegExp, "");
 
-    setFormInputValue((prev) => ({ ...prev, [inputName]: newInputValue }));
-  };
+  //   setFormInputValue((prev) => ({ ...prev, [inputName]: newInputValue }));
+  // };
 
   const handleOnClickSubmitButton = async (e) => {
     e.preventDefault();
@@ -333,7 +330,7 @@ export default function Register() {
                   placeholder={"인증 번호 6자리"}
                   maxLength="6"
                   ref={verificationCodeInput}
-                  onChange={handleOnChangeVerificationCodeInput}
+                  onChange={handleOnChangeFormInput}
                   onKeyDown={(e) => {
                     if (e.key === " ") {
                       e.preventDefault();
