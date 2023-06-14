@@ -71,7 +71,8 @@ const dummyTest =  [
                   <img 
                     src={pencil} 
                     alt="update"
-                    onClick={() => navigate('/admin/update')} 
+                    onClick={() => navigate(`/admin/update?quizId=${quiz.id}`)}
+                    // /admin/update로 이동하면서 quiz.id 정보 갖고 넘어가기
                     />
                     
                   <img 
