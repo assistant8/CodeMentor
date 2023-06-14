@@ -10,6 +10,7 @@ import {
   makeEmailValidationMessage,
   makePasswordValidationMessage,
 } from "../../hooks/useLogin.js";
+import { Modal } from "../../components/modal/index.jsx";
 import { LoginHeader } from "../../components/headers/LoginHeader.jsx";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
@@ -68,6 +69,14 @@ export default function Login() {
 
   // state destructuring
   const { email, password } = formInputValue;
+
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   // func
   const handleOnChangeFormInput = (e) => {
@@ -241,11 +250,12 @@ export default function Login() {
 
   return (
     <div className={styles.container_Login}>
+      <Modal children={"바보야!"} isOpen={isOpen} closeModal={closeModal} />
+      <button onClick={openModal}>ddd</button>
       <div className={styles.topBar}>11:11</div>
       <div className={styles.wrapper_header}>
         <LoginHeader children={"logo"} />
       </div>
-
       <form>
         <div className={styles.wrapper_Inputs}>
           <UserInput
