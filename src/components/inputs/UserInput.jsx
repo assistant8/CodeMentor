@@ -12,6 +12,7 @@ export const UserInput = React.forwardRef(
       maxLength,
       onKeyDown,
       disabled,
+      style,
     },
     ref
   ) => {
@@ -27,6 +28,7 @@ export const UserInput = React.forwardRef(
         maxLength={maxLength}
         onKeyDown={onKeyDown}
         disabled={disabled}
+        style={style}
       ></input>
     );
   }
