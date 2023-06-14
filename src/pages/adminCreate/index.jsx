@@ -2,13 +2,13 @@ import styles from './adminCreate.module.scss';
 import HintContainer from "../../components/hintContainer/HintCotainer";
 import { useRef, useState } from 'react';
 import { SmallVioletButton } from '../../components/buttons/SmallVioletButton';
-
+import AdminHintContainer from '../admin/adminHintContainer';
+import { UserInput } from '../../components/inputs/UserInput';
 
 export default function ProblemUpdatePage() {
 
   // problem reserved schema
-  // const dummyTest =  [
-  //   {
+  // const dummyTest = {
   //     "id": 1,
   //     "category": 0,
   //     "title": "3085 사탕 게임 - 1",
@@ -17,14 +17,14 @@ export default function ProblemUpdatePage() {
   //     "timer": 20,
   //     "hintContent": "1단계 힌트",
   //     "hintLevel": 1
-  //   },
-  // ];
-
+  //   }
 
   // 문제정보를 받을 상태와 입력시 상태를 변경할 set함수를 빈 객체를 초기값으로 설정
-  const [quizInfo, setQuizInfo] = useState({});
+  const [quizInfo, setQuizInfo] = useState({hintLevel: 1});
+  console.log("🚀 ~ file: index.jsx:26 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
 
   const buttonRef = useRef();
+  // 문제 기본정보 등록 이벤트 핸들러
   const handleProblemCreate = () => {
     // // 아래 입력된 데이터들을 데이터베이스의 problem에 추가시켜야 함
   //   axios
@@ -45,31 +45,52 @@ export default function ProblemUpdatePage() {
       [name]: value
     }));
   };
+
+  // 추가 힌트 등록 이벤트 핸들러
+  const handleHintCreate = () => {};
+
   
   return (
-    <div className='styles.container'>
-      <div className="styles.QuizInfo">
-        <h2>문제 정보</h2>
-        <input type="text" name='title' placeholder='문제 이름' value={quizInfo.title} onChange={handleInputChange} />
-        <input type="text" name='problemUrl' placeholder='문제 url' value={quizInfo.problemUrl} onChange={handleInputChange} />
-        <div className='category'>
-          <button type="button" value="백준" onClick={()=>setQuizInfo({...quizInfo, category: 0})}>백준</button> 
-          <button type="button" value="프로그래머스" onClick={()=>setQuizInfo({...quizInfo, category: 1})}>프로그래머스</button> 
+    <div className={styles.container}>
+      <div>
+        <div className={styles.QuizInfo}>
+        <h3>문제 정보</h3>
+          <UserInput
+            type="text"
+            name="title"
+            placeholder="문제이름"
+            value={quizInfo.title}
+            onChange={handleInputChange}
+            style={{borderRadius: "0.5rem", height: "50px", marginBottom: "10px"}}
+          />
+          <UserInput
+            type="text"
+            name="problemUrl"
+            placeholder="문제 url"
+            value={quizInfo.problemUrl}
+            onChange={handleInputChange}
+            style={{borderRadius: "0.5rem", height: "50px", marginBottom: "10px"}}
+          />
+          <div className={styles.category}>
+            <button name="category" type="button" value={0} onClick={handleInputChange}>백준</button> 
+            <button name="category" type="button" value={1} onClick={handleInputChange}>프로그래머스</button> 
+          </div>
         </div>
       </div>
-      <div className="hint">
-        <h2>힌트 정보</h2>
-        <HintContainer
-          hintTitle={"힌트 1"}
+      <div className={styles.hintContainer}>
+        <h3>힌트 정보</h3>
+         <AdminHintContainer
           hintLevel={1}
-          hintContent={""}
-          isAdmin={true}
+          hintContent={quizInfo.hintContent}
+          onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
         />
-        <SmallVioletButton 
-          ref={buttonRef} 
-          onClick={handleProblemCreate}
-          children="기본 등록"
-          />
+        <div className={styles.submitBtn}>
+          <SmallVioletButton 
+            ref={buttonRef} 
+            onClick={handleProblemCreate}
+            children="기본 등록"
+            />
+        </div>
         <HintContainer
           hintTitle={"힌트 2"}
           hintLevel={2}
@@ -88,11 +109,13 @@ export default function ProblemUpdatePage() {
           hintContent={""}
           isAdmin={true}
         />
-        <SmallVioletButton 
-          ref={buttonRef} 
-          onClick={handleProblemCreate}
-          children="추가 등록"
-          />
+        <div className={styles.submitBtn}>
+          <SmallVioletButton 
+            ref={buttonRef} 
+            onClick={handleHintCreate}
+            children="추가 등록"
+            />
+        </div>
       </div>
     </div>
   );
