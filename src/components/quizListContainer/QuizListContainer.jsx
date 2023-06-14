@@ -20,7 +20,7 @@ export const QuizListContainer = ({ style, isImgNeed = true, searchKey, selected
             <div className={styles.quizList}>
               <div
                 className={styles.quizListTitle}
-                onClick={() => navigate(PATH.QUIZ+`/:${quiz.id}`, {state: quiz})} 
+                onClick={() => navigate(PATH.QUIZ+`/${quiz.id}`, {state: quiz})} 
               > 
                 {quiz.title}
               </div>
