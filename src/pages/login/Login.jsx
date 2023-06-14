@@ -5,10 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../libs/utils/api.js";
 import PATH from "../../constants/path";
 import {
+  isEmailValid,
+  isPasswordValid,
   isPassValidation,
   alertValidationMessage,
   makeEmailValidationMessage,
   makePasswordValidationMessage,
+  modalValidationMessage,
 } from "../../hooks/useLogin.js";
 import { Modal } from "../../components/modal/index.jsx";
 import { LoginHeader } from "../../components/headers/LoginHeader.jsx";
@@ -70,12 +73,16 @@ export default function Login() {
   // state destructuring
   const { email, password } = formInputValue;
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  console.log(modalMessage);
   const openModal = () => {
-    setIsOpen(true);
+    setIsModalOpen(true);
   };
+
   const closeModal = () => {
-    setIsOpen(false);
+    setIsModalOpen(false);
   };
 
   // func
@@ -104,7 +111,14 @@ export default function Login() {
     e.preventDefault();
 
     if (!isPassValidation(formInputValue)) {
-      alertValidationMessage(validationMessage, focusRef);
+      modalValidationMessage(
+        validationMessage,
+        setModalMessage,
+        openModal,
+        focusRef
+      );
+
+      // alertValidationMessage(validationMessage, focusRef);
 
       return;
     }
@@ -248,10 +262,29 @@ export default function Login() {
     }));
   }, [password]);
 
+  useEffect(() => {
+    if (isModalOpen) return;
+
+    if (!isModalOpen & !isEmailValid(email)) {
+      focusRef.email.current.focus();
+
+      return;
+    }
+
+    if (!isModalOpen & !isPasswordValid(password)) {
+      focusRef.password.current.focus();
+
+      return;
+    }
+  }, [isModalOpen]);
+
   return (
     <div className={styles.container_Login}>
-      <Modal children={"바보야!"} isOpen={isOpen} closeModal={closeModal} />
-      <button onClick={openModal}>ddd</button>
+      <Modal
+        children={modalMessage}
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      />
       <div className={styles.topBar}>11:11</div>
       <div className={styles.wrapper_header}>
         <LoginHeader children={"logo"} />
