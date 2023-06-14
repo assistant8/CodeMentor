@@ -82,21 +82,40 @@ export default function Register() {
         return;
       }
 
-      const formData = {
-        email,
-      };
+      try {
+        const response = await api.post(`/users/profile/?email=${email}`);
+        const result = response.data;
+
+        if (result?.error) {
+          const errorMessage = result.error;
+
+          if (errorMessage === "이미 가입된 이메일입니다.") {
+            alert("이미 가입된 이메일입니다.");
+
+            return;
+          }
+
+          alert(`등록되지 않은 에러 메세지: ${errorMessage}`);
+
+          return;
+        }
+      } catch (error) {
+        alert("서버와의 통신에 실패했습니다.");
+
+        console.log(error);
+      }
 
       try {
-        const response = await api.post("/users/check-email", formData);
-        const result = response.data.result;
+        const response = await api.post(`/users/send/?email=${email}`);
+        const result = response.data;
 
-        if (result === "이미 가입된 이메일.") {
-          alert("이미 가입된 이메일입니다.");
+        if (result?.error) {
+          alert("인증 메일 발송 실패");
 
           return;
         }
 
-        // if (result === "인증 메일 발송 성공.") {
+        // if (result.message === "Verification email sent") {
         if (true) {
           setStep(1);
 
@@ -120,23 +139,38 @@ export default function Register() {
         return;
       }
 
-      const formData = {
-        email,
-        verificationCode,
-      };
-
       try {
-        const response = await api.post("/users/verify", formData);
-        const result = await response.data.result;
+        const response = await api.post(
+          `/users/verify/?email=${email}&verificationCode=${verificationCode}`
+        );
+        const result = await response.data;
 
-        if (result === "인증 코드가 일치하지 않습니다.") {
-          alert(
-            "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
-          );
+        if (result?.error) {
+          const errorMessage = result.error;
+
+          // 이건 필요 없을 것 같음. 앞에서 이메일 중복 검사를 하니까.
+          // if (
+          //   errorMessage === "User with the given email is already verified"
+          // ) {
+          //   alert("이미 인증된 사용자입니다.");
+
+          //   return;
+          // }
+
+          if (errorMessage === "The verification code is invalid") {
+            alert(
+              "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
+            );
+
+            return;
+          }
+
+          alert(`등록되지 않은 에러 메세지: ${errorMessage}`);
 
           return;
         }
-        // if (result === "인증 코드가 일치합니다.") {
+
+        // if (result.message === "email verify success!") {
         if (true) {
           setStep(2);
 
@@ -169,18 +203,27 @@ export default function Register() {
       }
 
       const formData = {
-        email,
         password,
-        userName: "",
-        image: "",
-        point: "",
+        point: 0,
       };
 
       try {
-        const response = await api.post("/users/signup", formData);
+        const response = await api.post(
+          `/users/signup/?email=${email}`,
+          formData
+        );
         const result = await response.data.result;
 
-        // if (result === "회원 가입 완료") {
+        // 여기선 에러가 안 나오나?
+        if (result?.error) {
+          const errorMessage = result.error;
+
+          alert("회원 가입에 실패했습니다.");
+
+          return;
+        }
+
+        // if (result.message === true) {
         if (true) {
           alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
 
