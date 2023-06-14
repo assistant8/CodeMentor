@@ -7,7 +7,7 @@ import { FaPencilAlt } from "react-icons/fa";
 import { Modal } from "../../components/modal";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
-import axios from "axios";
+import { api } from "../../libs/utils/api";
 
 const ModifyUser = () => {
   const [modalContent, setModalContent] = useState("");
@@ -31,8 +31,8 @@ const ModifyUser = () => {
     }
   };
   const handleSubmit = () => {
-    axios
-      .get("http://localhost:3000/api/users/")
+    api
+      .get("/users/")
       .then((data) => {
         const foundUser = data.filter(
           (user) => user.userName === nameRef.current.value
@@ -54,8 +54,8 @@ const ModifyUser = () => {
       });
   };
   const submitUserInfo = (data) => {
-    axios
-      .put(`http://localhost:3000/api/users/profile/${user.email}`, data)
+    api
+      .put(`/users/profile/${user.email}`, data)
       .then(() => {
         setModalContent("정보가 수정되었습니다.");
         openModal();
@@ -93,8 +93,8 @@ const ModifyUser = () => {
     openModal();
   };
   const signOut = () => {
-    axios
-      .delete(`http://localhost:3000/api/user/profile/${user.email}`)
+    api
+      .delete(`/user/profile/${user.email}`)
       .then(navigate("/login"))
       .catch((error) => {
         setModalContent(error + "회원 탈퇴에 실패했습니다.");

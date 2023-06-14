@@ -11,7 +11,7 @@ import { Modal } from "../../components/modal";
 import chart from "../../image/chart-bar.png";
 import bookmark from "../../image/bookmark.svg";
 import check from "../../image/check.svg";
-import axios from "axios";
+import { api } from "../../libs/utils/api";
 
 const User = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -95,8 +95,8 @@ const LogOut = () => {
   const [modalContent, setModalContent] = useState(""); // 상태 변수 추가
 
   const onClick = () => {
-    axios
-      .post("http://localhost:3000/api/users/logout", {})
+    api
+      .post("/users/logout", {})
       .then((res) => {
         // 로그아웃 처리 성공
         navigate("/login");
