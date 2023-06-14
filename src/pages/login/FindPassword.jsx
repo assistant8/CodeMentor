@@ -201,8 +201,9 @@ export default function FindPassword() {
             ref={emailInput}
             onChange={handleOnChangeFormInput}
             disabled={step !== 0}
-            showEditButtonState={showEditButtonState}
-            buttonOnClick={async (e) => {
+            editButton_children={"수정"}
+            editButton_showState={showEditButtonState}
+            editButton_onClick={async (e) => {
               e.preventDefault();
 
               try {

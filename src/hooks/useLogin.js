@@ -74,6 +74,10 @@ export function makePasswordConfirmValidationMessage(
     return "비밀번호를 재확인해주세요.";
   }
 
+  if (!isPasswordValid(password)) {
+    return "비밀번호를 다시 확인해주세요.";
+  }
+
   if (password !== passwordConfirm) {
     return "비밀번호가 일치하지 않습니다.";
   }
@@ -200,6 +204,88 @@ export function alertValidationMessage(validationMessage, focusRef = null) {
     if (focusRef !== null && focusRef?.userName?.current) {
       focusRef.userName.current.focus();
     }
+
+    return;
+  }
+}
+
+export function modalValidationMessage(
+  validationMessage,
+  setModalMessage,
+  openModal
+  // focusRef = null
+) {
+  if (
+    ("email" in validationMessage) &
+    (validationMessage.email !== validationMessageWhenPass)
+  ) {
+    setModalMessage(validationMessage.email);
+
+    openModal();
+
+    // if (focusRef !== null && focusRef?.email?.current) {
+    //   focusRef.email.current.focus();
+    // }
+
+    return;
+  }
+
+  if (
+    ("verificationCode" in validationMessage) &
+    (validationMessage.verificationCode !== validationMessageWhenPass)
+  ) {
+    setModalMessage(validationMessage.verificationCode);
+
+    openModal();
+
+    // if (focusRef !== null && focusRef?.verificationCode?.current) {
+    //   focusRef.verificationCode.current.focus();
+    // }
+
+    return;
+  }
+
+  if (
+    ("password" in validationMessage) &
+    (validationMessage.password !== validationMessageWhenPass)
+  ) {
+    setModalMessage(validationMessage.password);
+
+    openModal();
+
+    // if (focusRef !== null && focusRef?.password?.current) {
+    //   focusRef.password.current.focus();
+    // }
+
+    return;
+  }
+
+  if (
+    ("passwordConfirm" in validationMessage) &
+    (validationMessage.passwordConfirm !== validationMessageWhenPass)
+  ) {
+    setModalMessage(validationMessage.passwordConfirm);
+
+    openModal();
+
+    // if (focusRef !== null && focusRef?.passwordConfirm?.current) {
+    //   focusRef.passwordConfirm.current.focus();
+    // }
+
+    return;
+  }
+
+  if (
+    ("userName" in validationMessage) &
+    (validationMessage.userName !== validationMessageWhenPass)
+  ) {
+    setModalMessage(validationMessage.userName);
+
+    openModal();
+
+    // if (focusRef !== null && focusRef?.userName?.current) {
+    //   focusRef.userName.current.focus();
+    // }
 
     return;
   }

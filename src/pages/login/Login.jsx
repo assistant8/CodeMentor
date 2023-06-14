@@ -5,11 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../libs/utils/api.js";
 import PATH from "../../constants/path";
 import {
+  isEmailValid,
+  isPasswordValid,
   isPassValidation,
   alertValidationMessage,
   makeEmailValidationMessage,
   makePasswordValidationMessage,
+  modalValidationMessage,
 } from "../../hooks/useLogin.js";
+import { Modal } from "../../components/modal/index.jsx";
 import { LoginHeader } from "../../components/headers/LoginHeader.jsx";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
@@ -69,6 +73,18 @@ export default function Login() {
   // state destructuring
   const { email, password } = formInputValue;
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  console.log(modalMessage);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   // func
   const handleOnChangeFormInput = (e) => {
     setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -95,7 +111,14 @@ export default function Login() {
     e.preventDefault();
 
     if (!isPassValidation(formInputValue)) {
-      alertValidationMessage(validationMessage, focusRef);
+      modalValidationMessage(
+        validationMessage,
+        setModalMessage,
+        openModal,
+        focusRef
+      );
+
+      // alertValidationMessage(validationMessage, focusRef);
 
       return;
     }
@@ -103,25 +126,34 @@ export default function Login() {
     const formData = { ...formInputValue };
 
     try {
-      const response = await api.post("/user/login", formData);
-      const result = await response.data.result;
+      const response = await api.post("/users/login", formData);
+      const result = await response.data;
 
-      if (result === "db에 이메일 없음.") {
-        alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
+      if (result?.error) {
+        const errorMessage = result.error;
+
+        if (errorMessage === "User not found with the given emai") {
+          alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
+
+          return;
+        }
+
+        if (errorMessage === "Incorrect password") {
+          alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
+
+          return;
+        }
+
+        alert(`등록되지 않은 에러 메세지: ${errorMessage}`);
 
         return;
       }
 
-      if (result === "비밀번호가 틀림.") {
-        alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
+      const userInfomation = result;
 
-        return;
-      }
+      setUser(userInfomation);
 
-      // if(result === "로그인 성공."){
-      if (true) {
-        navigate("/");
-      }
+      navigate("/");
     } catch (error) {
       alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
@@ -230,13 +262,33 @@ export default function Login() {
     }));
   }, [password]);
 
+  useEffect(() => {
+    if (isModalOpen) return;
+
+    if (!isModalOpen & !isEmailValid(email)) {
+      focusRef.email.current.focus();
+
+      return;
+    }
+
+    if (!isModalOpen & !isPasswordValid(password)) {
+      focusRef.password.current.focus();
+
+      return;
+    }
+  }, [isModalOpen]);
+
   return (
     <div className={styles.container_Login}>
+      <Modal
+        children={modalMessage}
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      />
       <div className={styles.topBar}>11:11</div>
       <div className={styles.wrapper_header}>
         <LoginHeader children={"logo"} />
       </div>
-
       <form>
         <div className={styles.wrapper_Inputs}>
           <UserInput
