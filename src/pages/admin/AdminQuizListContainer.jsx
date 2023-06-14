@@ -3,8 +3,13 @@ import pencil from "../../image/pencil.png";
 import deleteOutline from "../../image/delete-outline.png";
 import { useNavigate } from "react-router-dom";
 import { useState, useCallback, useEffect } from "react";
+import { useRecoilValue } from 'recoil';
+import { categoryState, searchKeyState } from '../../state/store.js';
 
-export default function AdminQuizListContainer ({ searchKey, selectedCategory }) {
+export default function AdminQuizListContainer () {
+
+  const selectedCategory = useRecoilValue(categoryState);
+  const searchKey = useRecoilValue(searchKeyState);
 
   // [코드리뷰] quizs 데이터 같은경우 이제 더미가 아닌 실제 백엔드로부터 데이터를 받아와야되는 것 같네요.
   // 아래 filter를 통해 selectedCategory, searchKey 일치시키는 데이터는 return 위 쪽에서 useState를 통해 상태를 관리해주시면 좋을 듯합니다.
