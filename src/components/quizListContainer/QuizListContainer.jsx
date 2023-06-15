@@ -13,9 +13,8 @@ export const QuizListContainer = ({
   quizs,
 }) => {
   const navigate = useNavigate();
-  // const quizss = api.get("/problems")
   const categoryNumber = selectedCategory === "백준" ? 0 : 1;
-
+  console.log("quizs", quizs)
   return (
     <div className={styles.quizListContainer}>
       {quizs
@@ -47,7 +46,7 @@ export const QuizListContainer = ({
   );
 };
 
-const quizs = [
+const quizss = [
   {
     id: 1,
     category: 0,
