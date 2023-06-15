@@ -11,7 +11,7 @@ axios.defaults.baseURL = "http://34.64.81.88/api";
 
 // axios.defaults.baseURL = "http://localhost:3001/api";
 
-export const api = axios.create({ baseURL: "http://localhost:3001/api" });
+export const api = axios.create();
 
 // const getCookie = () => {
 //   return;
