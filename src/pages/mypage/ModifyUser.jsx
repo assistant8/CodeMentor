@@ -125,6 +125,7 @@ const ModifyUser = () => {
         <UserInput
           ref={nameRef}
           placeholder={user.userName === " " ? "유저명" : user.userName}
+          onChange={() => setExist(false)}
         />
         {exist ? <p>중복된 유저명입니다</p> : null}
       </div>
