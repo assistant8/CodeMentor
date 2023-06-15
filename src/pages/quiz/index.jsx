@@ -69,6 +69,10 @@ export default function Quiz() {
     setTimerDuration(0);
   };
 
+  const handleHintClick = () => {
+    
+  }
+
   return (
     <div className={styles.quizContainer}>
       <QuizNameContainer onClick={handleClickPass} quizInfo={state}/>
@@ -79,25 +83,16 @@ export default function Quiz() {
         onStart={handleTimerStart}
       />
       {showToast && <Toast message={toastMsg} />}
-      <div className={styles.hindWrapper}>
+      <div className={styles.hintWrapper}>
         {
           hints.map(hint=>(
             <HintContainer
-              hintTitle={hint.title}
+              hintTitle={maplevelToQuestion[hint.hintLevel]}
               hintContent={hint.hintContent}
-              isOpen={true}
+              onClick={handleHintClick}
             />            
           ))
         }
-        <HintContainer
-          hintTitle={"힌트 2"}
-          hintContent={"여기는무슨힌트가숨겨져이씅ㄹ까?"}
-        />
-        <HintContainer
-          hintTitle={"힌트 3"}
-          hintContent={"컴포넌트 테스트용"}
-          isAdmin={true}
-        />
       </div>
 
       <CommentContainer />
@@ -199,3 +194,10 @@ const hints = [
     updatedAt: "2023-06-11T19:08:06.000Z",
   },
 ];
+
+const maplevelToQuestion = {
+  1: "문제 유형은 무엇인가요?", 
+  2: "세부 유형 또는 고려해야할 부분은 무엇일까요?",
+  3: "필수적으로 사용해야하는 것은 무엇인가요?",
+  4: "놓칠 수 있을만한 테스트 케이스는 무엇이 있을까요?",
+}

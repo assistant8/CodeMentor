@@ -17,19 +17,26 @@ const HintContentBox = ({ hintContent, isAdmin, isOpen }) => {
       />
     );
   }
+
   return (
     <div className={isOpen ? styles.hintContent : styles.blurContent}>
-      {hintContent}
+      {isOpen? hintContent : "블러처리된 내용입니다. 보시려면 클릭해주세요!"}
     </div>
   );
-};
+}; 
 
-export default function HintContainer({hintTitle, hintContent, isAdmin = false, isOpen = false}) {
+export default function HintContainer({hintTitle, hintContent, onClick, isAdmin = false, isOpen = false}) {
+    const [isHintOpen, setIsHintOpen] = useState(isOpen)
+    const handleHintClick = () => {
+        setIsHintOpen(true);
+        console.log("isopen", isHintOpen)
+    }
+    
     return (
-        <div className={styles.hintContainer}>
+        <div className={styles.hintContainer} onClick={handleHintClick}>
             <div className={styles.hintName}>
                 <div className={styles.hintTitle}>{hintTitle}</div>
-                <HintContentBox hintContent={hintContent} isAdmin={isAdmin} isOpen={isOpen}/>
+                <HintContentBox hintContent={hintContent} isAdmin={isAdmin} isOpen={isHintOpen}/>
             </div>
         </div>
     );
