@@ -2,16 +2,20 @@ import styles from "./ModifyUser.module.scss";
 import { useNavigate } from "react-router-dom";
 import { VioletButton } from "../../components/buttons/VioletButton";
 import { UserInput } from "../../components/inputs/UserInput";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { Modal } from "../../components/modal";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
 import { api } from "../../libs/utils/api";
 
 const ModifyUser = () => {
   const [modalContent, setModalContent] = useState("");
-  const [user, setUser] = useRecoilState(userState);
+  const email = useRecoilValue(userState).email;
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
+  }, []);
   const [exist, setExist] = useState(false);
   const [imgUrl, setImgUrl] = useState(user.image);
   const fileInputRef = useRef(null);
@@ -33,19 +37,20 @@ const ModifyUser = () => {
   const handleSubmit = () => {
     api
       .get("/users/")
-      .then((data) => {
-        const foundUser = data.filter(
+      .then((res) => {
+        const foundUser = res.data.filter(
           (user) => user.userName === nameRef.current.value
         );
+        console.log(foundUser);
         if (foundUser.length > 0) {
           // 닉네임 중복
           setExist(true);
         } else {
           // 중복 없음
-          const image = imgUrl;
-          const userName = nameRef.current.value;
-          const data = { ...user, image, userName };
-          submitUserInfo(data);
+          const formData = new FormData();
+          formData.append("image", fileInputRef.current.files[0]);
+          formData.append("userName", nameRef.current.value);
+          submitUserInfo(formData);
         }
       })
       .catch((error) => {
@@ -55,7 +60,7 @@ const ModifyUser = () => {
   };
   const submitUserInfo = (data) => {
     api
-      .put(`/users/profile/${user.email}`, data)
+      .put(`/users/profile/?email=${email}`, data)
       .then(() => {
         setModalContent("정보가 수정되었습니다.");
         openModal();
@@ -94,8 +99,11 @@ const ModifyUser = () => {
   };
   const signOut = () => {
     api
-      .delete(`/user/profile/${user.email}`)
-      .then(navigate("/login"))
+      .delete(`/users/profile/?email=${email}`)
+      .then(() => {
+        setModalContent("탈퇴 되었습니다. 이용해주셔서 감사합니다.");
+        navigate("/login");
+      })
       .catch((error) => {
         setModalContent(error + "회원 탈퇴에 실패했습니다.");
         openModal();
@@ -114,7 +122,11 @@ const ModifyUser = () => {
         <img src={imgUrl} alt="프사" ref={profileImgRef} />
       </div>
       <div className={styles.inputBox}>
-        <UserInput ref={nameRef} placeholder={user.userName} />
+        <UserInput
+          ref={nameRef}
+          placeholder={user.userName === " " ? "유저명" : user.userName}
+          onChange={() => setExist(false)}
+        />
         {exist ? <p>중복된 유저명입니다</p> : null}
       </div>
       <VioletButton onClick={handleSubmit} ref={buttonRef}>

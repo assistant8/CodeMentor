@@ -7,10 +7,10 @@ export default function AdminHintContainer({ hintLevel, hintContent, onChange })
             <div className={styles.hintName}>
                 <div className={styles.hintTitle}>힌트 {hintLevel}</div>
                 <input className={styles.hintContent}
-                  type="text"
-                  value={hintContent}
-                  placeholder={"힌트를 입력해주세요"}
-                  onChange={onChange} 
+                    type="text"
+                    value={hintContent}
+                    placeholder={"힌트를 입력해주세요"}
+                    onChange={onChange} 
                 />
             </div>
         </div>

@@ -12,8 +12,9 @@ const Header = () => {
   useEffect(() => {
     const pathname = location.pathname;
     setTitle(() => mapPathnameToTitle[pathname]);
+    // console.log("title", pathname)
+    // console.log("mapPathnameToTitle[pathname]", mapPathnameToTitle[pathname])
   }, [location.pathname]);
-
   const navigate = useNavigate();
   return (
     <div className={styles.header}>

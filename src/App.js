@@ -59,9 +59,8 @@ function App() {
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<QuizList />} />
-        <Route path={PATH.QUIZ} element={<Quiz />} />
+        <Route path={PATH.QUIZ + `/:quizId`} element={<Quiz />} />
         <Route path={PATH.QUIZLIST} element={<QuizList />} />
-
         <Route path={PATH.HOME} element={<Home />} />
 
         <Route path={PATH.LOGIN}>

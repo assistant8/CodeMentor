@@ -1,25 +1,21 @@
 import styles from "./Password.module.scss";
 import { VioletButton } from "../../components/buttons/VioletButton";
 import { UserInput } from "../../components/inputs/UserInput";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Modal } from "../../components/modal";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
 import { api } from "../../libs/utils/api";
 
 const PassWord = () => {
-  const user = useRecoilValue(userState);
+  const email = useRecoilValue(userState).email;
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
+  }, []);
   const [newPwd, setNewPwd] = useState("");
-  const [comparePresent, setComparePresent] = useState(false);
   const [checkPattern, setCheckPattern] = useState(false);
   const [checkPwd, setCheckPwd] = useState(false);
-  const handleCompare = useCallback(() => {
-    if (user.password === presentPwdRef.current.value) {
-      setComparePresent(true);
-    } else {
-      setComparePresent(false);
-    }
-  }, [user.password, setComparePresent]);
   const handlePwd = (e) => {
     setNewPwd(e.target.value);
     const pattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
@@ -38,7 +34,6 @@ const PassWord = () => {
     }
   };
   const buttonRef = useRef(null);
-  const presentPwdRef = useRef(null);
   const pwdRef = useRef(null);
   const checkRef = useRef(null);
 
@@ -52,16 +47,13 @@ const PassWord = () => {
 
   const [modalContent, setModalContent] = useState(""); // 상태 변수 추가
   const handleModalContent = () => {
-    if (!comparePresent) {
-      setModalContent("현재 비밀번호가 일치하지 않습니다.");
-    } else if (!checkPattern) {
+    if (!checkPattern) {
       setModalContent("영문 대소문자 포함 8~12자리여야 합니다.");
     } else if (!checkPwd) {
       setModalContent("비밀번호가 일치하지 않습니다.");
     } else {
       api
-        .put(`/users/profile/${user.email}`, {
-          ...user,
+        .put(`/users/profile/?email=${email}`, {
           password: pwdRef.current.value,
         })
         .then(() => {
@@ -81,15 +73,6 @@ const PassWord = () => {
     <div className={styles.pwdContainer}>
       <p className={styles.pwdTitle}>비밀번호 변경</p>
       <div className={styles.inputsContainer}>
-        <div className={styles.inputBox}>
-          <UserInput
-            ref={presentPwdRef}
-            type="password"
-            onChange={handleCompare}
-            placeholder="현재 비밀번호"
-          />
-          {!comparePresent ? <p>현재 비밀번호와 일치하지 않습니다.</p> : null}
-        </div>
         <div className={styles.inputBox}>
           <UserInput
             ref={pwdRef}

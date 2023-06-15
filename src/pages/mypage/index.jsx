@@ -4,8 +4,8 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { LuSprout } from "react-icons/lu";
 import { FaGraduationCap } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
-import React, { useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useState, useEffect } from "react";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { userState } from "../../state/userState";
 import { Modal } from "../../components/modal";
 import chart from "../../image/chart-bar.png";
@@ -14,7 +14,12 @@ import check from "../../image/check.svg";
 import { api } from "../../libs/utils/api";
 
 const User = () => {
-  const [user, setUser] = useRecoilState(userState);
+  const email = useRecoilValue(userState).email;
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
+    console.log(user);
+  }, []);
 
   let navigate = useNavigate();
   return (
@@ -23,8 +28,8 @@ const User = () => {
         <img src={user.image} alt="프사" />
       </div>
       <div style={{ display: "flex" }}>
-        <h3>{user.grade === "admin" ? "코드 멘토, " : "코드 멘티, "}</h3>
-        <h3>{user.userName}</h3>
+        <h3>{user.grade === "general" ? "코드 멘티, " : "코드 멘토, "}</h3>
+        <h3>{user.userName === " " ? "이름을 설정해주세요" : user.userName}</h3>
       </div>
       <button>
         <MdOutlineKeyboardArrowRight
@@ -84,6 +89,7 @@ const Menu = () => {
 };
 
 const LogOut = () => {
+  const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => {
@@ -100,6 +106,18 @@ const LogOut = () => {
       .then((res) => {
         // 로그아웃 처리 성공
         navigate("/login");
+        setUser({
+          id: null,
+          userName: "",
+          email: "",
+          image: null,
+          grade: "",
+          point: 0,
+          createdAt: "",
+          updatedAt: "",
+          isEmailVerified: false,
+          verificationCode: null,
+        });
       })
       .catch((error) => {
         // 로그아웃 처리 실패

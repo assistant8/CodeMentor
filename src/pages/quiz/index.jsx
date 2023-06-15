@@ -1,56 +1,80 @@
+
 import HintContainer from "../../components/hintContainer/HintCotainer";
 import styles from "./Quiz.module.scss";
 import { useEffect, useState, useRef } from "react";
 import Timer from "../../components/timer/Timer.jsx";
 import Toast from "../../components/toast/Toast";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 import { SmallVioletButton } from "../../components/buttons/SmallVioletButton";
-import bookmark from "../../image/bookmark.png"
-import check from "../../image/check.png"
-import skip from "../../image/skip2.png"
-
-
+import bookmark from "../../image/bookmark.png";
+import check from "../../image/check.png";
+import skip from "../../image/skip2.png";
+import { useLocation, useNavigate } from "react-router";
+import {api} from "../../libs/utils/api"
 
 export default function Quiz() {
   const [showToast, setShowToast] = useState(false);
   const [timerDuration, setTimerDuration] = useState(10);
-  const [toastMsg, setToastMsg] = useState("스스로 풀어보세요")
-  const [timerCount, setTimerCount] = useState(0)
+  const [toastMsg, setToastMsg] = useState("스스로 풀어보세요");
+  const [timerCount, setTimerCount] = useState(0);
+  const [hints, setHints] = useState([])
 
-  useEffect(()=>{
-    console.log("timerCount", timerCount)
-  }, [timerCount])
+  const { state } = useLocation(); //리스트에서 누른 퀴즈의 정보 넘어옴
+  const problemId = state.id;
+  console.log("problemId", problemId)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await api.get(`/hints/${problemId}`);
+        console.log("res", res);
+        setHints(res.data);
+      } catch (error) {
+        // 에러 처리 로직 추가
+        console.error("Error occurred:", error);
+      }
+    };
   
-  const handleTimerStart = () => { //토스트 메시지 내용 설정 및 show
-    if(timerCount===0) {
-      setShowToast(true);
-    } else if(timerCount===1) {
-      setToastMsg("힌트 보며 풀어보세요")
-      setShowToast(true);
-    } else if(timerCount===2) {
-      setToastMsg("해설 시간을 가져보세요")
-      setShowToast(true);
-    }
-  }
+    fetchData();
+  }, []);
+  console.log(hints)
 
-  const handleTimerComplete = () => { //끝났을 때 다음 타이머 duration 설정해야될듯? / 토스트 메시지 / timerCOunt
-    if(timerCount===0) {
-      setToastMsg("스스로 푸는 시간 종료")
+  useEffect(() => {
+    console.log("timerCount", timerCount);
+  }, [timerCount]);
+
+  const handleTimerStart = () => {
+    //토스트 메시지 내용 설정 및 show
+    if (timerCount === 0) {
       setShowToast(true);
-      setTimerCount((prev)=>prev+1) //이제 2
-      setTimerDuration(5) //2단계 시간 설정 해줌
-    } else if(timerCount===1) {
-      setToastMsg("힌트 풀이 시간 종료")
+    } else if (timerCount === 1) {
+      setToastMsg("힌트 보며 풀어보세요");
       setShowToast(true);
-      setTimerCount((prev)=>prev+1) //이제 3
-      setTimerDuration(4) //3단계 시간 설정 해줌
-    } else if(timerCount===2) {
-      setToastMsg("해설 시간 종료")
+    } else if (timerCount === 2) {
+      setToastMsg("해설 시간을 가져보세요");
       setShowToast(true);
     }
   };
 
-  useEffect(() => { //타이머 머무는 시간 설정 
+  const handleTimerComplete = () => {
+    //끝났을 때 다음 타이머 duration 설정해야될듯? / 토스트 메시지 / timerCOunt
+    if (timerCount === 0) {
+      setToastMsg("스스로 푸는 시간 종료");
+      setShowToast(true);
+      setTimerCount((prev) => prev + 1); //이제 2
+      setTimerDuration(5); //2단계 시간 설정 해줌
+    } else if (timerCount === 1) {
+      setToastMsg("힌트 풀이 시간 종료");
+      setShowToast(true);
+      setTimerCount((prev) => prev + 1); //이제 3
+      setTimerDuration(4); //3단계 시간 설정 해줌
+    } else if (timerCount === 2) {
+      setToastMsg("해설 시간 종료");
+      setShowToast(true);
+    }
+  };
+
+  useEffect(() => {
+    //타이머 머무는 시간 설정
     const timer = setTimeout(() => {
       setShowToast(false);
     }, 3000);
@@ -59,41 +83,40 @@ export default function Quiz() {
   }, [showToast]);
 
   const handleClickPass = () => {
-    setTimerDuration(0)
-  }
-
+    setTimerDuration(0);
+  };
 
   return (
     <div className={styles.quizContainer}>
-      <QuizNameContainer onClick={handleClickPass} />
-      <Timer initialMinutes={0} initialSeconds={timerDuration} onComplete={handleTimerComplete} onStart={handleTimerStart}/>
+      <QuizNameContainer onClick={handleClickPass} quizInfo={state}/>
+      <Timer
+        initialMinutes={0}
+        initialSeconds={timerDuration}
+        onComplete={handleTimerComplete}
+        onStart={handleTimerStart}
+      />
       {showToast && <Toast message={toastMsg} />}
-      <HintContainer
-        hintTitle={"힌트 1"}
-        hintContent={"풀어줘요"}
-        isOpen={true}
-      />
-      <HintContainer
-        hintTitle={"힌트 2"}
-        hintContent={"여기는무슨힌트가숨겨져이씅ㄹ까?"}
-      />
-      <HintContainer
-        hintTitle={"힌트 3"}
-        hintContent={"컴포넌트 테스트용"}
-        isAdmin={true}
-      />
+      <div className={styles.hintWrapper}>
+        {
+          hints.map(hint=>(
+            <HintContainer
+              hintTitle={maplevelToQuestion[hint.hintLevel]}
+              hintContent={hint.hintContent}
+            />            
+          ))
+        }
+      </div>
+
       <CommentContainer />
     </div>
   );
 }
 
-
-const QuizNameContainer = ({onClick, title}) => {
-  
+const QuizNameContainer = ({ onClick, quizInfo }) => {
   return (
     <div className={styles.quizNameContainer}>
       <div className={styles.quizInfo}>
-        <div className={styles.quizTitle}>문제제목</div>
+        <div className={styles.quizTitle} ><a href={quizInfo.problemUrl}>{quizInfo.title}</a></div>
         <div className={styles.quizPersonal}>
           <div className={styles.bookmark}>
             <img src={bookmark} alt="찜" className={styles.bookmarkImage}></img>
@@ -156,3 +179,45 @@ const CommentContainer = () => {
     </div>
   );
 };
+
+const hintss = [
+  {
+    id: 2,
+    problemId: 1,
+    hintContent: "1단계 힌트",
+    hintLevel: "1",
+    createdAt: "2023-06-11T18:55:37.000Z",
+    updatedAt: "2023-06-11T18:55:37.000Z",
+  },
+  {
+    id: 3,
+    problemId: 2,
+    hintContent: "2단계 힌트",
+    hintLevel: "2",
+    createdAt: "2023-06-11T19:07:53.000Z",
+    updatedAt: "2023-06-11T19:07:53.000Z",
+  },
+  {
+    id: 4,
+    problemId: 3,
+    hintContent: "3단계 힌트",
+    hintLevel: "3",
+    createdAt: "2023-06-11T19:08:06.000Z",
+    updatedAt: "2023-06-11T19:08:06.000Z",
+  },
+  {
+    id: 5,
+    problemId: 4,
+    hintContent: "4단계 힌트",
+    hintLevel: "4",
+    createdAt: "2023-06-11T19:08:06.000Z",
+    updatedAt: "2023-06-11T19:08:06.000Z",
+  },
+];
+
+const maplevelToQuestion = {
+  1: "문제 유형은 무엇인가요?", 
+  2: "세부 유형 또는 고려해야할 부분은 무엇일까요?",
+  3: "필수적으로 사용해야하는 것은 무엇인가요?",
+  4: "놓칠 수 있을만한 테스트 케이스는 무엇이 있을까요?",
+}
