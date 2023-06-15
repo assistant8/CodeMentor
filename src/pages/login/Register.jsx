@@ -157,11 +157,13 @@ export default function Register() {
           `/users/verify/?email=${email}&verificationCode=${verificationCode}`,
           {
             validateStatus: (status) => {
-              return status < 500;
+              return status < 500 || status === 400;
             },
           }
         );
         const data = await response.data;
+
+        console.log("데이터", data);
 
         // 인증 번호 일치.
         // "message": "email verify success!"
@@ -192,6 +194,12 @@ export default function Register() {
 
             return;
           }
+
+          alert(
+            `개발용: 등록되지 않은 에러 메세지: ${
+              (response.data, errorMessage)
+            }`
+          );
         }
 
         alert(`개발용: 등록되지 않은 에러 메세지: ${response.data}`);
