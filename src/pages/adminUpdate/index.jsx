@@ -8,11 +8,13 @@ import { UserInput } from '../../components/inputs/UserInput';
 import axios from 'axios';
 
 export default function ProblemUpdatePage() {
+  const buttonRef = useRef();
+  
   const location = useLocation();
   // URL 매개변수에서 퀴즈 정보 추출
   const queryParams = new URLSearchParams(location.search);
   const quizId = queryParams.get('quizId');
-
+  
   
   // problem reserved schema
   // const dummyTest =  [
@@ -43,7 +45,24 @@ export default function ProblemUpdatePage() {
     getQuizInfo();
   }, [getQuizInfo]);
 
-  const buttonRef = useRef();
+  // 변경할 힌트들은 배열로 들어올 것임 
+  const [hints, setHints] = useState([]);
+  console.log("🚀 ~ file: index.jsx:50 ~ ProblemUpdatePage ~ hints:", hints)
+  const getHintsInfo = useCallback(async () => {
+    try {
+      const response = await axios.get(`/hints/${quizId}`);
+      setHints(response.data);
+    } catch (err) {
+      console.error('힌트조회 실패', err);
+    }
+  }, [])
+  console.log("🚀 ~ file: index.jsx:50 ~ ProblemUpdatePage ~ hints:", hints)
+
+  useEffect(() => {
+    getHintsInfo();
+  }, [getHintsInfo]);
+
+
   const handleProblemUpdate = () => {
     // // 위 입력된 데이터들을 데이터베이스의 problem에 추가시켜야 함
 
