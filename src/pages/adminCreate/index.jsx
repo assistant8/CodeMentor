@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { SmallVioletButton } from '../../components/buttons/SmallVioletButton';
 import AdminHintContainer from '../admin/adminHintContainer';
 import { UserInput } from '../../components/inputs/UserInput';
+import axios from 'axios';
 
 export default function ProblemUpdatePage() {
 
@@ -25,16 +26,13 @@ export default function ProblemUpdatePage() {
 
   const buttonRef = useRef();
   // 문제 기본정보 등록 이벤트 핸들러
-  const handleProblemCreate = () => {
-    // // 아래 입력된 데이터들을 데이터베이스의 problem에 추가시켜야 함
-  //   axios
-  //     .post('/api/problems', quizInfo)
-  //     .then(response => {
-  //       console.log('업데이트 성공', response.data);
-  //     })
-  //     .catch(err => {
-  //       console.log('업데이트 실패', err);
-  //     });
+  const handleProblemCreate = async () => {
+    try {
+      const response = await axios.post('/problems', quizInfo)
+      console.log('업데이트 성공', response.data)
+    } catch(error) {
+      console.error('업데이트 실패', error);
+    }
   };
 
   // 입력값에 따라 문제정보에 저장될 정보가 달라짐.
@@ -42,7 +40,7 @@ export default function ProblemUpdatePage() {
     const { name, value } = e.target;
     setQuizInfo(prev => ({
       ...prev,
-      [name]: value
+      [name]: (name === "category" ? Number(value) : value),
     }));
   };
 

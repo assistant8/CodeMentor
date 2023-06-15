@@ -102,7 +102,8 @@ export default function AdminQuizListContainer () {
   // 삭제버튼 클릭 이벤트 핸들러
   const deleteProblem = async (quiz) => {
     try {
-      await axios.delete(`/problems/${quiz.id}`);
+      const response = await axios.delete(`/problems/${quiz.id}`);
+      console.log('삭제 후 응답값: ', response.data);
       await getAllProblems();
       navigate("/admin");
     } catch(error){
