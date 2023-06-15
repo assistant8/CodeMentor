@@ -2,10 +2,13 @@ import styles from "./MenuContainer.module.scss";
 import bookmark from "../../image/bookmark.png";
 import check from "../../image/check.png";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import PATH from "../../constants/path";
 
 export const MenuContainer = ({ style, isImgNeed = true, onClick, category }) => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [selectedFilter, setSelectedFilter] = useState();
+  const navigate = useNavigate();
 
   // const handleItemClick = useCallback((item)=>{
   //   setSelectedCategory(item);
@@ -47,11 +50,11 @@ export const MenuContainer = ({ style, isImgNeed = true, onClick, category }) =>
         <div className={styles.imageContainer}>
           <img src={bookmark} alt="bookmark" 
             className={selectedFilter === 'bookmark' ? styles.selectedFilter : ''}
-            onClick={() => handleFilterClick('bookmark')}
+            onClick={() => navigate(PATH.MYPAGE + `/bookmark`)}
           />
           <img src={check} alt="check" 
             className={selectedFilter === 'check' ? styles.selectedFilter : ''}
-            onClick={() => handleFilterClick('check')}
+            onClick={() => navigate(PATH.MYPAGE + `/complete`)}
           />
         </div>
       )}
