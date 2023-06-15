@@ -12,8 +12,9 @@ import axios from "axios";
 axios.defaults.baseURL = "http://34.64.81.88/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
+// axios.defaults.baseURL = "http://localhost:3001/api";
+
 export const api = axios.create();
-// export const api = axios.create({ baseURL: "http://localhost:8080/api/" });
 
 // const getCookie = () => {
 //   return;
