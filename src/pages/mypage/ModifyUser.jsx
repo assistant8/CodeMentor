@@ -34,7 +34,18 @@ const ModifyUser = () => {
   };
 
   const handleSubmit = () => {
-    console.log("제출됨");
+    const formData = new FormData();
+    formData.append("image", fileInputRef.current.files[0]);
+    api
+      .post(`/users/profile/${user.id}/upload-image`, formData)
+      .then((res) => {
+        setModalContent("사진을 업로드했습니다.");
+        openModal();
+      })
+      .catch((error) => {
+        setModalContent(error + "사진 업로드에 실패했습니다.");
+        openModal();
+      });
   };
 
   const buttonRef = useRef(null);
