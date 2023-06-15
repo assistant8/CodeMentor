@@ -106,6 +106,7 @@ export default function AdminQuizListContainer () {
       console.log('삭제 후 응답값: ', response.data);
       await getAllProblems();
       navigate("/admin");
+      closeModal();
     } catch(error){
       setModalContent(error + "문제 삭제에 실패했습니다.");
       openModal();
