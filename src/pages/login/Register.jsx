@@ -102,7 +102,7 @@ export default function Register() {
         // 200: 해당 이메일 주소를 사용하는 회원 정보가 있음.
         // -> return;
         if (response.status === 200) {
-          console.log(result);
+          // console.log(result);
           alert("이미 가입된 이메일입니다.");
 
           return;
@@ -130,7 +130,7 @@ export default function Register() {
         }
 
         // 인증 메일 발송 실패.
-        if (result?.error) {
+        if (response.data?.error) {
           alert("인증 메일 발송 실패");
 
           return;
