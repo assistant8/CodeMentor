@@ -83,19 +83,27 @@ export default function Register() {
       }
 
       try {
-        const response = await api.post(`/users/profile/?email=${email}`);
-        const result = response.data;
+        const response = await api.get(`/users/profile/?email=${email}`, {
+          validateStatus: (status) => {
+            return (200 <= status && status < 400) || status === 404;
+          },
+        });
 
-        if (result?.error) {
-          const errorMessage = result.error;
+        // 404: 해당 이메일 주소를 사용하는 회원 정보가 없음.
+        // -> 해당 이메일로 회원 가입을 진행.
+        if (response.status === 404) {
+          console.log("속행(이메일 중복 검사 통과.)");
+        } else {
+          alert("from: 이메일 중복 검사.");
 
-          if (errorMessage === "이미 가입된 이메일입니다.") {
-            alert("이미 가입된 이메일입니다.");
+          console.log(response.status, response.data);
+        }
 
-            return;
-          }
-
-          alert(`등록되지 않은 에러 메세지: ${errorMessage}`);
+        // 200: 해당 이메일 주소를 사용하는 회원 정보가 있음.
+        // -> return;
+        if (response.status === 200) {
+          console.log(result);
+          alert("이미 가입된 이메일입니다.");
 
           return;
         }
@@ -103,12 +111,25 @@ export default function Register() {
         alert("서버와의 통신에 실패했습니다.");
 
         console.log(error);
+
+        return;
       }
 
       try {
-        const response = await api.post(`/users/send/?email=${email}`);
-        const result = response.data;
+        const response = await api.post(`/users/send/?email=${email}`, {
+          validateStatus: (status) => {
+            return 200 <= status && status < 400;
+          },
+        });
 
+        // 인증 메일 발송 성공.
+        if (response.status === 200) {
+          setStep(1);
+
+          return;
+        }
+
+        // 인증 메일 발송 실패.
         if (result?.error) {
           alert("인증 메일 발송 실패");
 
@@ -117,9 +138,6 @@ export default function Register() {
 
         // if (result.message === "Verification email sent") {
         if (true) {
-          setStep(1);
-
-          return;
         }
       } catch (error) {
         alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
@@ -141,12 +159,17 @@ export default function Register() {
 
       try {
         const response = await api.post(
-          `/users/verify/?email=${email}&verificationCode=${verificationCode}`
+          `/users/verify/?email=${email}&verificationCode=${verificationCode}`,
+          {
+            validateStatus: (status) => {
+              return 200 <= status && status < 400;
+            },
+          }
         );
-        const result = await response.data;
+        const data = await response.data;
 
-        if (result?.error) {
-          const errorMessage = result.error;
+        if (data?.error) {
+          const errorMessage = data.error;
 
           // 이건 필요 없을 것 같음. 앞에서 이메일 중복 검사를 하니까.
           // if (

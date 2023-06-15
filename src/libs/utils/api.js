@@ -10,3 +10,4 @@ import axios from "axios";
 axios.defaults.baseURL = "/api";
 
 export const api = axios.create();
+// export const api = axios.create({baseUrl: 'http://localhost:3001'});
