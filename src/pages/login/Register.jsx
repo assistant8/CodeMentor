@@ -339,6 +339,22 @@ export default function Register() {
 
   return (
     <div className={styles.container_Register}>
+      <button
+        onClick={async () => {
+          try {
+            const response = await api.delete(`/users/profile/?email=${email}`);
+
+            if (response.status === 200) {
+              alert(`${email} 회원 탈퇴 완료`);
+            }
+          } catch (error) {
+            alert("회원 탈퇴 과정에서 에러");
+            console.log(error);
+          }
+        }}
+      >
+        회원 탈퇴
+      </button>
       <div className={styles.topBar}>11:11</div>
       <div className={styles.wrapper_header}>
         <LoginHeader children={"회원 가입"} />
