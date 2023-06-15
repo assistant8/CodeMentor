@@ -35,7 +35,6 @@ export default function ProblemUpdatePage() {
   //       console.log('업데이트 실패', err);
   //     });
   const [quizInfo, setQuizInfo] = useState(dummyTest[0]);
-  console.log("🚀 ~ file: index.jsx:36 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
 
   const buttonRef = useRef();
   const handleProblemUpdate = () => {
@@ -94,7 +93,7 @@ export default function ProblemUpdatePage() {
         </div>
       </div>
       <div className={styles.hintContainer}>
-       <h3>힌트 정보</h3>
+      <h3>힌트 정보</h3>
         <AdminHintContainer
           hintLevel={1}
           hintContent={quizInfo.hintContent}

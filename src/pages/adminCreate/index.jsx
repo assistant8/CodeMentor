@@ -79,7 +79,7 @@ export default function ProblemUpdatePage() {
       </div>
       <div className={styles.hintContainer}>
         <h3>힌트 정보</h3>
-         <AdminHintContainer
+        <AdminHintContainer
           hintLevel={1}
           hintContent={quizInfo.hintContent}
           onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
