@@ -10,6 +10,7 @@ import axios from "axios";
 
 // VM IP주소(34.64.81.88)로 변경
 axios.defaults.baseURL = "http://34.64.81.88/api";
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 export const api = axios.create();
 // export const api = axios.create({ baseURL: "http://localhost:8080/api/" });

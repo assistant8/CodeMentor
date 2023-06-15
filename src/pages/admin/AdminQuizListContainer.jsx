@@ -104,6 +104,7 @@ export default function AdminQuizListContainer () {
     try {
       const response = await axios.delete(`/problems/${quiz.id}`);
       console.log('삭제 후 응답값: ', response.data);
+      (response.success === true) && alert(`${quiz.title} 문제를 정상적으로 삭제하였습니다.`)
       await getAllProblems();
       navigate("/admin");
       closeModal();

@@ -74,7 +74,7 @@ export default function ProblemUpdatePage() {
             name="title"
             placeholder="문제이름"
             value={quizInfo.title}
-            onChange={handleInputChange}
+            onChange={e => handleInputChange(e)}
             style={{borderRadius: "0.5rem", height: "50px", marginBottom: "10px"}}
           />
           <UserInput
@@ -82,7 +82,7 @@ export default function ProblemUpdatePage() {
             name="problemUrl"
             placeholder="문제 url"
             value={quizInfo.problemUrl}
-            onChange={handleInputChange}
+            onChange={e => handleInputChange(e)}
             style={{borderRadius: "0.5rem", height: "50px", marginBottom: "10px"}}
           />
           <div className={styles.category}>

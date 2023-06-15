@@ -5,6 +5,7 @@ import { SmallVioletButton } from '../../components/buttons/SmallVioletButton';
 import AdminHintContainer from '../admin/adminHintContainer';
 import { UserInput } from '../../components/inputs/UserInput';
 import axios from 'axios';
+import { Navigate } from 'react-router';
 
 export default function ProblemUpdatePage() {
 
@@ -29,9 +30,11 @@ export default function ProblemUpdatePage() {
   const handleProblemCreate = async () => {
     try {
       const response = await axios.post('/problems', quizInfo)
-      console.log('업데이트 성공', response.data)
+      alert('기본 정보를 추가하였습니다.', response.data)
+      console.log("🚀 ~ file: index.jsx:38 ~ handleProblemCreate ~ response.data:", response.data)
+      
     } catch(error) {
-      console.error('업데이트 실패', error);
+      console.error('기본정보 등록 실패', error);
     }
   };
 
@@ -58,7 +61,7 @@ export default function ProblemUpdatePage() {
             name="title"
             placeholder="문제이름"
             value={quizInfo.title}
-            onChange={handleInputChange}
+            onChange={e => handleInputChange(e)}
             style={{borderRadius: "0.5rem", height: "50px", marginBottom: "10px"}}
           />
           <UserInput
@@ -66,7 +69,7 @@ export default function ProblemUpdatePage() {
             name="problemUrl"
             placeholder="문제 url"
             value={quizInfo.problemUrl}
-            onChange={handleInputChange}
+            onChange={e => handleInputChange(e)}
             style={{borderRadius: "0.5rem", height: "50px", marginBottom: "10px"}}
           />
           <div className={styles.category}>
