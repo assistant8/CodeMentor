@@ -7,27 +7,34 @@ import { QuizListContainer } from "../../components/quizListContainer/QuizListCo
 import { QuizInput } from "../../components/inputs/QuizInput";
 import { useCallback, useState } from "react";
 
-export default function QuizListPage() {
+export default function QuizListPage({ quizs }) {
   const [searchKey, setSearchKey] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [selectedCategory, setSelectedCategory] = useState("전체");
 
   const handleSearchClick = (e) => {
-    console.log("page", e.target.previousElementSibling.value)
+    console.log("page", e.target.previousElementSibling.value);
     setSearchKey(e.target.previousElementSibling.value);
-    //퀴즈리스트에 보여질 quizs가 filter 됨 
-  }
+    //퀴즈리스트에 보여질 quizs가 filter 됨
+  };
 
-  const handleCategoryClick = useCallback((c)=>{ 
+  const handleCategoryClick = useCallback((c) => {
     setSelectedCategory(c);
-  }, [])
-  
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.searchContainer}>
-        <QuizInput placeholder="문제 제목 검색" onClick={handleSearchClick}/>
+        <QuizInput placeholder="문제 제목 검색" onClick={handleSearchClick} />
       </div>
-      <MenuContainer onClick={handleCategoryClick} category={selectedCategory}/>
-      <QuizListContainer searchKey={searchKey} selectedCategory={selectedCategory}/> 
+      <MenuContainer
+        onClick={handleCategoryClick}
+        category={selectedCategory}
+      />
+      <QuizListContainer
+        quizs={quizs}
+        searchKey={searchKey}
+        selectedCategory={selectedCategory}
+      />
     </div>
-  ); 
-} 
+  );
+}

@@ -10,7 +10,6 @@ import { api } from "../../libs/utils/api";
 const PassWord = () => {
   const user = useRecoilValue(userState);
   const [newPwd, setNewPwd] = useState("");
-  const [comparePresent, setComparePresent] = useState(false);
   const [checkPattern, setCheckPattern] = useState(false);
   const [checkPwd, setCheckPwd] = useState(false);
   const handlePwd = (e) => {
