@@ -1,3 +1,4 @@
+
 import HintContainer from "../../components/hintContainer/HintCotainer";
 import styles from "./Quiz.module.scss";
 import { useEffect, useState, useRef } from "react";
@@ -16,16 +17,26 @@ export default function Quiz() {
   const [timerDuration, setTimerDuration] = useState(10);
   const [toastMsg, setToastMsg] = useState("스스로 풀어보세요");
   const [timerCount, setTimerCount] = useState(0);
-  const [hints, setHints] = useState("")
+  const [hints, setHints] = useState([])
 
   const { state } = useLocation(); //리스트에서 누른 퀴즈의 정보 넘어옴
   const problemId = state.id;
-  useEffect(()=>{
-    api
-      .get(`/hints/:${problemId}`)
-      .then(res=>setHints(res))
-  }, [])
-  console.log("hints", hints)
+  console.log("problemId", problemId)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await api.get(`/hints/${problemId}`);
+        console.log("res", res);
+        setHints(res.data);
+      } catch (error) {
+        // 에러 처리 로직 추가
+        console.error("Error occurred:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  console.log(hints)
 
   useEffect(() => {
     console.log("timerCount", timerCount);

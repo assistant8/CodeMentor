@@ -14,10 +14,6 @@ export const MenuContainer = ({ style, isImgNeed = true, onClick, category }) =>
   //   setSelectedCategory(item);
   // }, [])
 
-  const handleFilterClick = useCallback((item)=>{
-    setSelectedFilter(item);
-  }, [])
-
   useEffect(()=>{
     setSelectedCategory(category);
   }, [category])
