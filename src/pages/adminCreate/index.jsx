@@ -26,30 +26,30 @@ export default function ProblemUpdatePage() {
   console.log("🚀 ~ file: index.jsx:26 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
 
   const buttonRef = useRef();
-  // 문제 기본정보 등록 이벤트 핸들러
-  const handleProblemCreate = async () => {
-    try {
-      const response = await axios.post('/problems', quizInfo)
-      alert('기본 정보를 추가하였습니다.', response.data)
-      console.log("🚀 ~ file: index.jsx:38 ~ handleProblemCreate ~ response.data:", response.data)
-      
-    } catch(error) {
-      console.error('기본정보 등록 실패', error);
-    }
-  };
-
+  
   // 입력값에 따라 문제정보에 저장될 정보가 달라짐.
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setQuizInfo(prev => ({
       ...prev,
+      // category값이 문자열로 저장되어서 숫자로 변환하는 코드 삽입
       [name]: (name === "category" ? Number(value) : value),
     }));
+  };
+  console.log(quizInfo);
+  // 문제 기본정보 등록 이벤트 핸들러
+  const handleProblemCreate = async () => {
+    try {
+      const response = await axios.post('/problems', quizInfo)
+      alert('기본 정보를 추가하였습니다.', response.data)
+      console.log("🚀 ~ file: index.jsx:38 ~ handleProblemCreate ~ response.data:", response)
+      
+    } catch(error) {
+      console.error('기본정보 등록 실패', error);}
   };
 
   // 추가 힌트 등록 이벤트 핸들러
   const handleHintCreate = () => {};
-
   
   return (
     <div className={styles.container}>

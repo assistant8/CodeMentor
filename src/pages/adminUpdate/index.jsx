@@ -1,10 +1,11 @@
 import styles from './adminUpdate.module.scss';
 import HintContainer from "../../components/hintContainer/HintCotainer";
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { SmallVioletButton } from '../../components/buttons/SmallVioletButton';
 import { useLocation } from 'react-router-dom';
 import AdminHintContainer from '../admin/adminHintContainer';
 import { UserInput } from '../../components/inputs/UserInput';
+import axios from 'axios';
 
 export default function ProblemUpdatePage() {
   const location = useLocation();
@@ -12,34 +13,39 @@ export default function ProblemUpdatePage() {
   const queryParams = new URLSearchParams(location.search);
   const quizId = queryParams.get('quizId');
 
+  
   // problem reserved schema
-  const dummyTest =  [
-    {
-      "id": 1,
-      "category": 0,
-      "title": "3085 사탕 게임 - 1",
-      "problemUrl": "https://www.acmicpc.net/problem/3085",
-      "difficulty": 3,
-      "timer": 20,
-      "hintContent": "1단계 힌트",
-      "hintLevel": 1
-    },
-  ];
+  // const dummyTest =  [
+  //   {
+  //     "id": 1,
+  //     "category": 0,
+  //     "title": "3085 사탕 게임 - 1",
+  //     "problemUrl": "https://www.acmicpc.net/problem/3085",
+  //     "difficulty": 3,
+  //     "timer": 20,
+  //     "hintContent": "1단계 힌트",
+  //     "hintLevel": 1
+  //   },
+  // ];
+  const [quizInfo, setQuizInfo] = useState({});
+  console.log("🚀 ~ file: index.jsx:31 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
   // 변경할 문제 상태는 객체로 들어올 것임
-  //   axios
-  //     .get(apiUrl)
-  //     .then(response => {
-  //       console.log('업데이트 성공', response.data);
-  //     })
-  //     .catch(err => {
-  //       console.log('업데이트 실패', err);
-  //     });
-  const [quizInfo, setQuizInfo] = useState(dummyTest[0]);
+  const getQuizInfo = useCallback(async () => {
+    try {
+      const response = await axios.get(`/problems/${quizId}`);
+      setQuizInfo(response.data);
+    } catch (err) {
+      console.error('문제조회 실패', err);
+    }
+  },[]);
+  
+  useEffect(() => {
+    getQuizInfo();
+  }, [getQuizInfo]);
 
   const buttonRef = useRef();
   const handleProblemUpdate = () => {
     // // 위 입력된 데이터들을 데이터베이스의 problem에 추가시켜야 함
-    // const apiUrl = `api/problems/${quizId}`;
 
   //   axios
   //     .put(apiUrl, quizInfo)
