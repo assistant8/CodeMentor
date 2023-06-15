@@ -20,7 +20,7 @@ const HintContentBox = ({ hintContent, isAdmin, isOpen }) => {
 
   return (
     <div className={isOpen ? styles.hintContent : styles.blurContent}>
-      {isOpen? hintContent : "블러처리된 내용입니다. 보시려면 클릭해주세요!"}
+      {isOpen? hintContent : "블러처리된 내용입니다. 클릭처리 전엔 안보여드립니다!"}
     </div>
   );
 }; 
