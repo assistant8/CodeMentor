@@ -144,29 +144,31 @@ export default function Login() {
         return;
       }
 
-      if (data?.error) {
-        const errorMessage = data.error;
+      const errorMessage = data.error;
 
-        if (errorMessage === "User not found with the given email") {
-          alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
-
-          return;
-        }
-
-        if (errorMessage === "Incorrect password") {
-          alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
-
-          return;
-        }
-
-        alert(`개발용: 등록되지 않은 에러 메세지: ${errorMessage}`);
+      // "error": "User not found with the given email"
+      if (response.status === 404) {
+        alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
         return;
       }
+
+      // "error": "Incorrect password"
+      if (response.status === 401) {
+        alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
+
+        return;
+      }
+
+      // alert(`개발용: 등록되지 않은 에러 메세지: ${errorMessage}`);
+
+      // return;
     } catch (error) {
       alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
       console.log(error);
+
+      return;
     }
   };
 
@@ -294,6 +296,15 @@ export default function Login() {
         isOpen={isModalOpen}
         closeModal={closeModal}
       />
+      {/* <button
+        onClick={() => {
+          fetch("http://localhost:8080/api/test/login")
+            .then((res) => res.json())
+            .then((res) => console.log(res));
+        }}
+      >
+        로그인 인증
+      </button> */}
       <div className={styles.topBar}>11:11</div>
       <div className={styles.wrapper_header}>
         <LoginHeader children={"logo"} />

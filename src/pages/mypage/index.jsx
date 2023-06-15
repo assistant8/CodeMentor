@@ -5,7 +5,7 @@ import { LuSprout } from "react-icons/lu";
 import { FaGraduationCap } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { userState } from "../../state/userState";
 import { Modal } from "../../components/modal";
 import chart from "../../image/chart-bar.png";
@@ -89,6 +89,7 @@ const Menu = () => {
 };
 
 const LogOut = () => {
+  const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => {
@@ -105,6 +106,18 @@ const LogOut = () => {
       .then((res) => {
         // 로그아웃 처리 성공
         navigate("/login");
+        setUser({
+          id: null,
+          userName: "",
+          email: "",
+          image: null,
+          grade: "",
+          point: 0,
+          createdAt: "",
+          updatedAt: "",
+          isEmailVerified: false,
+          verificationCode: null,
+        });
       })
       .catch((error) => {
         // 로그아웃 처리 실패
