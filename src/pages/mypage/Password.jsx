@@ -5,7 +5,7 @@ import { useState, useRef, useCallback } from "react";
 import { Modal } from "../../components/modal";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
-import axios from "axios";
+import { api } from "../../libs/utils/api";
 
 const PassWord = () => {
   const user = useRecoilValue(userState);
@@ -59,8 +59,8 @@ const PassWord = () => {
     } else if (!checkPwd) {
       setModalContent("비밀번호가 일치하지 않습니다.");
     } else {
-      axios
-        .put(`http://localhost:3000/api/users/profile/${user.email}`, {
+      api
+        .put(`/users/profile/${user.email}`, {
           ...user,
           password: pwdRef.current.value,
         })

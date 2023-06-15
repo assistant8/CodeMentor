@@ -30,8 +30,8 @@ export default function ProblemAdminPage() {
         <div className={styles.searchContainer}>
           <QuizInput placeholder="문제 제목 검색" onClick={handleSearchClick}/>
         </div>
-        <AdminMenuContainer onClick={handleCategoryClick} category={selectedCategory}/>
-        <AdminQuizListContainer searchKey={searchKey} selectedCategory={selectedCategory}/> 
+        <AdminMenuContainer onClick={handleCategoryClick} />
+        <AdminQuizListContainer /> 
       </div>
 
     </>
