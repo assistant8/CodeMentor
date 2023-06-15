@@ -9,105 +9,117 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-}
-.quizNameContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 20.63rem;
-  color: #3e3e3e;
-  .quizInfo {
+
+  .quizNameContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 20.63rem;
+    color: #3e3e3e;
+    .quizInfo {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      justify-content: center;
+      width: 17rem;
+      .quizTitle {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+
+        a {
+          color: inherit; /* 링크의 색상을 상속받습니다. */
+          text-decoration: none;
+        }
+      }
+      .quizPersonal {
+        display: flex;
+        height: 3.5rem;
+        font-size: 0.63rem;
+        line-height: 200%;
+        .bookmark,
+        .solved {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          margin: 0 0.5rem;
+          cursor: pointer;
+          .bookmarkImage {
+            width: 2rem;
+            height: 2rem;
+          }
+        }
+      }
+    }
+    .timer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 3rem;
+      cursor: pointer;
+      div {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 0.75rem;
+      }
+      .skip {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+    }
+  }
+
+  .quizWrapper {
     display: flex;
     flex-direction: column;
-    align-items: start;
-    justify-content: center;
-    width: 17rem;
-    .quizTitle {
+  }
+
+  .commentsContainer {
+    border-top: $border-color 2px solid;
+    margin-top: 1rem;
+    width: 85%;
+    .commentTitle {
+      font-weight: bold;
       font-size: 1.25rem;
-      font-weight: 600;
       margin-bottom: 1rem;
     }
-    .quizPersonal {
-      display: flex;
-      height: 3.5rem;
-      font-size: 0.63rem;
-      line-height: 200%;
-      .bookmark,
-      .solved {
+    .commentBox {
+      margin-bottom: 1.25rem;
+      .userInfo {
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        margin: 0 0.5rem;
-        cursor: pointer;
-        .bookmarkImage {
-          width: 2rem;
-          height: 2rem;
+        flex-direction: row;
+        margin-bottom: 0.5rem;
+        .userImg {
+          width: 1.5rem;
+          height: 1.5rem;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: $border-color;
+          border-radius: 50%;
+          img {
+            width: 100%;
+          }
+        }
+        .userName {
+          margin: 0;
+          margin-left: 0.5rem;
         }
       }
     }
-  }
-  .timer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 3rem;
-    cursor: pointer;
-    div {
-      font-family: "Inter";
-      font-style: normal;
-      font-weight: 600;
-      font-size: 0.75rem;
-    }
-    .skip {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-  }
-}
-.commentsContainer {
-  border-top: $border-color 2px solid;
-  margin-top: 1rem;
-  width: 85%;
-  .commentTitle {
-    font-weight: bold;
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-  }
-  .commentBox {
-    margin-bottom: 1.25rem;
-    .userInfo {
-      display: flex;
-      flex-direction: row;
-      margin-bottom: 0.5rem;
-      .userImg {
-        width: 1.5rem;
-        height: 1.5rem;
-        overflow: hidden;
+    .commentInputContainer {
+      .commentInput {
+        width: 100%;
+        padding: 0.5rem;
+      }
+      .submitBtn {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: $border-color;
-        border-radius: 50%;
-        img {
-          width: 100%;
-        }
+        flex-direction: row;
+        justify-content: right;
       }
-      .userName {
-        margin: 0;
-        margin-left: 0.5rem;
-      }
-    }
-  }
-  .commentInputContainer {
-    .commentInput {
-      width: 100%;
-      padding: 0.5rem;
-    }
-    .submitBtn {
-      display: flex;
-      flex-direction: row;
-      justify-content: right;
     }
   }
 }
