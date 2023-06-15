@@ -5,13 +5,13 @@ import { UserInput } from "../../components/inputs/UserInput";
 import { useState, useRef } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { Modal } from "../../components/modal";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
 import { api } from "../../libs/utils/api";
 
 const ModifyUser = () => {
   const [modalContent, setModalContent] = useState("");
-  const [user, setUser] = useRecoilState(userState);
+  const user = useRecoilValue(userState);
   const [exist, setExist] = useState(false);
   const [imgUrl, setImgUrl] = useState(user.image);
   const fileInputRef = useRef(null);
@@ -42,10 +42,10 @@ const ModifyUser = () => {
           setExist(true);
         } else {
           // 중복 없음
-          const image = imgUrl;
-          const userName = nameRef.current.value;
-          const data = { ...user, image, userName };
-          submitUserInfo(data);
+          const formData = new FormData();
+          formData.append("image", fileInputRef.current.files[0]);
+          formData.append("userName", nameRef.current.value);
+          submitUserInfo(formData);
         }
       })
       .catch((error) => {
@@ -55,7 +55,7 @@ const ModifyUser = () => {
   };
   const submitUserInfo = (data) => {
     api
-      .put(`/users/profile/${user.email}`, data)
+      .put(`/users/profile/?email=${user.email}`, data)
       .then(() => {
         setModalContent("정보가 수정되었습니다.");
         openModal();
@@ -94,7 +94,7 @@ const ModifyUser = () => {
   };
   const signOut = () => {
     api
-      .delete(`/user/profile/${user.email}`)
+      .delete(`/users/profile/?email=${user.email}`)
       .then(navigate("/login"))
       .catch((error) => {
         setModalContent(error + "회원 탈퇴에 실패했습니다.");
