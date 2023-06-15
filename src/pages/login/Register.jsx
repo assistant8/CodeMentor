@@ -86,22 +86,30 @@ export default function Register() {
 
         if (response.status === 404) {
           alert("개발용: 이메일 중복 검사 통과.");
-        } else if (response.status === 200) {
+        }
+
+        if (response.status === 200) {
+          if (data.isEmailVerified === 0) {
+            setStep(1);
+
+            return;
+          }
+
           alert("이미 가입된 이메일입니다.");
-
-          console.log(`해당 이메일 주소로 가입된 회원 정보: ${response}`);
-
-          return;
-        } else {
-          alert("error from: 이메일 중복 검사 과정.");
-
-          console.log(
-            `응답 코드: ${response.status}`,
-            `응답 데이터: ${response.data}`
-          );
 
           return;
         }
+
+        // } else {
+        //   alert("error from: 이메일 중복 검사 과정.");
+
+        //   console.log(
+        //     `응답 코드: ${response.status}`,
+        //     `응답 데이터: ${response.data}`
+        //   );
+
+        //   return;
+        // }
       } catch (error) {
         alert("서버와의 통신에 실패했습니다.");
 
@@ -123,16 +131,10 @@ export default function Register() {
           setStep(1);
 
           return;
-        }
-
-        // 인증 메일 발송 실패.
-        if (data?.error) {
+        } else {
           alert("인증 메일 발송 실패. 다시 시도해주세요.");
 
           return;
-        }
-
-        if (true) {
         }
       } catch (error) {
         alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
@@ -173,7 +175,7 @@ export default function Register() {
           return;
         }
 
-        // 인증 번호 불일치 & 이미 인증된 사용자.
+        // 인증 번호 불일치
         if (response.status === 400) {
           const errorMessage = data.error;
 
@@ -182,15 +184,6 @@ export default function Register() {
             alert(
               "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
             );
-
-            return;
-          }
-
-          // "error": "User with the given email is already verified"
-          if (
-            errorMessage === "User with the given email is already verified"
-          ) {
-            alert("이미 인증된 사용자입니다.");
 
             return;
           }
@@ -206,7 +199,6 @@ export default function Register() {
 
         return;
       } catch (error) {
-        console.log("여기로 옴");
         alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
         console.log(error);
@@ -247,9 +239,12 @@ export default function Register() {
         if (response.status === 201) {
           alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
 
+          // 사용자 특정, 정보 수정을 위해 들고 프로필 설정 페이지로 넘어감.
+          // -> 백엔드 로직상 userName만 변경하고 싶어도 password 필드를 반드시 알맞게 채워야 한다고 함.
           navigate(PATH.LOGIN + "/create-profile", {
             state: {
               email,
+              password,
             },
           });
 
@@ -362,6 +357,23 @@ export default function Register() {
         }}
       >
         회원 탈퇴
+      </button>
+      <button
+        onClick={async () => {
+          try {
+            const response = await api.get(`/users/profile/?email=${email}`, {
+              validateStatus: (status) => status < 500,
+            });
+            const data = await response.data;
+
+            console.log(response.status, data);
+          } catch (error) {
+            alert("서버 통신 실패.");
+            return;
+          }
+        }}
+      >
+        사용자 정보 조회
       </button>
       <div className={styles.topBar}>11:11</div>
       <div className={styles.wrapper_header}>
