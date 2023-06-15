@@ -76,7 +76,6 @@ export default function Login() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  console.log(modalMessage);
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -123,16 +122,32 @@ export default function Login() {
       return;
     }
 
-    const formData = { ...formInputValue };
+    const formData = { email, password };
 
     try {
-      const response = await api.post("/users/login", formData);
-      const result = await response.data;
+      const response = await api.post("/users/login", formData, {
+        validateStatus: (status) => {
+          return status < 500;
+        },
+      });
+      const data = await response.data;
 
-      if (result?.error) {
-        const errorMessage = result.error;
+      if (response.status === 200) {
+        alert("개발용: 로그인 성공!");
 
-        if (errorMessage === "User not found with the given emai") {
+        const userInfomation = data;
+
+        setUser(userInfomation);
+
+        navigate("/");
+
+        return;
+      }
+
+      if (data?.error) {
+        const errorMessage = data.error;
+
+        if (errorMessage === "User not found with the given email") {
           alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
           return;
@@ -144,16 +159,10 @@ export default function Login() {
           return;
         }
 
-        alert(`등록되지 않은 에러 메세지: ${errorMessage}`);
+        alert(`개발용: 등록되지 않은 에러 메세지: ${errorMessage}`);
 
         return;
       }
-
-      const userInfomation = result;
-
-      setUser(userInfomation);
-
-      navigate("/");
     } catch (error) {
       alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 

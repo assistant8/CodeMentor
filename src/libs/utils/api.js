@@ -9,8 +9,9 @@ import axios from "axios";
 // -> 오피스 아워 떄 물어보고 수정하기.
 axios.defaults.baseURL = "http://34.64.81.88/api";
 
-export const api = axios.create();
-// export const api = axios.create({ baseURL: "http://localhost:8080/api/" });
+// axios.defaults.baseURL = "http://localhost:3001/api";
+
+export const api = axios.create({ baseURL: "http://localhost:3001/api" });
 
 // const getCookie = () => {
 //   return;
