@@ -1,14 +1,18 @@
 import styles from "./Password.module.scss";
 import { VioletButton } from "../../components/buttons/VioletButton";
 import { UserInput } from "../../components/inputs/UserInput";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Modal } from "../../components/modal";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
 import { api } from "../../libs/utils/api";
 
 const PassWord = () => {
-  const user = useRecoilValue(userState);
+  const email = useRecoilValue(userState).email;
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
+  }, []);
   const [newPwd, setNewPwd] = useState("");
   const [checkPattern, setCheckPattern] = useState(false);
   const [checkPwd, setCheckPwd] = useState(false);
@@ -49,8 +53,7 @@ const PassWord = () => {
       setModalContent("비밀번호가 일치하지 않습니다.");
     } else {
       api
-        .put(`/users/profile/${user.email}`, {
-          ...user,
+        .put(`/users/profile/?email=${email}`, {
           password: pwdRef.current.value,
         })
         .then(() => {

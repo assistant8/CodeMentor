@@ -18,7 +18,7 @@ const Complete = () => {
   const user = useRecoilValue(userState);
   useEffect(() => {
     api
-      .get(`/user-problem/?email=${user.email}/saved`)
+      .get(`/user-problem/solved/?email=${user.email}`)
       .then((res) => setQuizs(res))
       .catch((error) => {
         setModalContent(error + "문제 불러오기를 실패했습니다.");
