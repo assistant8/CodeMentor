@@ -7,9 +7,12 @@ import axios from "axios";
 // 그럼 굳이 axios 설정으로 '/api'를 기본으로 붙여줄 필요가 있나..? 코치님도 '/'만 했었고.
 // 아니 또 근데 그렇게 치면 '/'도 안 붙이고 그냥 써야 되는 거 아닌가?? 애매하네..
 // -> 오피스 아워 떄 물어보고 수정하기.
-//axios.defaults.baseURL = "http://34.64.81.88/api";
 
-axios.defaults.baseURL = "http://localhost:3001/api";
+// VM IP주소(34.64.81.88)로 변경
+axios.defaults.baseURL = "http://34.64.81.88/api";
+axios.defaults.headers.post["Content-Type"] = "application/json";
+
+// axios.defaults.baseURL = "http://localhost:3001/api";
 
 export const api = axios.create();
 
