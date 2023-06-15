@@ -24,22 +24,13 @@ const HintContentBox = ({ hintContent, isAdmin, isOpen }) => {
   );
 };
 
-export default function HintContainer({
-  hintTitle,
-  hintContent,
-  isAdmin = false,
-  isOpen = false,
-}) {
-  return (
-    <div className={styles.hintContainer}>
-      <div className={styles.hintName}>
-        <div className={styles.hintTitle}>{hintTitle}</div>
-        <HintContentBox
-          hintContent={hintContent}
-          isAdmin={isAdmin}
-          isOpen={isOpen}
-        />
-      </div>
-    </div>
-  );
+export default function HintContainer({hintTitle, hintContent, isAdmin = false, isOpen = false}) {
+    return (
+        <div className={styles.hintContainer}>
+            <div className={styles.hintName}>
+                <div className={styles.hintTitle}>{hintTitle}</div>
+                <HintContentBox hintContent={hintContent} isAdmin={isAdmin} isOpen={isOpen}/>
+            </div>
+        </div>
+    );
 }
