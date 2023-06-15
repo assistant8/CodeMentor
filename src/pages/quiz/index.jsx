@@ -9,6 +9,7 @@ import bookmark from "../../image/bookmark.png";
 import check from "../../image/check.png";
 import skip from "../../image/skip2.png";
 import { useLocation, useNavigate } from "react-router";
+import {api} from "../../libs/utils/api"
 
 export default function Quiz() {
   const [showToast, setShowToast] = useState(false);
@@ -16,8 +17,9 @@ export default function Quiz() {
   const [toastMsg, setToastMsg] = useState("스스로 풀어보세요");
   const [timerCount, setTimerCount] = useState(0);
 
-  const { state } = useLocation();
-  console.log(state);
+  const { state } = useLocation(); //리스트에서 누른 퀴즈의 정보 넘어옴
+  const problemId = state.id;
+  // const hints = api.get(`/hints/:${problemId}`)
 
   useEffect(() => {
     console.log("timerCount", timerCount);
@@ -78,11 +80,15 @@ export default function Quiz() {
       />
       {showToast && <Toast message={toastMsg} />}
       <div className={styles.hindWrapper}>
-        <HintContainer
-          hintTitle={"힌트 1"}
-          hintContent={"풀어줘요"}
-          isOpen={true}
-        />
+        {
+          hints.map(hint=>(
+            <HintContainer
+              hintTitle={hint.title}
+              hintContent={hint.hintContent}
+              isOpen={true}
+            />            
+          ))
+        }
         <HintContainer
           hintTitle={"힌트 2"}
           hintContent={"여기는무슨힌트가숨겨져이씅ㄹ까?"}
@@ -166,3 +172,30 @@ const CommentContainer = () => {
     </div>
   );
 };
+
+const hints = [
+  {
+    id: 2,
+    problemId: 1,
+    hintContent: "1단계 힌트",
+    hintLevel: "1",
+    createdAt: "2023-06-11T18:55:37.000Z",
+    updatedAt: "2023-06-11T18:55:37.000Z",
+  },
+  {
+    id: 3,
+    problemId: 1,
+    hintContent: "1단계 힌트",
+    hintLevel: "1",
+    createdAt: "2023-06-11T19:07:53.000Z",
+    updatedAt: "2023-06-11T19:07:53.000Z",
+  },
+  {
+    id: 4,
+    problemId: 1,
+    hintContent: "2단계 힌트",
+    hintLevel: "2",
+    createdAt: "2023-06-11T19:08:06.000Z",
+    updatedAt: "2023-06-11T19:08:06.000Z",
+  },
+];
