@@ -16,10 +16,16 @@ export default function Quiz() {
   const [timerDuration, setTimerDuration] = useState(10);
   const [toastMsg, setToastMsg] = useState("스스로 풀어보세요");
   const [timerCount, setTimerCount] = useState(0);
+  const [hints, setHints] = useState("")
 
   const { state } = useLocation(); //리스트에서 누른 퀴즈의 정보 넘어옴
   const problemId = state.id;
-  // const hints = api.get(`/hints/:${problemId}`)
+  useEffect(()=>{
+    api
+      .get(`/hints/:${problemId}`)
+      .then(res=>setHints(res))
+  }, [])
+  console.log("hints", hints)
 
   useEffect(() => {
     console.log("timerCount", timerCount);
@@ -69,10 +75,6 @@ export default function Quiz() {
     setTimerDuration(0);
   };
 
-  const handleHintClick = () => {
-    
-  }
-
   return (
     <div className={styles.quizContainer}>
       <QuizNameContainer onClick={handleClickPass} quizInfo={state}/>
@@ -89,7 +91,6 @@ export default function Quiz() {
             <HintContainer
               hintTitle={maplevelToQuestion[hint.hintLevel]}
               hintContent={hint.hintContent}
-              onClick={handleHintClick}
             />            
           ))
         }
@@ -168,7 +169,7 @@ const CommentContainer = () => {
   );
 };
 
-const hints = [
+const hintss = [
   {
     id: 2,
     problemId: 1,
