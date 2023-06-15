@@ -3,25 +3,35 @@ import bookmark from "../../image/bookmark.png";
 import check from "../../image/check.png";
 import { useNavigate } from "react-router-dom";
 import PATH from "../../constants/path";
-import {api} from "../../libs/utils/api"
+import { api } from "../../libs/utils/api";
 
-export const QuizListContainer = ({ style, isImgNeed = true, searchKey, selectedCategory }) => {
+export const QuizListContainer = ({
+  style,
+  isImgNeed = true,
+  searchKey,
+  selectedCategory,
+  quizs,
+}) => {
   const navigate = useNavigate();
   // const quizss = api.get("/problems")
-  const categoryNumber = selectedCategory==="백준" ? 0 : 1;
+  const categoryNumber = selectedCategory === "백준" ? 0 : 1;
 
   return (
     <div className={styles.quizListContainer}>
       {quizs
-        .filter((quiz) => selectedCategory==='전체' ? true : quiz.category === categoryNumber)
+        .filter((quiz) =>
+          selectedCategory === "전체" ? true : quiz.category === categoryNumber
+        )
         .filter((quiz) => quiz.title.includes(searchKey))
         .map((quiz) => {
           return (
             <div className={styles.quizList}>
               <div
                 className={styles.quizListTitle}
-                onClick={() => navigate(PATH.QUIZ+`/${quiz.id}`, {state: quiz})} 
-              > 
+                onClick={() =>
+                  navigate(PATH.QUIZ + `/${quiz.id}`, { state: quiz })
+                }
+              >
                 {quiz.title}
               </div>
               {isImgNeed && (
