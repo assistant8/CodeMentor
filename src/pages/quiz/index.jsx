@@ -1,3 +1,4 @@
+
 import HintContainer from "../../components/hintContainer/HintCotainer";
 import styles from "./Quiz.module.scss";
 import { useEffect, useState, useRef } from "react";
@@ -16,10 +17,26 @@ export default function Quiz() {
   const [timerDuration, setTimerDuration] = useState(10);
   const [toastMsg, setToastMsg] = useState("스스로 풀어보세요");
   const [timerCount, setTimerCount] = useState(0);
+  const [hints, setHints] = useState([])
 
   const { state } = useLocation(); //리스트에서 누른 퀴즈의 정보 넘어옴
   const problemId = state.id;
-  // const hints = api.get(`/hints/:${problemId}`)
+  console.log("problemId", problemId)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await api.get(`/hints/${problemId}`);
+        console.log("res", res);
+        setHints(res.data);
+      } catch (error) {
+        // 에러 처리 로직 추가
+        console.error("Error occurred:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  console.log(hints)
 
   useEffect(() => {
     console.log("timerCount", timerCount);
@@ -79,25 +96,15 @@ export default function Quiz() {
         onStart={handleTimerStart}
       />
       {showToast && <Toast message={toastMsg} />}
-      <div className={styles.hindWrapper}>
+      <div className={styles.hintWrapper}>
         {
           hints.map(hint=>(
             <HintContainer
-              hintTitle={hint.title}
+              hintTitle={maplevelToQuestion[hint.hintLevel]}
               hintContent={hint.hintContent}
-              isOpen={true}
             />            
           ))
         }
-        <HintContainer
-          hintTitle={"힌트 2"}
-          hintContent={"여기는무슨힌트가숨겨져이씅ㄹ까?"}
-        />
-        <HintContainer
-          hintTitle={"힌트 3"}
-          hintContent={"컴포넌트 테스트용"}
-          isAdmin={true}
-        />
       </div>
 
       <CommentContainer />
@@ -173,7 +180,7 @@ const CommentContainer = () => {
   );
 };
 
-const hints = [
+const hintss = [
   {
     id: 2,
     problemId: 1,
@@ -184,18 +191,33 @@ const hints = [
   },
   {
     id: 3,
-    problemId: 1,
-    hintContent: "1단계 힌트",
-    hintLevel: "1",
+    problemId: 2,
+    hintContent: "2단계 힌트",
+    hintLevel: "2",
     createdAt: "2023-06-11T19:07:53.000Z",
     updatedAt: "2023-06-11T19:07:53.000Z",
   },
   {
     id: 4,
-    problemId: 1,
-    hintContent: "2단계 힌트",
-    hintLevel: "2",
+    problemId: 3,
+    hintContent: "3단계 힌트",
+    hintLevel: "3",
+    createdAt: "2023-06-11T19:08:06.000Z",
+    updatedAt: "2023-06-11T19:08:06.000Z",
+  },
+  {
+    id: 5,
+    problemId: 4,
+    hintContent: "4단계 힌트",
+    hintLevel: "4",
     createdAt: "2023-06-11T19:08:06.000Z",
     updatedAt: "2023-06-11T19:08:06.000Z",
   },
 ];
+
+const maplevelToQuestion = {
+  1: "문제 유형은 무엇인가요?", 
+  2: "세부 유형 또는 고려해야할 부분은 무엇일까요?",
+  3: "필수적으로 사용해야하는 것은 무엇인가요?",
+  4: "놓칠 수 있을만한 테스트 케이스는 무엇이 있을까요?",
+}

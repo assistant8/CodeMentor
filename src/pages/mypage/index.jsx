@@ -18,6 +18,7 @@ const User = () => {
   const [user, setUser] = useState("");
   useEffect(() => {
     api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
+    console.log(user);
   }, []);
 
   let navigate = useNavigate();
@@ -28,7 +29,7 @@ const User = () => {
       </div>
       <div style={{ display: "flex" }}>
         <h3>{user.grade === "general" ? "코드 멘티, " : "코드 멘토, "}</h3>
-        <h3>{user.userName === "" ? "이름을 설정해주세요" : user.userName}</h3>
+        <h3>{user.userName === " " ? "이름을 설정해주세요" : user.userName}</h3>
       </div>
       <button>
         <MdOutlineKeyboardArrowRight
