@@ -14,7 +14,7 @@ const ModifyUser = () => {
   const [user, setUser] = useState("");
   useEffect(() => {
     api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
-  }, []);
+  }, [email]);
   const [imgUrl, setImgUrl] = useState(user.image);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();

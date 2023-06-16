@@ -19,7 +19,7 @@ const Complete = () => {
   useEffect(() => {
     api
       .get(`/user-problem/solved/?email=${user.email}`)
-      .then((res) => setQuizs(res))
+      .then((res) => setQuizs(res.data))
       .catch((error) => {
         setModalContent(error + "문제 불러오기를 실패했습니다.");
         openModal();
