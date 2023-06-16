@@ -22,7 +22,15 @@ export default function ProblemUpdatePage() {
   //   }
 
   // 문제정보를 받을 상태와 입력시 상태를 변경할 set함수를 빈 객체를 초기값으로 설정
-  const [quizInfo, setQuizInfo] = useState({hintLevel: 1});
+  const [quizInfo, setQuizInfo] = useState({
+    title: '',
+    problemUrl: '',
+    category: 0,
+    hintLevel: 1,
+    hintContent: '',
+    difficulty: 1,
+    timer: 5,
+  });
   console.log("🚀 ~ file: index.jsx:26 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
 
   const buttonRef = useRef();
