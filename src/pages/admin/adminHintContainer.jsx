@@ -1,14 +1,8 @@
 import styles from './adminHintContainer.module.scss'
 import plusIcon from '../../image/plus.png'
+import { maplevelToQuestion } from '../quiz';
 
 export default function AdminHintContainer({ hintLevel, hintContent, onChange, showImage=true, onClick }) {
-
-    const maplevelToQuestion = {
-        1: "문제 유형은 무엇인가요?", 
-        2: "세부 유형 또는 고려해야할 부분은 무엇일까요?",
-        3: "필수적으로 사용해야하는 것은 무엇인가요?",
-        4: "놓칠 수 있을만한 테스트 케이스는 무엇이 있을까요?",
-    }
 
     return (
         <div className={styles.hintContainer}>

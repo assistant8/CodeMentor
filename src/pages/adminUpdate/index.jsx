@@ -10,58 +10,33 @@ import axios from 'axios';
 export default function ProblemUpdatePage() {
   const buttonRef = useRef();
   
+  // 문제정보를 받을 상태와 입력시 상태를 변경할 set함수를 초기값으로 설정
+  const [quizInfo, setQuizInfo] = useState({});
+  console.log("🚀 ~ file: index.jsx:31 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
+  // 변경할 힌트들은 배열로 들어올 것임 
+  const [hints, setHints] = useState([]);
+  console.log("🚀 ~ file: index.jsx:50 ~ ProblemUpdatePage ~ hints:", hints)
+  
   const location = useLocation();
   // URL 매개변수에서 퀴즈 정보 추출
   const queryParams = new URLSearchParams(location.search);
   const quizId = queryParams.get('quizId');
   
-  
-  // problem reserved schema
-  // const dummyTest =  [
-  //   {
-  //     "id": 1,
-  //     "category": 0,
-  //     "title": "3085 사탕 게임 - 1",
-  //     "problemUrl": "https://www.acmicpc.net/problem/3085",
-  //     "difficulty": 3,
-  //     "timer": 20,
-  //     "hintContent": "1단계 힌트",
-  //     "hintLevel": 1
-  //   },
-  // ];
-  const [quizInfo, setQuizInfo] = useState({});
-  console.log("🚀 ~ file: index.jsx:31 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
-  // 변경할 문제 상태는 객체로 들어올 것임
-  const getQuizInfo = useCallback(async () => {
+  // quizId를 활용해서 데이터 받아오기
+  const getInfo = useCallback(async () => {
     try {
-      const response = await axios.get(`/problems/${quizId}`);
-      setQuizInfo(response.data);
+      const problemData = await axios.get(`/problems/${quizId}`);
+      const quizesData = await axios.get(`/hints/${quizId}`);
+      setQuizInfo(problemData.data);
+      setHints(quizesData.data);
     } catch (err) {
       console.error('문제조회 실패', err);
     }
   },[]);
   
   useEffect(() => {
-    getQuizInfo();
-  }, [getQuizInfo]);
-
-  // 변경할 힌트들은 배열로 들어올 것임 
-  const [hints, setHints] = useState([]);
-  console.log("🚀 ~ file: index.jsx:50 ~ ProblemUpdatePage ~ hints:", hints)
-  const getHintsInfo = useCallback(async () => {
-    try {
-      const response = await axios.get(`/hints/${quizId}`);
-      setHints(response.data);
-    } catch (err) {
-      console.error('힌트조회 실패', err);
-    }
-  }, [])
-  console.log("🚀 ~ file: index.jsx:50 ~ ProblemUpdatePage ~ hints:", hints)
-
-  useEffect(() => {
-    getHintsInfo();
-  }, [getHintsInfo]);
-
+    getInfo();
+  }, [getInfo]);
 
   const handleProblemUpdate = () => {
     // // 위 입력된 데이터들을 데이터베이스의 problem에 추가시켜야 함
@@ -84,6 +59,20 @@ export default function ProblemUpdatePage() {
       [name]: value
     }));
   };
+
+  // 힌트 2, 3, 4 
+  const [secondHint, setSecondHint] = useState({
+    hintLevel: 2,
+    hintContent: "",
+  })
+  const [thirdHint, setThirdHint] = useState({
+    hintLevel: 3,
+    hintContent: "",
+  })
+  const [fourthHint, setFourthHint] = useState({
+    hintLevel: 4,
+    hintContent: "",
+  })
 
   // 힌트 추가 수정 이벤트 핸들러(hintSchema)
   const handleHintUpdate = () => {};
@@ -122,7 +111,7 @@ export default function ProblemUpdatePage() {
         <AdminHintContainer
           showImage={false}
           hintLevel={1}
-          hintContent={quizInfo.hintContent}
+          hintContent={hints.hintContent}
           onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
         />
         <div className={styles.submitBtn}>
@@ -134,19 +123,23 @@ export default function ProblemUpdatePage() {
         </div>
         <AdminHintContainer
           hintLevel={2}
-          hintContent={quizInfo.hintContent}
-          onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
+          hintContent={secondHint.hintContent}
+          onChange={(e)=>{setSecondHint({...secondHint, hintContent: e.target.value})}}
+          onClick={() => {handleHintUpdate(secondHint)}}
         />
         <AdminHintContainer
           hintLevel={3}
-          hintContent={quizInfo.hintContent}
-          onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
+          hintContent={thirdHint.hintContent}
+          onChange={(e)=>{setThirdHint({...thirdHint, hintContent: e.target.value})}}
+          onClick={() => {handleHintUpdate(thirdHint)}}
         />
         <AdminHintContainer
           hintLevel={4}
-          hintContent={quizInfo.hintContent}
-          onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
+          hintContent={fourthHint.hintContent}
+          onChange={(e)=>{setFourthHint({...fourthHint, hintContent: e.target.value})}}
+          onClick={() => {handleHintUpdate(fourthHint)}}
         />
+ 
       </div>
     </div>
   );
