@@ -13,6 +13,7 @@ const PassWord = () => {
   useEffect(() => {
     api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
   }, []);
+  const [exist, setExist] = useState(false);
   const [newPwd, setNewPwd] = useState("");
   const [checkPattern, setCheckPattern] = useState(false);
   const [checkPwd, setCheckPwd] = useState(false);
@@ -33,6 +34,7 @@ const PassWord = () => {
       setCheckPwd(false);
     }
   };
+  const nameRef = useRef(null);
   const buttonRef = useRef(null);
   const pwdRef = useRef(null);
   const checkRef = useRef(null);
@@ -52,16 +54,30 @@ const PassWord = () => {
     } else if (!checkPwd) {
       setModalContent("비밀번호가 일치하지 않습니다.");
     } else {
-      api
-        .put(`/users/profile/?email=${email}`, {
-          password: pwdRef.current.value,
-        })
-        .then(() => {
-          setModalContent("비밀번호가 변경되었습니다.");
-        })
-        .catch((error) => {
-          setModalContent(error + "오류가 발생했습니다.");
-        });
+      api.get("/users/").then((res) => {
+        const foundUser = res.data.filter(
+          (user) => user.userName === nameRef.current.value
+        );
+        console.log(foundUser);
+        if (foundUser.length > 0) {
+          // 닉네임 중복
+          setExist(true);
+          setModalContent("중복된 이름입니다.");
+        } else {
+          // 중복 없음
+          api
+            .put(`/users/profile/?email=${email}`, {
+              userName: nameRef.current.value,
+              password: pwdRef.current.value,
+            })
+            .then(() => {
+              setModalContent("정보가 변경되었습니다.");
+            })
+            .catch((error) => {
+              setModalContent(error + "오류가 발생했습니다.");
+            });
+        }
+      });
     }
   };
 
@@ -69,10 +85,19 @@ const PassWord = () => {
     handleModalContent();
     openModal();
   };
+
   return (
     <div className={styles.pwdContainer}>
-      <p className={styles.pwdTitle}>비밀번호 변경</p>
+      <p className={styles.pwdTitle}>내 정보 변경</p>
       <div className={styles.inputsContainer}>
+        <div className={styles.inputBox}>
+          <UserInput
+            ref={nameRef}
+            placeholder={user.userName === " " ? "유저명" : user.userName}
+            onChange={() => setExist(false)}
+          />
+          {exist ? <p>중복된 유저명입니다</p> : null}
+        </div>
         <div className={styles.inputBox}>
           <UserInput
             ref={pwdRef}

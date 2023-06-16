@@ -19,7 +19,9 @@ const BookMark = () => {
   useEffect(() => {
     api
       .get(`/user-problem/saved/?email=${user.email}`)
-      .then((res) => setQuizs(res.data))
+      .then((res) => {
+        setQuizs(res.data);
+      })
       .catch((error) => {
         setModalContent(error + "문제 불러오기를 실패했습니다.");
         openModal();

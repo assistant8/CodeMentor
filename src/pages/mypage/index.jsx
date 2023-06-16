@@ -118,6 +118,7 @@ const LogOut = () => {
           isEmailVerified: false,
           verificationCode: null,
         });
+        localStorage.setItem("isLogin", false);
       })
       .catch((error) => {
         // 로그아웃 처리 실패

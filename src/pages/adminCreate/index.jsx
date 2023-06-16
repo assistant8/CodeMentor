@@ -4,6 +4,8 @@ import { useRef, useState } from 'react';
 import { SmallVioletButton } from '../../components/buttons/SmallVioletButton';
 import AdminHintContainer from '../admin/adminHintContainer';
 import { UserInput } from '../../components/inputs/UserInput';
+import axios from 'axios';
+import { Navigate } from 'react-router';
 
 export default function ProblemUpdatePage() {
 
@@ -24,31 +26,30 @@ export default function ProblemUpdatePage() {
   console.log("🚀 ~ file: index.jsx:26 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
 
   const buttonRef = useRef();
-  // 문제 기본정보 등록 이벤트 핸들러
-  const handleProblemCreate = () => {
-    // // 아래 입력된 데이터들을 데이터베이스의 problem에 추가시켜야 함
-  //   axios
-  //     .post('/api/problems', quizInfo)
-  //     .then(response => {
-  //       console.log('업데이트 성공', response.data);
-  //     })
-  //     .catch(err => {
-  //       console.log('업데이트 실패', err);
-  //     });
-  };
-
+  
   // 입력값에 따라 문제정보에 저장될 정보가 달라짐.
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setQuizInfo(prev => ({
       ...prev,
-      [name]: value
+      // category값이 문자열로 저장되어서 숫자로 변환하는 코드 삽입
+      [name]: (name === "category" ? Number(value) : value),
     }));
+  };
+  console.log(quizInfo);
+  // 문제 기본정보 등록 이벤트 핸들러
+  const handleProblemCreate = async () => {
+    try {
+      const response = await axios.post('/problems', quizInfo)
+      alert('기본 정보를 추가하였습니다.', response.data)
+      console.log("🚀 ~ file: index.jsx:38 ~ handleProblemCreate ~ response.data:", response)
+      
+    } catch(error) {
+      console.error('기본정보 등록 실패', error);}
   };
 
   // 추가 힌트 등록 이벤트 핸들러
   const handleHintCreate = () => {};
-
   
   return (
     <div className={styles.container}>
@@ -60,7 +61,7 @@ export default function ProblemUpdatePage() {
             name="title"
             placeholder="문제이름"
             value={quizInfo.title}
-            onChange={handleInputChange}
+            onChange={e => handleInputChange(e)}
             style={{borderRadius: "0.5rem", height: "50px", marginBottom: "10px"}}
           />
           <UserInput
@@ -68,7 +69,7 @@ export default function ProblemUpdatePage() {
             name="problemUrl"
             placeholder="문제 url"
             value={quizInfo.problemUrl}
-            onChange={handleInputChange}
+            onChange={e => handleInputChange(e)}
             style={{borderRadius: "0.5rem", height: "50px", marginBottom: "10px"}}
           />
           <div className={styles.category}>
