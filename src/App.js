@@ -29,8 +29,6 @@ import ProblemAdminPage from "./pages/admin";
 import ProblemCreatePage from "./pages/adminCreate";
 import ProblemUpdatePage from "./pages/adminUpdate";
 import Home from "./pages/home";
-import { useRecoilState } from "recoil";
-import { isLoginState } from "./state/isLogin.js";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -61,13 +59,12 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  let isLogin = localStorage.getItem("isLogin");
+  const isLogin = localStorage.getItem("isLogin") === "true" ? true : false;
+  // const [isLogin, setIsLogin] = useState();
 
   useEffect(() => {
-    if (isLogin === null) isLogin = false;
-
     console.log("path: ", location.pathname);
-    console.log("isLogin: ", isLogin);
+    console.log("isLogin: ", typeof isLogin, isLogin);
 
     if (!isLogin && !location.pathname.includes("/login")) {
       alert("로그인이 필요한 페이지입니다.");
@@ -82,37 +79,42 @@ function App() {
   }, [location.pathname, isLogin]);
 
   return (
-    <>
-      <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<QuizList />} />
-          <Route path={PATH.QUIZ + `/:quizId`} element={<Quiz />} />
-          <Route path={PATH.QUIZLIST} element={<QuizList />} />
-          <Route path={PATH.HOME} element={<Home />} />
+    <Routes>
+      {isLogin && (
+        <>
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<QuizList />} />
+            <Route path={PATH.QUIZ + `/:quizId`} element={<Quiz />} />
+            <Route path={PATH.QUIZLIST} element={<QuizList />} />
+            <Route path={PATH.HOME} element={<Home />} />
 
+            <Route path={PATH.MYPAGE}>
+              <Route index element={<MyPage />} />
+              <Route path="modify" element={<ModifyUser />} />
+              <Route path="password" element={<PassWord />} />
+              <Route path="bookmark" element={<BookMark />} />
+              <Route path="complete" element={<Complete />} />
+              <Route path="chart" element={<Chart />} />
+            </Route>
+
+            <Route path={PATH.ADMIN}>
+              <Route index element={<ProblemAdminPage />} />
+              <Route path="create" element={<ProblemCreatePage />} />
+              <Route path="update" element={<ProblemUpdatePage />} />
+            </Route>
+          </Route>
+        </>
+      )}
+      {!isLogin && (
+        <>
           <Route path={PATH.LOGIN}>
             <Route index element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="create-profile" element={<CreateProfile />} />
           </Route>
-
-          <Route path={PATH.MYPAGE}>
-            <Route index element={<MyPage />} />
-            <Route path="modify" element={<ModifyUser />} />
-            <Route path="password" element={<PassWord />} />
-            <Route path="bookmark" element={<BookMark />} />
-            <Route path="complete" element={<Complete />} />
-            <Route path="chart" element={<Chart />} />
-          </Route>
-
-          <Route path={PATH.ADMIN}>
-            <Route index element={<ProblemAdminPage />} />
-            <Route path="create" element={<ProblemCreatePage />} />
-            <Route path="update" element={<ProblemUpdatePage />} />
-          </Route>
-        </Route>
-      </Routes>
-    </>
+        </>
+      )}
+    </Routes>
   );
 }
 
