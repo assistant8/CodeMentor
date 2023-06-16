@@ -9,16 +9,25 @@
   .hintName {
     display: flex;
     flex-direction: column;
-    width: 17rem;
-    .hintTitle {
-      font-family: "Inter";
-      font-weight: 600;
-      font-size: 0.94rem;
-      line-height: 1.3rem;
-      color: #3e3e3e;
-      text-overflow: ellipsis;
-      line-height: 110%;
-      padding-bottom: 0.5rem;
+    width: 20rem;
+    .hintUpper {
+      display: flex;
+      justify-content: space-between;
+      .hintTitle {
+        font-family: "Inter";
+        font-weight: 600;
+        font-size: 0.94rem;
+        line-height: 1.3rem;
+        color: #3e3e3e;
+        text-overflow: ellipsis;
+        line-height: 110%;
+        padding-bottom: 0.5rem;
+      }
+      img {
+        width: 0.94rem;
+        height: 0.94rem;
+        cursor: pointer;
+      }
     }
     .hintContent {
       font-family: "Inter";
