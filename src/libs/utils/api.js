@@ -19,17 +19,20 @@ export const api = axios.create();
 
 // api.interceptors.request.use(
 //   (req) => {
-//     // 쿠키에서 세션 아이디 확인
-//     const sessionId = getCookie("sessionId");
+//     console.log(req);
 
-//     if (!sessionId) {
-//       // 세션 아이디가 없으면 로그인 페이지로 이동
-//       alert("로그인이 필요한 작업입니다.");
+//     return req;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
-//       navigate(PATH.LOGIN);
+// api.interceptors.response.use(
+//   (res) => {
+//     console.log(res);
 
-//       return Promise.reject(new Error("세션 아이디 없음."));
-//     }
+//     return res;
 //   },
 //   (error) => {
 //     return Promise.reject(error);

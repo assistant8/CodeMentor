@@ -20,6 +20,8 @@ import { UserInput } from "../../components/inputs/UserInput.jsx";
 import { LoginTextLink } from "../../components/links/LoginTextLink.jsx";
 import { useRecoilState } from "recoil";
 import { userState } from "../../state/userState";
+import { isLoginState } from "../../state/isLogin.js";
+
 import kakao from "../../image/kakao.png";
 import naver from "../../image/naver.png";
 // 구글 소셜 로그인
@@ -50,7 +52,7 @@ const auth = getAuth();
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-export default function Login() {
+export default function Login({ setIsLogin }) {
   // hook
   const navigate = useNavigate();
 
@@ -75,6 +77,7 @@ export default function Login() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  // const [isLogin, setIsLogin] = useRecoilState(isLoginState);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -121,6 +124,8 @@ export default function Login() {
         const userInfomation = data;
 
         setUser(userInfomation);
+
+        localStorage.setItem("isLogin", true);
 
         navigate("/");
 
