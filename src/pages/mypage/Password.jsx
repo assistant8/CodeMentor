@@ -1,24 +1,22 @@
 import styles from "./Password.module.scss";
 import { VioletButton } from "../../components/buttons/VioletButton";
 import { UserInput } from "../../components/inputs/UserInput";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Modal } from "../../components/modal";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
+import { api } from "../../libs/utils/api";
 
 const PassWord = () => {
-  const user = useRecoilValue(userState);
+  const email = useRecoilValue(userState).email;
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
+  }, []);
+  const [exist, setExist] = useState(false);
   const [newPwd, setNewPwd] = useState("");
-  const [comparePresent, setComparePresent] = useState(false);
   const [checkPattern, setCheckPattern] = useState(false);
   const [checkPwd, setCheckPwd] = useState(false);
-  const handleCompare = () => {
-    if (user.password === presentPwdRef.current.value) {
-      setComparePresent(true);
-    } else {
-      setComparePresent(false);
-    }
-  };
   const handlePwd = (e) => {
     setNewPwd(e.target.value);
     const pattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,12}$/;
@@ -36,8 +34,8 @@ const PassWord = () => {
       setCheckPwd(false);
     }
   };
+  const nameRef = useRef(null);
   const buttonRef = useRef(null);
-  const presentPwdRef = useRef(null);
   const pwdRef = useRef(null);
   const checkRef = useRef(null);
 
@@ -51,14 +49,35 @@ const PassWord = () => {
 
   const [modalContent, setModalContent] = useState(""); // 상태 변수 추가
   const handleModalContent = () => {
-    if (!comparePresent) {
-      setModalContent("현재 비밀번호가 일치하지 않습니다.");
-    } else if (!checkPattern) {
+    if (!checkPattern) {
       setModalContent("영문 대소문자 포함 8~12자리여야 합니다.");
     } else if (!checkPwd) {
       setModalContent("비밀번호가 일치하지 않습니다.");
     } else {
-      setModalContent("비밀번호가 변경되었습니다.");
+      api.get("/users/").then((res) => {
+        const foundUser = res.data.filter(
+          (user) => user.userName === nameRef.current.value
+        );
+        console.log(foundUser);
+        if (foundUser.length > 0) {
+          // 닉네임 중복
+          setExist(true);
+          setModalContent("중복된 이름입니다.");
+        } else {
+          // 중복 없음
+          api
+            .put(`/users/profile/?email=${email}`, {
+              userName: nameRef.current.value,
+              password: pwdRef.current.value,
+            })
+            .then(() => {
+              setModalContent("정보가 변경되었습니다.");
+            })
+            .catch((error) => {
+              setModalContent(error + "오류가 발생했습니다.");
+            });
+        }
+      });
     }
   };
 
@@ -66,18 +85,18 @@ const PassWord = () => {
     handleModalContent();
     openModal();
   };
+
   return (
     <div className={styles.pwdContainer}>
-      <p className={styles.pwdTitle}>비밀번호 변경</p>
+      <p className={styles.pwdTitle}>내 정보 변경</p>
       <div className={styles.inputsContainer}>
         <div className={styles.inputBox}>
           <UserInput
-            ref={presentPwdRef}
-            type="password"
-            onChange={handleCompare}
-            placeholder="현재 비밀번호"
+            ref={nameRef}
+            placeholder={user.userName === " " ? "유저명" : user.userName}
+            onChange={() => setExist(false)}
           />
-          {!comparePresent ? <p>현재 비밀번호와 일치하지 않습니다.</p> : null}
+          {exist ? <p>중복된 유저명입니다</p> : null}
         </div>
         <div className={styles.inputBox}>
           <UserInput

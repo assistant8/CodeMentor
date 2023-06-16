@@ -1,9 +1,12 @@
 import styles from "./AdminMenuContainer.module.scss";
-import { useCallback, useEffect, useState, } from "react";
 import plus from '../../image/plus.png'
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from 'recoil';
+import { categoryState} from '../../state/store.js';
 
-export const AdminMenuContainer = ({ onClick, category }) => {
+export const AdminMenuContainer = ({ onClick }) => {
+
+  const selectedCategory = useRecoilValue(categoryState);
   const navigate = useNavigate();
 
   return (
@@ -11,20 +14,20 @@ export const AdminMenuContainer = ({ onClick, category }) => {
       <div className={styles.categoryContainer}>
         <ul>
           <li
-            className={category === '전체' ? styles.selected : ''}
+            className={selectedCategory === '전체' ? styles.selected : ''}
             onClick={() => onClick('전체')}
           >
             전체
           </li>
           <li
-            className={category === '백준' ? styles.selected : ''}
-            onClick={() => onClick('백준')}
+            className={selectedCategory === 0 ? styles.selected : ''}
+            onClick={() => onClick(0)}  // category === 0
           >
             백준
           </li>
           <li
-            className={category === '프로그래머스' ? styles.selected : ''}
-            onClick={() => onClick('프로그래머스')}
+            className={selectedCategory === 1 ? styles.selected : ''}
+            onClick={() => onClick(1)}  // category === 1
           >
             프로그래머스
           </li>
