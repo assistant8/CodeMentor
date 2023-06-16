@@ -11,12 +11,19 @@ export default function ProblemUpdatePage() {
   const buttonRef = useRef();
   
   // 문제정보를 받을 상태와 입력시 상태를 변경할 set함수를 초기값으로 설정
-  const [quizInfo, setQuizInfo] = useState({});
+  const [quizInfo, setQuizInfo] = useState({
+    title: '',
+    problemUrl: '',
+    category: 0,
+    hintLevel: 1,
+    hintContent: '',
+    difficulty: 1,
+    timer: 5,
+  });  
   console.log("🚀 ~ file: index.jsx:31 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
   // 변경할 힌트들은 배열로 들어올 것임 
   const [hints, setHints] = useState([]);
   console.log("🚀 ~ file: index.jsx:50 ~ ProblemUpdatePage ~ hints:", hints)
-  
   const location = useLocation();
   // URL 매개변수에서 퀴즈 정보 추출
   const queryParams = new URLSearchParams(location.search);
@@ -25,15 +32,16 @@ export default function ProblemUpdatePage() {
   // quizId를 활용해서 데이터 받아오기
   const getInfo = useCallback(async () => {
     try {
-      const problemData = await axios.get(`/problems/${quizId}`);
-      const quizesData = await axios.get(`/hints/${quizId}`);
-      setQuizInfo(problemData.data);
-      setHints(quizesData.data);
+      const problemRes = await axios.get(`/problems/${quizId}`);
+      const hintsRes = await axios.get(`/hints/${quizId}`);
+      setQuizInfo(problemRes.data);
+      setHints(hintsRes.data.map(({ id, problemId, hintContent }) => ({ id, problemId, hintContent })));
     } catch (err) {
       console.error('문제조회 실패', err);
     }
   },[]);
   
+
   useEffect(() => {
     getInfo();
   }, [getInfo]);
@@ -60,19 +68,17 @@ export default function ProblemUpdatePage() {
     }));
   };
 
-  // 힌트 2, 3, 4 
-  const [secondHint, setSecondHint] = useState({
-    hintLevel: 2,
-    hintContent: "",
-  })
-  const [thirdHint, setThirdHint] = useState({
-    hintLevel: 3,
-    hintContent: "",
-  })
-  const [fourthHint, setFourthHint] = useState({
-    hintLevel: 4,
-    hintContent: "",
-  })
+  // 힌트 1, 2, 3, 4 
+
+
+  const [firstHint, setFirstHint] = useState();
+  console.log("🚀 ~ file: index.jsx:65 ~ ProblemUpdatePage ~ firstHint:", firstHint)
+  // const [secondHint, setSecondHint] = useState(hints[1])
+  // console.log("🚀 ~ file: index.jsx:67 ~ ProblemUpdatePage ~ secondHint:", secondHint)
+  // const [thirdHint, setThirdHint] = useState(hints[2])
+  // console.log("🚀 ~ file: index.jsx:69 ~ ProblemUpdatePage ~ thirdHint:", thirdHint)
+  // const [fourthHint, setFourthHint] = useState(hints[3])
+  // console.log("🚀 ~ file: index.jsx:71 ~ ProblemUpdatePage ~ fourthHint:", fourthHint)
 
   // 힌트 추가 수정 이벤트 핸들러(hintSchema)
   const handleHintUpdate = () => {};
@@ -111,8 +117,8 @@ export default function ProblemUpdatePage() {
         <AdminHintContainer
           showImage={false}
           hintLevel={1}
-          hintContent={hints.hintContent}
-          onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
+          // hintContent={hints[0].hintContent}
+          // onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
         />
         <div className={styles.submitBtn}>
           <SmallVioletButton 
@@ -123,23 +129,22 @@ export default function ProblemUpdatePage() {
         </div>
         <AdminHintContainer
           hintLevel={2}
-          hintContent={secondHint.hintContent}
-          onChange={(e)=>{setSecondHint({...secondHint, hintContent: e.target.value})}}
-          onClick={() => {handleHintUpdate(secondHint)}}
+          // hintContent={secondHint.hintContent}
+          // onChange={(e)=>{setSecondHint({...secondHint, hintContent: e.target.value})}}
+          // onClick={() => {handleHintUpdate(secondHint)}}
         />
         <AdminHintContainer
           hintLevel={3}
-          hintContent={thirdHint.hintContent}
-          onChange={(e)=>{setThirdHint({...thirdHint, hintContent: e.target.value})}}
-          onClick={() => {handleHintUpdate(thirdHint)}}
+          // hintContent={thirdHint.hintContent}
+          // onChange={(e)=>{setThirdHint({...thirdHint, hintContent: e.target.value})}}
+          // onClick={() => {handleHintUpdate(thirdHint)}}
         />
         <AdminHintContainer
           hintLevel={4}
-          hintContent={fourthHint.hintContent}
-          onChange={(e)=>{setFourthHint({...fourthHint, hintContent: e.target.value})}}
-          onClick={() => {handleHintUpdate(fourthHint)}}
+          // hintContent={fourthHint.hintContent}
+          // onChange={(e)=>{setFourthHint({...fourthHint, hintContent: e.target.value})}}
+          // onClick={() => {handleHintUpdate(fourthHint)}}
         />
- 
       </div>
     </div>
   );
