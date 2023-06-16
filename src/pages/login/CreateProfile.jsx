@@ -8,6 +8,8 @@ import { SmallVioletButton } from "../../components/buttons/SmallVioletButton.js
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import defaultProfileImage from "../../image/defaultProfileImage.png";
+import { Modal } from "../../components/modal/index.jsx";
+import { set } from "date-fns";
 
 export default function CreateProfile() {
   const navigate = useNavigate();
@@ -29,6 +31,16 @@ export default function CreateProfile() {
   const { userName } = formInputValue;
   const [validationMessage, setValidationMessage] = useState({ userName: "" });
   const [VioletButtonDisabled, setVioletButtonDisabled] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleOnChangeFormInput = (e) => {
     const value = e.target.value;
@@ -65,7 +77,10 @@ export default function CreateProfile() {
     e.preventDefault();
 
     if (!isUserNameValid(userName)) {
-      alert(validationMessage.userName);
+      // alert(validationMessage.userName);
+
+      setModalMessage(validationMessage.userName);
+      openModal();
 
       userNameInput.current.focus();
 
@@ -86,23 +101,27 @@ export default function CreateProfile() {
 
       // "userName": "JohnDoe5"
       if (response.status === 200) {
-        alert(`개발용: userName ${data.userName}으로 변경 성공.`);
+        console.log(`개발용: userName ${data.userName}으로 변경 성공.`);
       } else {
-        alert(`개발용: userName 변경 실패`);
+        console.log(`개발용: userName 변경 실패`);
 
         console.log(response.status, data);
 
         return;
       }
     } catch (error) {
-      alert("form userName: 서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      // alert("form userName: 서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+      setModalMessage("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      openModal();
+
       console.log(error);
 
       return;
     }
 
     if (profileImageInputFile === null) {
-      alert("개발용: 프로필 이미지 변경 생략.");
+      console.log("개발용: 프로필 이미지 변경 생략.");
 
       navigate(PATH.LOGIN);
 
@@ -130,22 +149,33 @@ export default function CreateProfile() {
       const data = await response.data;
 
       if (response.status === 200) {
-        alert("개발용: 프로필 이미지 변경 성공.");
+        console.log("개발용: 프로필 이미지 변경 성공.");
 
-        alert("프로필 생성이 완료되었습니다. 로그인 페이지로 이동합니다.");
+        // alert("프로필 생성이 완료되었습니다. 로그인 페이지로 이동합니다.");
 
-        navigate(PATH.LOGIN);
+        setModalMessage(
+          "프로필 생성이 완료되었습니다. 로그인 페이지로 이동합니다."
+        );
+        openModal();
+
+        setTimeout(() => {
+          navigate(PATH.LOGIN);
+        }, 3000);
 
         return;
       } else {
-        alert("개발용: 프로필 이미지 변경 실패.");
+        console.log("개발용: 프로필 이미지 변경 실패.");
 
         console.log(response.status, response.data);
 
         return;
       }
     } catch (error) {
-      alert("form image: 서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      // alert("form image: 서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+      setModalMessage("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      openModal();
+
       console.log(error);
 
       return;
@@ -173,18 +203,30 @@ export default function CreateProfile() {
       const data = await response.data;
 
       if (response.status === 200) {
-        alert("기본 프로필을 사용합니다. 로그인 페이지로 이동합니다.");
+        // alert("기본 프로필을 사용합니다. 로그인 페이지로 이동합니다.");
 
-        navigate(PATH.LOGIN);
+        setModalMessage(
+          "기본 프로필을 사용합니다. 로그인 페이지로 이동합니다."
+        );
+        openModal();
+
+        setTimeout(() => {
+          navigate(PATH.LOGIN);
+        }, 3000);
+
+        return;
       } else {
-        alert(`개발용: 기본 프로필 설정 실패 실패`);
+        console.log(`개발용: 기본 프로필 설정 실패 실패`);
 
         console.log(response.status, data);
 
         return;
       }
     } catch (error) {
-      alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      // alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+      setModalMessage("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      openModal();
 
       return;
     }
@@ -207,7 +249,7 @@ export default function CreateProfile() {
           return;
         }
       } catch (error) {
-        alert("유저 정보를 불러오지 못했습니다.");
+        console.log("유저 정보를 불러오지 못했습니다.");
 
         return;
       }
@@ -229,6 +271,11 @@ export default function CreateProfile() {
 
   return (
     <div className={styles.container_CreateProfile}>
+      <Modal
+        children={modalMessage}
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      />
       {/* <div className={styles.topBar}>11:11</div> */}
       <div className={styles.wrapper_header}>
         <LoginHeader children={"프로필 설정"} />
