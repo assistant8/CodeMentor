@@ -120,6 +120,7 @@ export default function Quiz() {
 const QuizNameContainer = ({ onClick, quizInfo }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const userEmail = useRecoilValue(userState).email;
+  console.log("userEmail", userEmail)
 
   const addBookmark = async () => {
     try {
