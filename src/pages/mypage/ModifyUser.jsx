@@ -39,6 +39,7 @@ const ModifyUser = () => {
     api
       .post(`/users/profile/${user.id}/upload-image`, formData)
       .then((res) => {
+        console.log(res);
         setModalContent("사진을 업로드했습니다.");
         openModal();
       })
@@ -79,6 +80,7 @@ const ModifyUser = () => {
       .delete(`/users/profile/?email=${email}`)
       .then(() => {
         setModalContent("탈퇴 되었습니다. 이용해주셔서 감사합니다.");
+        openModal();
         navigate("/login");
       })
       .catch((error) => {

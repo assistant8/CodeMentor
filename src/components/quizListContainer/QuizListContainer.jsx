@@ -14,7 +14,7 @@ export const QuizListContainer = ({
 }) => {
   const navigate = useNavigate();
   const categoryNumber = selectedCategory === "백준" ? 0 : 1;
-  console.log("quizs", quizs)
+  console.log("quizs", quizs);
   return (
     <div className={styles.quizListContainer}>
       {quizs
