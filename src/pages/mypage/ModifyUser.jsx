@@ -12,10 +12,17 @@ const ModifyUser = () => {
   const [modalContent, setModalContent] = useState("");
   const email = useRecoilValue(userState).email;
   const [user, setUser] = useState("");
+  const [imgUrl, setImgUrl] = useState(null);
   useEffect(() => {
     api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
+    console.log(user);
   }, [email]);
-  const [imgUrl, setImgUrl] = useState(user.image);
+  useEffect(() => {
+    if (user) {
+      setImgUrl(user.image);
+    }
+  }, [user]);
+  console.log(imgUrl);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const modifyImg = () => {
