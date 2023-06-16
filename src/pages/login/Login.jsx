@@ -290,7 +290,7 @@ export default function Login({ setIsLogin }) {
         isOpen={isModalOpen}
         closeModal={closeModal}
       />
-      <div className={styles.topBar}>11:11</div>
+      {/* <div className={styles.topBar}>11:11</div> */}
       <div className={styles.wrapper_header}>
         <LoginHeader children={"/*codeMentor*/"} />
       </div>
@@ -319,17 +319,17 @@ export default function Login({ setIsLogin }) {
         </div>
       </form>
       <div className={styles.wrapper_TextLinks}>
-        <LoginTextLink
+        {/* <LoginTextLink
           children={"비밀번호 찾기"}
           onClick={handleOnClickFindPassword}
-        />
+        /> */}
         <LoginTextLink children={"회원 가입"} onClick={handleOnClickSignUp} />
       </div>
-      <div className={styles.wrapper_loginOptions}>
+      {/* <div className={styles.wrapper_loginOptions}>
         <LoginOption children={"구글"} onClick={loginByGoogle} />
         <LoginOption children={"카카오"} />
         <LoginOption children={"네이버"} />
-      </div>
+      </div> */}
     </div>
   );
 }
