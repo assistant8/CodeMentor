@@ -7,7 +7,7 @@ import { api } from "../../libs/utils/api";
 
 export const QuizListContainer = ({
   style,
-  isImgNeed = true,
+  isImgNeed = false,
   searchKey,
   selectedCategory,
   quizs,
