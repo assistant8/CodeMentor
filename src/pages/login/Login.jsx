@@ -5,23 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../libs/utils/api.js";
 import PATH from "../../constants/path";
 import {
-  isEmailValid,
-  isPasswordValid,
   isPassValidation,
   alertValidationMessage,
   makeEmailValidationMessage,
   makePasswordValidationMessage,
-  modalValidationMessage,
 } from "../../hooks/useLogin.js";
-import { Modal } from "../../components/modal/index.jsx";
 import { LoginHeader } from "../../components/headers/LoginHeader.jsx";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import { LoginTextLink } from "../../components/links/LoginTextLink.jsx";
-import { useRecoilState } from "recoil";
-import { userState } from "../../state/userState";
-import { isLoginState } from "../../state/isLogin.js";
-
 import kakao from "../../image/kakao.png";
 import naver from "../../image/naver.png";
 // 구글 소셜 로그인
@@ -52,7 +44,7 @@ const auth = getAuth();
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-export default function Login({ setIsLogin }) {
+export default function Login() {
   // hook
   const navigate = useNavigate();
 
@@ -70,22 +62,9 @@ export default function Login({ setIsLogin }) {
     email: "",
     password: "",
   });
-  const [user, setUser] = useRecoilState(userState);
 
   // state destructuring
   const { email, password } = formInputValue;
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  // const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   // func
   const handleOnChangeFormInput = (e) => {
@@ -96,67 +75,34 @@ export default function Login({ setIsLogin }) {
     e.preventDefault();
 
     if (!isPassValidation(formInputValue)) {
-      modalValidationMessage(
-        validationMessage,
-        setModalMessage,
-        openModal,
-        focusRef
-      );
-
-      // alertValidationMessage(validationMessage, focusRef);
+      alertValidationMessage(validationMessage, focusRef);
 
       return;
     }
 
-    const formData = { email, password };
+    const formData = { ...formInputValue };
 
     try {
-      const response = await api.post("/users/login", formData, {
-        validateStatus: (status) => {
-          return status < 500;
-        },
-      });
-      const data = await response.data;
+      const response = await api.post("/user/login", formData);
+      const result = await response.data.result;
 
-      if (response.status === 200) {
-        alert("개발용: 로그인 성공!");
-
-        const userInfomation = data;
-
-        setUser(userInfomation);
-
-        localStorage.setItem("isLogin", true);
-
-        navigate("/");
-
-        return;
-      }
-
-      const errorMessage = data.error;
-
-      // "error": "User not found with the given email"
-      if (response.status === 404) {
+      if (result === "db에 이메일 없음.") {
         alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
         return;
       }
 
-      // "error": "Incorrect password"
-      if (response.status === 401) {
+      if (result === "비밀번호가 틀림.") {
         alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
 
         return;
       }
 
-      // alert(`개발용: 등록되지 않은 에러 메세지: ${errorMessage}`);
-
-      // return;
+      navigate("/");
     } catch (error) {
       alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
       console.log(error);
-
-      return;
     }
   };
 
@@ -184,44 +130,31 @@ export default function Login({ setIsLogin }) {
           return;
         }
 
-        api.get(`/users/profile/?email=${user.email}`).then((response) => {
-          if (response.status === 200) {
-            const data = response.data;
+        const formData = { email: user.email };
 
-            setUser(data);
+        // 가입 내역 있음?
+        // - 있음
+        //  -> (백) 로그인 처리.
+        //  -> (프론트) 메인 페이지로 이동.
+        // - 없음
+        //  -> (백) 가입 처리.
+        //  -> (프론트) 프로필 생성 페이지로 이동.
+        api
+          .post("/user/login-google", formData)
+          .then((response) => {
+            const result = response.data.result;
+
+            if (result === "db에 이메일 없음.") {
+              navigate(PATH.LOGIN + "/create-profile", {
+                state: { email: user.email, name: user.displayName },
+              });
+
+              return;
+            }
 
             navigate("/");
 
             return;
-          }
-        });
-
-        const formData = {
-          email: user.email,
-          userName: user.displayName,
-          password: "Example123",
-        };
-
-        api
-          .post("/users/signup", formData, {
-            validateStatus: (status) => status < 500,
-          })
-          .then((response) => {
-            if (response.status === 201) {
-              navigate(PATH.LOGIN + "/create-profile", {
-                state: {
-                  email: user.email,
-                  userName: user.displayName,
-                  password: "Example123",
-                },
-              });
-
-              return;
-            } else {
-              alert("개발용: 구글 회원 가입 실패");
-
-              console.log(response.status, response.data);
-            }
           })
           .catch((error) => {
             alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
@@ -250,6 +183,12 @@ export default function Login({ setIsLogin }) {
   };
 
   useEffect(() => {
+    // 로그인 된 상태?
+    // ㅇㅇ -> 메인 페이지로 이동.
+    // ㄴㄴ -> 페이지 랜더링 계속.
+  }, []);
+
+  useEffect(() => {
     emailInput.current.focus();
   }, []);
 
@@ -267,32 +206,11 @@ export default function Login({ setIsLogin }) {
     }));
   }, [password]);
 
-  useEffect(() => {
-    if (isModalOpen) return;
-
-    if (!isModalOpen & !isEmailValid(email)) {
-      focusRef.email.current.focus();
-
-      return;
-    }
-
-    if (!isModalOpen & !isPasswordValid(password)) {
-      focusRef.password.current.focus();
-
-      return;
-    }
-  }, [isModalOpen]);
-
   return (
     <div className={styles.container_Login}>
-      <Modal
-        children={modalMessage}
-        isOpen={isModalOpen}
-        closeModal={closeModal}
-      />
       <div className={styles.topBar}>11:11</div>
       <div className={styles.wrapper_header}>
-        <LoginHeader children={"/*codeMentor*/"} />
+        <LoginHeader children={"logo"} />
       </div>
       <form>
         <div className={styles.wrapper_Inputs}>
@@ -334,18 +252,10 @@ export default function Login({ setIsLogin }) {
   );
 }
 
-// const LoginOption = React.forwardRef(({ children, onClick }, ref) => {
-//   return (
-//     <div className={styles.loginOption} onClick={onClick} ref={ref}>
-//       {children}
-//     </div>
-//   );
-// });
-
-function LoginOption({ children, onClick }) {
+const LoginOption = React.forwardRef(({ children, onClick }, ref) => {
   return (
-    <div className={styles.loginOption} onClick={onClick}>
+    <div className={styles.loginOption} onClick={onClick} ref={ref}>
       {children}
     </div>
   );
-}
+});

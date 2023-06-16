@@ -1,5 +1,5 @@
 import styles from "./Register.module.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PATH from "../../constants/path";
 import {
@@ -11,15 +11,20 @@ import {
   makeVerificationCodeVaildationMessage,
   makePasswordValidationMessage,
   makePasswordConfirmValidationMessage,
+  isPassValidation,
+  alertValidationMessage,
 } from "../../hooks/useLogin.js";
 import { api } from "../../libs/utils/api.js";
 import { InputWithEditButton } from "../../components/inputs/InputWithEditButton.jsx";
+import { InputWithIndicator } from "../../components/inputs/InputWithIndicator.jsx";
 import { LoginHeader } from "../../components/headers/LoginHeader";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput";
+import { set } from "date-fns";
 
 export default function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
   const emailInput = useRef();
   const verificationCodeInput = useRef();
   const passwordInput = useRef();
@@ -44,19 +49,23 @@ export default function Register() {
     passwordConfirm: "",
   });
   const [showEditButtonState, setShowEditButtonState] = useState(false);
+
+  // 이메일 인증 페이지랑 합칠까..
+
   const [step, setStep] = useState(0);
 
   const handleOnChangeFormInput = (e) => {
-    const inputName = e.target.name;
-    let inputValue = e.target.value;
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-    if (inputName === "verificationCode") {
-      const RegExp = /\D/;
+  const handleOnChangeVerificationCodeInput = (e) => {
+    const value = e.target.value;
 
-      inputValue = inputValue.replace(RegExp, "");
-    }
+    const RegExp = /\D/;
 
-    setFormInputValue((prev) => ({ ...prev, [inputName]: inputValue }));
+    const newValue = value.replace(RegExp, "");
+
+    setFormInputValue((prev) => ({ ...prev, [e.target.name]: newValue }));
   };
 
   const handleOnClickSubmitButton = async (e) => {
@@ -71,68 +80,23 @@ export default function Register() {
         return;
       }
 
+      const formData = {
+        email,
+      };
+
       try {
-        const response = await api.get(`/users/profile/?email=${email}`, {
-          validateStatus: (status) => status < 500,
-        });
-        const data = await response.data;
+        const response = await api.post("/email-verification", formData);
+        const result = response.data.result;
 
-        // 404: 해당 이메일 주소를 사용하는 회원 정보가 없음.
-        // { message: `Email User Not Found` }
-        // -> 해당 이메일로 회원 가입을 진행.
-
-        // 200: 해당 이메일 주소를 사용하는 회원 정보가 있음.
-        // -> alert + return;
-
-        if (response.status === 404) {
-          alert("개발용: 이메일 중복 검사 통과.");
-        }
-
-        if (response.status === 200) {
-          if (data.isEmailVerified === 0) {
-            setStep(1);
-
-            return;
-          }
-
+        if (result === "이미 가입된 이메일.") {
           alert("이미 가입된 이메일입니다.");
 
           return;
         }
 
-        // } else {
-        //   alert("error from: 이메일 중복 검사 과정.");
-
-        //   console.log(
-        //     `응답 코드: ${response.status}`,
-        //     `응답 데이터: ${response.data}`
-        //   );
-
-        //   return;
-        // }
-      } catch (error) {
-        alert("서버와의 통신에 실패했습니다.");
-
-        console.log(error);
-
-        return;
-      }
-
-      try {
-        const response = await api.post(`/users/send/?email=${email}`, {
-          validateStatus: (status) => status < 500,
-        });
-        const data = await response.data;
-
-        // 인증 메일 발송 성공.
-        // "message": "Verification email sent"
-        if (response.status === 200) {
-          alert("인증 메일 발송 성공.");
+        // if (result === "인증 메일 발송 성공.") {
+        if (true) {
           setStep(1);
-
-          return;
-        } else {
-          alert("인증 메일 발송 실패. 다시 시도해주세요.");
 
           return;
         }
@@ -154,50 +118,28 @@ export default function Register() {
         return;
       }
 
+      const formData = {
+        email,
+        verificationCode,
+      };
+
       try {
-        const response = await api.post(
-          `/users/verify/?email=${email}&verificationCode=${verificationCode}`,
-          {
-            validateStatus: (status) => {
-              return status < 500 || status === 400;
-            },
-          }
-        );
-        const data = await response.data;
+        const response = await api.post("/verification-code-confirm", formData);
+        const result = await response.data.result;
 
-        console.log("데이터", data);
+        if (result === "인증 코드가 일치하지 않습니다.") {
+          alert(
+            "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
+          );
 
-        // 인증 번호 일치.
-        // "message": "email verify success!"
-        if (response.status === 200) {
+          return;
+        }
+        // if (result === "인증 코드가 일치합니다.") {
+        if (true) {
           setStep(2);
 
           return;
         }
-
-        // 인증 번호 불일치
-        if (response.status === 400) {
-          const errorMessage = data.error;
-
-          // "error": "The verification code is invalid"
-          if (errorMessage === "The verification code is invalid") {
-            alert(
-              "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
-            );
-
-            return;
-          }
-
-          alert(
-            `개발용: 등록되지 않은 에러 메세지: ${
-              (response.data, errorMessage)
-            }`
-          );
-        }
-
-        alert(`개발용: 등록되지 않은 에러 메세지: ${response.data}`);
-
-        return;
       } catch (error) {
         alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
@@ -227,36 +169,26 @@ export default function Register() {
       const formData = {
         email,
         password,
-        userName: " ",
+        userName: "",
+        image: "",
+        grade: "",
+        point: "",
       };
 
       try {
-        const response = await api.post("/users/signup", formData, {
-          validateStatus: (status) => status < 500,
-        });
-        const data = await response.data;
+        const response = await api.post("/user/sign-up", formData);
+        const result = await response.data.result;
 
-        if (response.status === 201) {
+        // if (result === "회원 가입 완료") {
+        if (true) {
           alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
 
-          // 사용자 특정, 정보 수정을 위해 들고 프로필 설정 페이지로 넘어감.
-          // -> 백엔드 로직상 userName만 변경하고 싶어도 password 필드를 반드시 알맞게 채워야 한다고 함.
           navigate(PATH.LOGIN + "/create-profile", {
             state: {
               email,
-              password,
             },
           });
-
-          return;
         }
-
-        alert(`개발용: 회원 가입 실패.`);
-
-        console.log(
-          `응답 코드: ${response.status}`,
-          `응답 데이터: ${response.data}`
-        );
       } catch (error) {
         alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
@@ -306,7 +238,7 @@ export default function Register() {
       ...oldMessage,
       passwordConfirm: newMessage,
     }));
-  }, [password, passwordConfirm]);
+  }, [passwordConfirm]);
 
   useEffect(() => {
     if (step === 0) {
@@ -342,39 +274,6 @@ export default function Register() {
 
   return (
     <div className={styles.container_Register}>
-      <button
-        onClick={async () => {
-          try {
-            const response = await api.delete(`/users/profile/?email=${email}`);
-
-            if (response.status === 200) {
-              alert(`${email} 회원 탈퇴 완료`);
-            }
-          } catch (error) {
-            alert("회원 탈퇴 과정에서 에러");
-            console.log(error);
-          }
-        }}
-      >
-        회원 탈퇴
-      </button>
-      <button
-        onClick={async () => {
-          try {
-            const response = await api.get(`/users/profile/?email=${email}`, {
-              validateStatus: (status) => status < 500,
-            });
-            const data = await response.data;
-
-            console.log(response.status, data);
-          } catch (error) {
-            alert("서버 통신 실패.");
-            return;
-          }
-        }}
-      >
-        사용자 정보 조회
-      </button>
       <div className={styles.topBar}>11:11</div>
       <div className={styles.wrapper_header}>
         <LoginHeader children={"회원 가입"} />
@@ -389,15 +288,17 @@ export default function Register() {
               ref={emailInput}
               onChange={handleOnChangeFormInput}
               disabled={step !== 0}
-              editButton_children={"수정"}
-              editButton_showState={showEditButtonState}
-              editButton_onClick={async (e) => {
+              showEditButtonState={showEditButtonState}
+              buttonOnClick={async (e) => {
                 e.preventDefault();
 
                 try {
-                  const response = await api.post("/user/verify-cancle", {
-                    email,
-                  });
+                  const response = await api.post(
+                    "/email-verification-cancle",
+                    {
+                      email,
+                    }
+                  );
                   const result = await response.data.result;
 
                   // if (response.data.result === "발송된 인증 번호 폐기 성공.") {
@@ -431,7 +332,7 @@ export default function Register() {
                   placeholder={"인증 번호 6자리"}
                   maxLength="6"
                   ref={verificationCodeInput}
-                  onChange={handleOnChangeFormInput}
+                  onChange={handleOnChangeVerificationCodeInput}
                   onKeyDown={(e) => {
                     if (e.key === " ") {
                       e.preventDefault();

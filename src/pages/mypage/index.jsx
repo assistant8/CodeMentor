@@ -4,21 +4,32 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { LuSprout } from "react-icons/lu";
 import { FaGraduationCap } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
-import { useState, useEffect } from "react";
-import { useRecoilValue, useRecoilState } from "recoil";
+import React, { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
+import { useEffect } from "react";
 import { Modal } from "../../components/modal";
 import chart from "../../image/chart-bar.png";
+import book from "../../image/book-account-outline.png";
 import bookmark from "../../image/bookmark.svg";
 import check from "../../image/check.svg";
-import { api } from "../../libs/utils/api";
+import axios from "axios";
 
 const User = () => {
-  const email = useRecoilValue(userState).email;
-  const [user, setUser] = useState("");
+  const [user, setUser] = useRecoilState(userState);
   useEffect(() => {
-    api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
-    console.log(user);
+    const fetchUserInfo = () => {
+      // Mock 데이터를 사용하여 유저 정보를 설정하는 코드
+      const userInfo = {
+        name: "낭니",
+        email: "nangni@elice.com",
+        password: "Asdfasdf",
+        image: "account-circle.png",
+      };
+      setUser(userInfo);
+    };
+
+    fetchUserInfo();
   }, []);
 
   let navigate = useNavigate();
@@ -28,8 +39,8 @@ const User = () => {
         <img src={user.image} alt="프사" />
       </div>
       <div style={{ display: "flex" }}>
-        <h3>{user.grade === "general" ? "코드 멘티, " : "코드 멘토, "}</h3>
-        <h3>{user.userName === " " ? "이름을 설정해주세요" : user.userName}</h3>
+        <h3>{user.admin ? "코드 멘토, " : "코드 멘티, "}</h3>
+        <h3>{user.name}</h3>
       </div>
       <button>
         <MdOutlineKeyboardArrowRight
@@ -45,7 +56,7 @@ const Grade = ({ openModal }) => {
   return (
     <div className={styles.gradeInfo}>
       <div className={styles.gradeImg}>
-        {user.grade === "admin" ? (
+        {user.admin ? (
           <FaGraduationCap className={styles.gradeIcon} />
         ) : (
           <LuSprout className={styles.gradeIcon} />
@@ -89,54 +100,7 @@ const Menu = () => {
 };
 
 const LogOut = () => {
-  const [user, setUser] = useRecoilState(userState);
-  const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  const openModal = () => {
-    setIsOpen(true);
-  };
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-  const [modalContent, setModalContent] = useState(""); // 상태 변수 추가
-
-  const onClick = () => {
-    api
-      .post("/users/logout", {})
-      .then((res) => {
-        // 로그아웃 처리 성공
-        navigate("/login");
-        setUser({
-          id: null,
-          userName: "",
-          email: "",
-          image: null,
-          grade: "",
-          point: 0,
-          createdAt: "",
-          updatedAt: "",
-          isEmailVerified: false,
-          verificationCode: null,
-        });
-        localStorage.setItem("isLogin", false);
-      })
-      .catch((error) => {
-        // 로그아웃 처리 실패
-        openModal();
-        setModalContent(error + "로그아웃에 실패했습니다.");
-      });
-  };
-
-  return (
-    <>
-      <p className={styles.logout} onClick={onClick}>
-        로그아웃
-      </p>
-      <Modal isOpen={isOpen} closeModal={closeModal}>
-        {modalContent}
-      </Modal>
-    </>
-  );
+  return <p className={styles.logout}>로그아웃</p>;
 };
 
 const MyPage = () => {

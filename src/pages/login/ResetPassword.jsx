@@ -106,7 +106,7 @@ export default function ResetPassword() {
       ...oldMessage,
       passwordConfirm: newMessage,
     }));
-  }, [password, passwordConfirm]);
+  }, [passwordConfirm]);
 
   return (
     <div className={styles.container_ResetPassword}>
