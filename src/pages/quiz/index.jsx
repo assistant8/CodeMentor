@@ -107,7 +107,7 @@ export default function Quiz() {
         ))}
       </div>
 
-      <CommentContainer />
+      {/* <CommentContainer /> */}
     </div>
   );
 }
