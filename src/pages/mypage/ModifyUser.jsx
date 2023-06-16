@@ -79,8 +79,11 @@ const ModifyUser = () => {
     api
       .delete(`/users/profile/?email=${email}`)
       .then(() => {
-        alert("탈퇴 되었습니다. 이용해주셔서 감사합니다.");
-        navigate("/login");
+        setModalContent("탈퇴 되었습니다. 이용해주셔서 감사합니다.");
+        openModal();
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       })
       .catch((error) => {
         setModalContent(error + "회원 탈퇴에 실패했습니다.");
