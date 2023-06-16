@@ -1,11 +1,19 @@
 import styles from './adminHintContainer.module.scss'
-import {useState} from "react";
+import plusIcon from '../../image/plus.png'
+import { maplevelToQuestion } from '../quiz';
 
-export default function AdminHintContainer({ hintLevel, hintContent, onChange }) {
+export default function AdminHintContainer({ hintLevel, hintContent, onChange, showImage=true, onClick }) {
+
     return (
         <div className={styles.hintContainer}>
             <div className={styles.hintName}>
-                <div className={styles.hintTitle}>힌트 {hintLevel}</div>
+                <div className={styles.hintUpper}>
+                    <div className={styles.hintTitle}>
+                        {maplevelToQuestion[hintLevel]}
+                    </div>
+                    {/* 첫 번째 힌트 컨테이너에는 이미지가 보이지않게 하기위한 설정 */}
+                    {showImage && <img src={plusIcon} alt="register" onClick={onClick}/>}
+                </div>
                 <input className={styles.hintContent}
                     type="text"
                     value={hintContent}

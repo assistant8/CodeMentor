@@ -8,34 +8,6 @@ import { categoryState, searchKeyState } from '../../state/store.js';
 import { Modal } from '../../components/modal';
 import axios from "axios";
 
-// problem reserved schema
-// const dummyTest =  [
-//   {
-//     "id": 1,
-//     "category": 0,
-//     "title": "3085 사탕 게임 - 1",
-//     "problemUrl": "https://www.acmicpc.net/problem/3085",
-//     "difficulty": 3,
-//     "timer": 20,
-//     "hintContent": "1단계 힌트",
-//     "hintLevel": 1,
-//     "createdAt": "2023-06-01T01:00:00.000Z",
-//     "updatedAt": "2023-06-11T18:13:30.000Z"
-//     },
-//   {
-//     "id": 4,
-//     "category": 1,
-//     "title": "6064 카잉 달력",
-//     "problemUrl": "https://www.acmicpc.net/problem/6064",
-//     "difficulty": 4,
-//     "timer": 30,
-//     "hintContent": "1단계 힌트",
-//     "hintLevel": 1,
-//     "createdAt": "2023-06-04T00:00:01.000Z",
-//     "updatedAt": "2023-06-04T04:00:20.000Z"
-//     },
-//   ];
-
 export default function AdminQuizListContainer () {
   const navigate = useNavigate();
   
@@ -106,8 +78,8 @@ export default function AdminQuizListContainer () {
       console.log('삭제 후 응답값: ', response.data);
       (response.success === true) && alert(`${quiz.title} 문제를 정상적으로 삭제하였습니다.`)
       await getAllProblems();
-      navigate("/admin");
       closeModal();
+      navigate("/admin");
     } catch(error){
       setModalContent(error + "문제 삭제에 실패했습니다.");
       openModal();
