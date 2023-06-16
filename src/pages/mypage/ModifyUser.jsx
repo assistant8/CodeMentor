@@ -36,8 +36,13 @@ const ModifyUser = () => {
   const handleSubmit = () => {
     const formData = new FormData();
     formData.append("image", fileInputRef.current.files[0]);
+    console.log(fileInputRef.current.files[0]);
     api
-      .post(`/users/profile/${user.id}/upload-image`, formData)
+      .post(`/users/${user.id}/upload-image`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         console.log(res);
         setModalContent("사진을 업로드했습니다.");
