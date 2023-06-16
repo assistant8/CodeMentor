@@ -1,6 +1,6 @@
 import styles from "./InputWithEditButton.module.scss";
 import React from "react";
-import { UserInput } from "./UserInput.jsx";
+import check from "../../image/check.png";
 
 export const InputWithEditButton = React.forwardRef(
   (
@@ -12,18 +12,15 @@ export const InputWithEditButton = React.forwardRef(
       name,
       maxLength,
       onKeyDown,
+      buttonOnClick,
+      showEditButtonState,
       disabled,
-
-      editButton_showState,
-      editButton_onClick,
-      editButton_style,
-      editButton_children,
     },
     ref
   ) => {
     return (
       <div className={styles.wrapper}>
-        <UserInput
+        <input
           className={styles.input}
           type={type}
           placeholder={placeholder}
@@ -34,15 +31,15 @@ export const InputWithEditButton = React.forwardRef(
           maxLength={maxLength}
           onKeyDown={onKeyDown}
           disabled={disabled}
-        ></UserInput>
-        {editButton_showState ? (
+        ></input>
+        {showEditButtonState ? (
           <>
             <div
-              className={styles.editButton}
-              onClick={editButton_onClick}
-              style={editButton_style}
+              className={styles.button}
+              onClick={buttonOnClick}
+              style={{ cursor: "pointer" }}
             >
-              {editButton_children}
+              수정
             </div>
           </>
         ) : null}

@@ -15,6 +15,7 @@ import { InputWithEditButton } from "../../components/inputs/InputWithEditButton
 import { LoginHeader } from "../../components/headers/LoginHeader";
 import { UserInput } from "../../components/inputs/UserInput";
 import { VioletButton } from "../../components/buttons/VioletButton";
+import { is } from "immutable";
 
 export default function FindPassword() {
   const navigate = useNavigate();
@@ -63,42 +64,21 @@ export default function FindPassword() {
         return;
       }
 
-      try {
-        const response = await api.get(`/users/profile/?email=${email}`, {
-          validateStatus: (status) => status < 500,
-        });
-        const data = await response.data;
+      const formData = { email };
 
-        if (response.status === 200) {
-          alert("개발용: 등록된 이메일.");
-        } else {
+      try {
+        const response = await api.post("/uesr/check-email", formData);
+        const result = await response.data.result;
+
+        if (result === "db에 이메일 없음.") {
           alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
           return;
         }
-      } catch (error) {
-        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
-        console.log(error);
-
-        return;
-      }
-
-      try {
-        const response = await api.post(`/users/send/?email=${email}`, {
-          validateStatus: (status) => status < 500,
-        });
-        const data = await response.data;
-
-        // 인증 메일 발송 성공.
-        // "message": "Verification email sent"
-        if (response.status === 200) {
-          alert("인증 메일 발송 성공.");
+        // if (result === "db에 이메일 있음.") {
+        if (true) {
           setStep(1);
-
-          return;
-        } else {
-          alert("인증 메일 발송 실패. 다시 시도해주세요.");
 
           return;
         }
@@ -115,57 +95,32 @@ export default function FindPassword() {
       if (!isVerificationCodeValid(verificationCode)) {
         alert(validationMessage.verificationCode);
 
-        focusRef.verificationCode.current.focus();
-
         return;
       }
 
+      const formData = { email, verificationCode };
+
       try {
-        const response = await api.post(
-          `/users/verify/?email=${email}&verificationCode=${verificationCode}`,
-          {
-            validateStatus: (status) => {
-              return status < 500 || status === 400;
-            },
-          }
+        const resaponse = await api.post(
+          "/user/check-verification-code",
+          formData
         );
-        const data = await response.data;
+        const result = await resaponse.data.result;
 
-        console.log("데이터", data);
-
-        // 인증 번호 일치.
-        // "message": "email verify success!"
-        if (response.status === 200) {
-          navigate(PATH.LOGIN + "/reset-password", {
-            state: { email },
-          });
+        if (result === "인증 번호가 일치하지 않음.") {
+          alert(
+            "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
+          );
 
           return;
         }
 
-        // 인증 번호 불일치 & 이미 인증된 사용자.
-        if (response.status === 400) {
-          const errorMessage = data.error;
+        // if (result === "인증 번호 일치.") {
+        if (true) {
+          navigate(PATH.LOGIN + "/reset-password", { state: { email } });
 
-          // "error": "The verification code is invalid"
-          if (errorMessage === "The verification code is invalid") {
-            alert(
-              "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
-            );
-
-            return;
-          }
-
-          alert(
-            `개발용: 등록되지 않은 에러 메세지: ${
-              (response.data, errorMessage)
-            }`
-          );
+          return;
         }
-
-        alert(`개발용: 등록되지 않은 에러 메세지: ${response.data}`);
-
-        return;
       } catch (error) {
         alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
@@ -246,9 +201,8 @@ export default function FindPassword() {
             ref={emailInput}
             onChange={handleOnChangeFormInput}
             disabled={step !== 0}
-            editButton_children={"수정"}
-            editButton_showState={showEditButtonState}
-            editButton_onClick={async (e) => {
+            showEditButtonState={showEditButtonState}
+            buttonOnClick={async (e) => {
               e.preventDefault();
 
               try {
