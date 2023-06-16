@@ -128,7 +128,7 @@ const QuizNameContainer = ({ onClick, quizInfo }) => {
       console.log(response.data);
       setIsBookmarked(true);
     } catch (error) {
-      console.error(error)
+      console.log("error", error)
     }
   }
 
@@ -138,7 +138,7 @@ const QuizNameContainer = ({ onClick, quizInfo }) => {
       console.log(response.data); // 성공적으로 요청을 처리한 후의 응답 데이터
       setIsBookmarked(false); // 찜 버튼 상태를 업데이트
     } catch (error) {
-      console.error(error); // 에러 처리
+      console.log("error", error); // 에러 처리
     }
   };
 
