@@ -342,7 +342,7 @@ export default function Register() {
 
   return (
     <div className={styles.container_Register}>
-      <button
+      {/* <button
         onClick={async () => {
           try {
             const response = await api.delete(`/users/profile/?email=${email}`);
@@ -374,7 +374,7 @@ export default function Register() {
         }}
       >
         사용자 정보 조회
-      </button>
+      </button> */}
       {/* <div className={styles.topBar}>11:11</div> */}
       <div className={styles.wrapper_header}>
         <LoginHeader children={"회원 가입"} />
