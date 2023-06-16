@@ -14,7 +14,7 @@ const ModifyUser = () => {
   const [user, setUser] = useState("");
   useEffect(() => {
     api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
-  }, []);
+  }, [email]);
   const [imgUrl, setImgUrl] = useState(user.image);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -79,8 +79,7 @@ const ModifyUser = () => {
     api
       .delete(`/users/profile/?email=${email}`)
       .then(() => {
-        setModalContent("탈퇴 되었습니다. 이용해주셔서 감사합니다.");
-        openModal();
+        alert("탈퇴 되었습니다. 이용해주셔서 감사합니다.");
         navigate("/login");
       })
       .catch((error) => {
