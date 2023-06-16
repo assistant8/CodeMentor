@@ -11,6 +11,11 @@ import check from "../../image/check.png";
 import skip from "../../image/skip2.png";
 import { useLocation, useNavigate } from "react-router";
 import {api} from "../../libs/utils/api"
+// import { async } from "q";
+// import e from "express";
+// import { error } from "console";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../state/userState";
 
 export default function Quiz() {
   const [showToast, setShowToast] = useState(false);
@@ -113,12 +118,45 @@ export default function Quiz() {
 }
 
 const QuizNameContainer = ({ onClick, quizInfo }) => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const userEmail = useRecoilValue(userState).email;
+  console.log("userEmail", userEmail)
+
+  const addBookmark = async () => {
+    try {
+      const response = await api.post(`/user-problem/saved/?email=${userEmail}&problemId=${quizInfo.id}`); 
+      console.log(response.data);
+      setIsBookmarked(true);
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const removeBookmark = async () => {
+    try {
+      const response = await api.delete(`/user-problem/saved/?email=${userEmail}&problemId=${quizInfo.id}`, {"email":{userEmail}}); 
+      console.log(response.data); // 성공적으로 요청을 처리한 후의 응답 데이터
+      setIsBookmarked(false); // 찜 버튼 상태를 업데이트
+    } catch (error) {
+      console.error(error); // 에러 처리
+    }
+  };
+
+  const handleBookmarkClick = () => {
+    if (isBookmarked) {
+      removeBookmark();
+    } else {
+      addBookmark();
+    }
+  };
+
+
   return (
     <div className={styles.quizNameContainer}>
       <div className={styles.quizInfo}>
         <div className={styles.quizTitle} ><a href={quizInfo.problemUrl}>{quizInfo.title}</a></div>
         <div className={styles.quizPersonal}>
-          <div className={styles.bookmark}>
+          <div className={styles.bookmark} onClick={handleBookmarkClick}>
             <img src={bookmark} alt="찜" className={styles.bookmarkImage}></img>
             <div>찜</div>
           </div>
