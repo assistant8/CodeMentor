@@ -17,13 +17,10 @@ const BookMark = () => {
   const [quizs, setQuizs] = useState([]);
   const user = useRecoilValue(userState);
   useEffect(() => {
-    console.log("quizs 1 : ", quizs);
     api
       .get(`/user-problem/saved/?email=${user.email}`)
       .then((res) => {
-        console.log(res);
         setQuizs(res.data);
-        console.log("res.data : ", quizs);
       })
       .catch((error) => {
         setModalContent(error + "문제 불러오기를 실패했습니다.");
