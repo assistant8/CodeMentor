@@ -18,9 +18,8 @@ const User = () => {
   const [user, setUser] = useState("");
   useEffect(() => {
     api.get(`/users/profile/?email=${email}`).then((res) => setUser(res.data));
-    console.log(user);
   }, []);
-
+  console.log("user : ", user);
   let navigate = useNavigate();
   return (
     <div className={styles.userInfo}>
