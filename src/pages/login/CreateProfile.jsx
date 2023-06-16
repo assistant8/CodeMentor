@@ -15,6 +15,8 @@ export default function CreateProfile() {
   const { email, password } = location.state;
   console.log(email, password);
   const id = useRef("");
+  const image = useRef("");
+  console.log(id, image);
   // const defaultName = location?.state?.name;
   const userNameInput = useRef();
   const profileImageInput = useRef();
@@ -99,6 +101,13 @@ export default function CreateProfile() {
       return;
     }
 
+    if (profileImageInputFile === null) {
+      alert("개발용: 프로필 이미지 변경 생략.");
+
+      navigate(PATH.LOGIN);
+
+      return;
+    }
     // 이미지 변경.
     // -> ''로 넘기면 서버에서 잘 받을 수 있나? 기본값으로 설정하고 싶은데.
     try {
@@ -113,7 +122,7 @@ export default function CreateProfile() {
       };
 
       const response = await api.post(
-        `/users/profile/:${id.current}/upload-image`,
+        `/users/${id.current}/upload-image`,
         formData,
         axiosOption
       );
@@ -193,6 +202,7 @@ export default function CreateProfile() {
 
         if (response.status === 200) {
           id.current = data.id;
+          image.current = data.image;
 
           return;
         }
@@ -219,7 +229,7 @@ export default function CreateProfile() {
 
   return (
     <div className={styles.container_CreateProfile}>
-      <div className={styles.topBar}>11:11</div>
+      {/* <div className={styles.topBar}>11:11</div> */}
       <div className={styles.wrapper_header}>
         <LoginHeader children={"프로필 설정"} />
       </div>
