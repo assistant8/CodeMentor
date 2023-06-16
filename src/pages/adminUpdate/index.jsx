@@ -120,6 +120,7 @@ export default function ProblemUpdatePage() {
       <div className={styles.hintContainer}>
       <h3>힌트 정보</h3>
         <AdminHintContainer
+          showImage={false}
           hintLevel={1}
           hintContent={quizInfo.hintContent}
           onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
@@ -131,31 +132,21 @@ export default function ProblemUpdatePage() {
             children="기본 수정"
           />
         </div>
-        <HintContainer
-          hintTitle={"힌트 2"}
+        <AdminHintContainer
           hintLevel={2}
-          hintContent={""}
-          isAdmin={true}
+          hintContent={quizInfo.hintContent}
+          onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
         />
-        <HintContainer
-          hintTitle={"힌트 3"}
+        <AdminHintContainer
           hintLevel={3}
-          hintContent={""}
-          isAdmin={true}
+          hintContent={quizInfo.hintContent}
+          onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
         />
-        <HintContainer
-          hintTitle={"힌트 4"}
+        <AdminHintContainer
           hintLevel={4}
-          hintContent={""}
-          isAdmin={true}
+          hintContent={quizInfo.hintContent}
+          onChange={(e)=>{setQuizInfo({...quizInfo, hintContent: e.target.value})}}
         />
-        <div className={styles.submitBtn}>
-          <SmallVioletButton 
-            ref={buttonRef} 
-            onClick={handleHintUpdate}
-            children="추가 수정"
-            />
-        </div>
       </div>
     </div>
   );
