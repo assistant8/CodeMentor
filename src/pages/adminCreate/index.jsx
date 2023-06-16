@@ -9,29 +9,17 @@ import { useNavigate } from "react-router-dom";
 
 export default function ProblemUpdatePage() {
   const navigate = useNavigate();
-  // problem reserved schema
-  // const dummyTest = {
-    //     "id": 1,
-    //     "category": 0,
-    //     "title": "3085 사탕 게임 - 1",
-    //     "problemUrl": "https://www.acmicpc.net/problem/3085",
-    //     "difficulty": 3,
-    //     "timer": 20,
-    //     "hintContent": "1단계 힌트",
-    //     "hintLevel": 1
-    //   }
 
-    // 문제정보를 받을 상태와 입력시 상태를 변경할 set함수를 빈 객체를 초기값으로 설정
-    const [quizInfo, setQuizInfo] = useState({
-      title: '',
-      problemUrl: '',
-      category: 0,
+  // 문제정보를 받을 상태와 입력시 상태를 변경할 set함수를 빈 객체를 초기값으로 설정
+  const [quizInfo, setQuizInfo] = useState({
+    title: '',
+    problemUrl: '',
+    category: 0,
     hintLevel: 1,
     hintContent: '',
     difficulty: 1,
     timer: 5,
   });
-  console.log("🚀 ~ file: index.jsx:26 ~ ProblemUpdatePage ~ quizInfo:", quizInfo)
   
   const buttonRef = useRef();
   
@@ -44,7 +32,7 @@ export default function ProblemUpdatePage() {
       [name]: (name === "category" ? Number(value) : value),
     }));
   };
-  console.log(quizInfo);
+
   const handleProblemCreate = async () => {
     try {
       const response = await axios.post('/problems', quizInfo)
@@ -70,18 +58,15 @@ export default function ProblemUpdatePage() {
       hintLevel: 2,
       hintContent: "",
     })
-    console.log("🚀 ~ file: index.jsx:67 ~ ProblemUpdatePage ~ secondHint:", secondHint)
     const [thirdHint, setThirdHint] = useState({
       hintLevel: 3,
       hintContent: "",
     })
-    console.log("🚀 ~ file: index.jsx:73 ~ ProblemUpdatePage ~ thirdHint:", thirdHint)
     const [fourthHint, setFourthHint] = useState({
       hintLevel: 4,
       hintContent: "",
     })
-    console.log("🚀 ~ file: index.jsx:79 ~ ProblemUpdatePage ~ fourthHint:", fourthHint)
-    
+
     // 추가 힌트 등록 이벤트 핸들러
     const handleHintCreate = async (nthHint) => {
       try {
