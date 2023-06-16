@@ -114,6 +114,8 @@ export default function Quiz() {
 
 const QuizNameContainer = ({ onClick, quizInfo }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isSolved, setIsSolved] = useState(false);
+
   const userEmail = useRecoilValue(userState).email;
   console.log("userEmail", userEmail);
 
@@ -144,11 +146,47 @@ const QuizNameContainer = ({ onClick, quizInfo }) => {
     }
   };
 
+  const addSolved = async () => {
+    try {
+      const response = await api.post(
+        `/user-problem/solved/?email=${userEmail}&problemId=${quizInfo.id}`,
+        { email: { userEmail } }
+      );
+      console.log(response.data);
+      setIsSolved(true);
+    } catch (error) {
+      console.log("error", error);
+      setIsSolved(true);
+    }
+  };
+
+  const removeSolved = async () => {
+    try {
+      const response = await api.delete(
+        `/user-problem/solved/?email=${userEmail}&problemId=${quizInfo.id}`,
+        { email: { userEmail } }
+      );
+      console.log(response.data); // 성공적으로 요청을 처리한 후의 응답 데이터
+      setIsSolved(false); // 찜 버튼 상태를 업데이트
+    } catch (error) {
+      console.log("error", error); // 에러 처리
+      setIsSolved(false); // 찜 버튼 상태를 업데이트
+    }
+  };
+
   const handleBookmarkClick = () => {
     if (isBookmarked) {
       removeBookmark();
     } else {
       addBookmark();
+    }
+  };
+
+  const handleSolveClick = () => {
+    if (isSolved) {
+      removeSolved();
+    } else {
+      addSolved();
     }
   };
 
@@ -177,7 +215,7 @@ const QuizNameContainer = ({ onClick, quizInfo }) => {
             </svg>
             <div>찜</div>
           </div>
-          <div className={styles.solved}>
+          <div className={styles.solved} onClick={handleSolveClick}>
             <svg
               width="2rem"
               height="2rem"
