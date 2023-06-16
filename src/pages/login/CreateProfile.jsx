@@ -8,19 +8,19 @@ import { SmallVioletButton } from "../../components/buttons/SmallVioletButton.js
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput.jsx";
 import defaultProfileImage from "../../image/defaultProfileImage.png";
-import { set } from "date-fns";
-import { is } from "immutable";
 
 export default function CreateProfile() {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location?.state?.email;
-  const defaultName = location?.state?.name;
+  const { email, password } = location.state;
+  console.log(email, password);
+  const id = useRef("");
+  // const defaultName = location?.state?.name;
   const userNameInput = useRef();
   const profileImageInput = useRef();
 
-  const [profileImageInputFile, setProfileImageInputFile] = useState("");
-  const [profileImageFileURL, setProfileImageFileURL] = useState("");
+  const [profileImageInputFile, setProfileImageInputFile] = useState(null);
+  const [profileImageFileURL, setProfileImageFileURL] = useState(null);
   const [formInputValue, setFormInputValue] = useState({
     userName: "",
   });
@@ -70,55 +70,140 @@ export default function CreateProfile() {
       return;
     }
 
-    const formData = new FormData();
-
-    formData.append("email", email);
-    formData.append("userName", userName);
-    formData.append("image", profileImageInputFile);
-
-    const axiosOption = { headers: { "Content-Type": "multipart/form-data" } };
-
+    // userName 변경.
     try {
-      const response = await api.post("/user/profile", formData, axiosOption);
+      const formData = {
+        userName,
+        password,
+      };
+      const response = await api.put(
+        `/users/profile/?email=${email}`,
+        formData
+      );
+      const data = await response.data;
 
-      const result = await response.data.result;
+      // "userName": "JohnDoe5"
+      if (response.status === 200) {
+        alert(`개발용: userName ${data.userName}으로 변경 성공.`);
+      } else {
+        alert(`개발용: userName 변경 실패`);
 
-      // if (result === "프로필 생성 성공") {
-      if (true) {
-        // 소셜 로그인은 아마 안 될 듯.. 프론트에서라도 구현해봐야지.
-        if (result === "소셜 회원 가입 프로필 생성 완료") {
-          alert("프로필 생성이 완료되었습니다.");
+        console.log(response.status, data);
 
-          navigate(PATH.HOME);
-
-          return;
-        }
-
-        // if (result ===  '이메일 회원 가입 프로필 생성 완료') {
-        if (true) {
-          alert("프로필 생성이 완료되었습니다. 로그인 페이지로 이동합니다.");
-
-          navigate(PATH.LOGIN);
-
-          return;
-        }
+        return;
       }
     } catch (error) {
-      alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      alert("form userName: 서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      console.log(error);
 
+      return;
+    }
+
+    // 이미지 변경.
+    // -> ''로 넘기면 서버에서 잘 받을 수 있나? 기본값으로 설정하고 싶은데.
+    try {
+      const formData = new FormData();
+
+      formData.append("image", profileImageInputFile);
+
+      console.log(formData.get("image"));
+
+      const axiosOption = {
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+
+      const response = await api.post(
+        `/users/profile/:${id.current}/upload-image`,
+        formData,
+        axiosOption
+      );
+
+      const data = await response.data;
+
+      if (response.status === 200) {
+        alert("개발용: 프로필 이미지 변경 성공.");
+
+        alert("프로필 생성이 완료되었습니다. 로그인 페이지로 이동합니다.");
+
+        navigate(PATH.LOGIN);
+
+        return;
+      } else {
+        alert("개발용: 프로필 이미지 변경 실패.");
+
+        console.log(response.status, response.data);
+
+        return;
+      }
+    } catch (error) {
+      alert("form image: 서버와의 통신에 실패했습니다. 다시 시도해주세요.");
       console.log(error);
 
       return;
     }
   };
 
-  const handleSetProfileLater = () => {
-    alert("기본 프로필을 사용합니다. 로그인 페이지로 이동합니다.");
-    navigate(PATH.LOGIN);
+  const handleSetProfileLater = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = {
+        password,
+        userName: `코딩용사${id.current}`,
+      };
+
+      console.log(formData.userName);
+
+      const response = await api.put(
+        `/users/profile/?email=${email}`,
+        formData
+        // {
+        //   validateStatus: (status) => status < 500,
+        // }
+      );
+      const data = await response.data;
+
+      if (response.status === 200) {
+        alert("기본 프로필을 사용합니다. 로그인 페이지로 이동합니다.");
+
+        navigate(PATH.LOGIN);
+      } else {
+        alert(`개발용: 기본 프로필 설정 실패 실패`);
+
+        console.log(response.status, data);
+
+        return;
+      }
+    } catch (error) {
+      alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+      return;
+    }
   };
 
   useEffect(() => {
     userNameInput.current.focus();
+  }, []);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      try {
+        const response = await api.get(`/users/profile/?email=${email}`);
+        const data = await response.data;
+
+        if (response.status === 200) {
+          id.current = data.id;
+
+          return;
+        }
+      } catch (error) {
+        alert("유저 정보를 불러오지 못했습니다.");
+
+        return;
+      }
+    };
+
+    getUserId();
   }, []);
 
   useEffect(() => {
@@ -157,7 +242,7 @@ export default function CreateProfile() {
             />
             {/* </div> */}
 
-            {profileImageFileURL === "" ? (
+            {profileImageFileURL === null ? (
               <img src={defaultProfileImage} alt="defaultProfileImage" />
             ) : (
               <img src={profileImageFileURL} alt="profileImageFileURL" />
@@ -177,8 +262,8 @@ export default function CreateProfile() {
               onClick={(e) => {
                 e.preventDefault();
 
-                setProfileImageInputFile("");
-                setProfileImageFileURL("");
+                setProfileImageInputFile(null);
+                setProfileImageFileURL(null);
               }}
             />
           </div>
