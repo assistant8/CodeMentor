@@ -185,9 +185,7 @@ export default function Register() {
         const response = await api.post(
           `/users/verify/?email=${email}&verificationCode=${verificationCode}`,
           {
-            validateStatus: (status) => {
-              return status < 500 || status === 400;
-            },
+            validateStatus: (status) => status < 500,
           }
         );
         const data = await response.data;
@@ -233,7 +231,9 @@ export default function Register() {
       } catch (error) {
         // alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
-        setModalMessage("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+        setModalMessage(
+          "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
+        );
         openModal();
 
         console.log(error);
@@ -450,21 +450,21 @@ export default function Register() {
               editButton_onClick={async (e) => {
                 e.preventDefault();
 
-                try {
-                  const response = await api.post("/user/verify-cancle", {
-                    email,
-                  });
-                  const result = await response.data.result;
+                // setStep(0);
 
-                  // if (response.data.result === "발송된 인증 번호 폐기 성공.") {
-                  if (true) {
+                try {
+                  const response = await api.delete(
+                    `/users/profile/?email=${email}`
+                  );
+
+                  if (response.status === 200) {
+                    console.log(`${email} 회원 탈퇴 완료`);
                     setStep(0);
 
                     return;
                   }
                 } catch (error) {
-                  alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
-
+                  console.log("회원 탈퇴 과정에서 에러");
                   console.log(error);
 
                   return;
