@@ -1,3 +1,83 @@
+// @import "../../constants/utils.scss";
+
+// .container_Login {
+//   width: 100%;
+//   height: 100vh;
+
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+
+//   div {
+//     // border: 1px solid;
+//   }
+// }
+
+// .topBar {
+//   width: 354.33px;
+//   height: 20px;
+
+//   margin-top: 15px;
+// }
+
+// .wrapper_header {
+//   margin-top: 134px;
+// }
+
+// .wrapper_Inputs {
+//   margin-top: 64px;
+
+//   input + input {
+//     margin-top: 18px;
+//   }
+// }
+
+// .wrapper_submitButton {
+//   margin-top: 40px;
+// }
+
+// .wrapper_TextLinks {
+//   width: 300px;
+
+//   margin-top: 18px;
+
+//   display: flex;
+//   justify-content: center;
+
+//   div + div {
+//     margin-left: 100px;
+//   }
+// }
+
+// .wrapper_loginOptions {
+//   width: 264px;
+//   height: 66px;
+
+//   margin-top: 42px;
+
+//   display: flex;
+//   align-items: center;
+
+//   .loginOption {
+//     width: 66px;
+//     height: 66px;
+
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+
+//     cursor: pointer;
+//   }
+
+//   div + div {
+//     margin-left: 33px;
+//   }
+
+//   img {
+//     width: 100%;
+//   }
+// }
+
 @import "../../constants/utils.scss";
 
 .container_Login {
@@ -14,53 +94,53 @@
 }
 
 .topBar {
-  width: 354.33px;
-  height: 20px;
+  width: 22.145rem;
+  height: 1.25rem;
 
-  margin-top: 15px;
+  margin-top: 0.9375rem;
 }
 
 .wrapper_header {
-  margin-top: 134px;
+  margin-top: 8.375rem;
 }
 
 .wrapper_Inputs {
-  margin-top: 64px;
+  margin-top: 4rem;
 
   input + input {
-    margin-top: 18px;
+    margin-top: 1.125rem;
   }
 }
 
 .wrapper_submitButton {
-  margin-top: 40px;
+  margin-top: 2.5rem;
 }
 
 .wrapper_TextLinks {
-  width: 300px;
+  width: 18.75rem;
 
-  margin-top: 18px;
+  margin-top: 1.125rem;
 
   display: flex;
-  justify-content: center;
+  justify-content: end;
 
   div + div {
-    margin-left: 100px;
+    margin-left: 6.25rem;
   }
 }
 
 .wrapper_loginOptions {
-  width: 264px;
-  height: 66px;
+  width: 16.5rem;
+  height: 4.125rem;
 
-  margin-top: 42px;
+  margin-top: 2.625rem;
 
   display: flex;
   align-items: center;
 
   .loginOption {
-    width: 66px;
-    height: 66px;
+    width: 4.125rem;
+    height: 4.125rem;
 
     display: flex;
     justify-content: center;
@@ -70,7 +150,7 @@
   }
 
   div + div {
-    margin-left: 33px;
+    margin-left: 2.0625rem;
   }
 
   img {
