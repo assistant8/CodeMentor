@@ -1,3 +1,76 @@
+// @import "../../constants/utils.scss";
+
+// .container_Register {
+//   width: 100%;
+//   height: 100vh;
+
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+
+//   div {
+//     // border: 1px solid;
+//   }
+// }
+
+// .topBar {
+//   width: 354.33px;
+//   height: 20px;
+
+//   margin-top: 15px;
+// }
+
+// .wrapper_header {
+//   margin-top: 134px;
+// }
+
+// .wrapper_Inputs {
+//   margin-top: 58px;
+
+//   div + div {
+//     // margin-top: 20px;
+//   }
+
+//   .wrapper_InputAndValidationMessage {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     position: relative;
+
+//     .validationMessage {
+//       width: 280px;
+
+//       color: #f16f6f;
+
+//       margin: 10px 0 10px 0;
+//     }
+
+//     .message {
+//       width: 280px;
+
+//       font-family: "Inter";
+//       font-style: normal;
+//       font-weight: 300;
+//       font-size: 20px;
+
+//       color: #433a3a;
+
+//       margin-top: 15px;
+//       margin-bottom: 20px;
+//     }
+
+//     .inputGuide {
+//       width: 280px;
+
+//       margin: 0 0 10px 0;
+//     }
+//   }
+// }
+
+// .wrapper_submitButton {
+//   margin-top: 30px;
+// }
+
 @import "../../constants/utils.scss";
 
 .container_Register {
@@ -14,21 +87,21 @@
 }
 
 .topBar {
-  width: 354.33px;
-  height: 20px;
+  width: 22.145rem;
+  height: 1.25rem;
 
-  margin-top: 15px;
+  margin-top: 0.9375rem;
 }
 
 .wrapper_header {
-  margin-top: 134px;
+  margin-top: 8.375rem;
 }
 
 .wrapper_Inputs {
-  margin-top: 58px;
+  margin-top: 3.625rem;
 
   div + div {
-    // margin-top: 20px;
+    // margin-top: 1.25rem;
   }
 
   .wrapper_InputAndValidationMessage {
@@ -38,21 +111,35 @@
     position: relative;
 
     .validationMessage {
-      width: 280px;
+      width: 17.5rem;
 
       color: #f16f6f;
 
-      margin: 10px 0 10px 0;
+      margin: 0.625rem 0 0.625rem 0;
+    }
+
+    .message {
+      width: 17.5rem;
+
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 300;
+      font-size: 1.25rem;
+
+      color: #433a3a;
+
+      margin-top: 0.9375rem;
+      margin-bottom: 1.25rem;
     }
 
     .inputGuide {
-      width: 280px;
+      width: 17.5rem;
 
-      margin: 0 0 10px 0;
+      margin: 0 0 0.625rem 0;
     }
   }
 }
 
 .wrapper_submitButton {
-  margin-top: 30px;
+  margin-top: 1.875rem;
 }

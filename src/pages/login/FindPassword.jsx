@@ -224,7 +224,7 @@ export default function FindPassword() {
 
   return (
     <div className={styles.container_FindPassword}>
-      <div className={styles.topBar}>11:11</div>
+      {/* <div className={styles.topBar}>11:11</div> */}
       <div className={styles.wrapper_header}>
         <LoginHeader children={"비밀번호 찾기"} />
       </div>

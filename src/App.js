@@ -63,11 +63,8 @@ function App() {
   // const [isLogin, setIsLogin] = useState();
 
   useEffect(() => {
-    console.log("path: ", location.pathname);
-    console.log("isLogin: ", typeof isLogin, isLogin);
-
     if (!isLogin && !location.pathname.includes("/login")) {
-      alert("로그인이 필요한 페이지입니다.");
+      // alert("로그인이 필요한 페이지입니다.");
       navigate("/login");
 
       return;
