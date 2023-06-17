@@ -63,9 +63,14 @@ const Timer = ({ initialMinutes, initialSeconds, onComplete, onStart }) => { //ì
   }
 
   return (
-    <div className={styles.timerContainer} onClick={handleTimerClick} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
+    <div
+      className={styles.timerContainer}
+      onClick={handleTimerClick}
+      onTouchStart={handleHover}
+      onTouchEnd={handleLeave}
+    >
       <img src={timer} className={styles.timerRing} alt="Timer" />
-      <div className={`${isHover ? (!isPause ? styles.hoverPauseImage : styles.hoverPlayImage) : styles.timerString}`} >
+      <div className={`${isHover ? (!isPause ? styles.hoverPauseImage : styles.hoverPlayImage) : styles.timerString}`}>
         {isHover ? "" : `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
       </div>
     </div>
