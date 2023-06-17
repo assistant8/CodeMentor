@@ -12,6 +12,7 @@ import chart from "../../image/chart-bar.png";
 import bookmark from "../../image/bookmark.svg";
 import check from "../../image/check.svg";
 import { api } from "../../libs/utils/api";
+import defaultProfileImage from "../../image/defaultProfileImage.png";
 
 const User = () => {
   const email = useRecoilValue(userState).email;
@@ -24,7 +25,17 @@ const User = () => {
   return (
     <div className={styles.userInfo}>
       <div className={styles.profileImg}>
-        <img src={user.image} alt="프사" />
+        {/* 여기!!! */}
+        {user.image === null ? (
+          <>
+            <img src={defaultProfileImage} alt="프사" />
+          </>
+        ) : (
+          <>
+            <img src={user.image} alt="프사" />
+          </>
+        )}
+        {/* <img src={user.image} alt="프사" /> */}
       </div>
       <div style={{ display: "flex" }}>
         <h3>{user.grade === "general" ? "코드 멘티, " : "코드 멘토, "}</h3>
@@ -104,6 +115,9 @@ const LogOut = () => {
       .post("/users/logout", {})
       .then((res) => {
         // 로그아웃 처리 성공
+        // 여기!!!
+        localStorage.removeItem("isLogin");
+
         navigate("/login");
         setUser({
           id: null,
@@ -117,7 +131,6 @@ const LogOut = () => {
           isEmailVerified: false,
           verificationCode: null,
         });
-        localStorage.setItem("isLogin", false);
       })
       .catch((error) => {
         // 로그아웃 처리 실패

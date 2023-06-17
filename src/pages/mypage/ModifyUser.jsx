@@ -7,6 +7,7 @@ import { Modal } from "../../components/modal";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../state/userState";
 import { api } from "../../libs/utils/api";
+import defaultProfileImage from "../../image/defaultProfileImage.png";
 
 const ModifyUser = () => {
   const [modalContent, setModalContent] = useState("");
@@ -91,6 +92,8 @@ const ModifyUser = () => {
     api
       .delete(`/users/profile/?email=${email}`)
       .then(() => {
+        localStorage.removeItem("isLogin");
+
         setModalContent("탈퇴 되었습니다. 이용해주셔서 감사합니다.");
         openModal();
         setTimeout(() => {
@@ -112,7 +115,17 @@ const ModifyUser = () => {
         onChange={handleFileChange} // 파일 선택 창은 보이지 않도록 설정
       />
       <div className={styles.modifyImg}>
-        <img src={imgUrl} alt="프사" ref={profileImgRef} />
+        {/* 여기!!! */}
+        {imgUrl === null ? (
+          <>
+            <img src={defaultProfileImage} alt="프사" />
+          </>
+        ) : (
+          <>
+            <img src={imgUrl} alt="프사" ref={profileImgRef} />
+          </>
+        )}
+        {/* <img src={imgUrl} alt="프사" ref={profileImgRef} /> */}
       </div>
       <VioletButton onClick={handleSubmit} ref={buttonRef}>
         저장하기
