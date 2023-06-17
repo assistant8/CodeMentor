@@ -12,17 +12,42 @@ const Footer = () => {
 
   // 관리자 계정 확인하기 (userGrade === "admin" 이면 관리자)
   const userGrade = useRecoilValue(userState).grade;
-  
+
   const Mypage = ({ userGrade }) => {
     return (
       <div
         className="menu-my-page"
         onClick={() => {
-          navigate(userGrade === "general" ? "/mypage" : userGrade === "admin" ? "/admin" : "/login");
+          if (userGrade !== "general" && userGrade !== "admin") {
+            localStorage.removeItem("isLogin");
+          }
+
+          navigate(
+            userGrade === "general"
+              ? "/mypage"
+              : userGrade === "admin"
+              ? "/admin"
+              : "/login"
+          );
         }}
       >
-        <img src={mypage} alt={userGrade === "general" ? "마이페이지" : userGrade === "admin" ? "관리자페이지" : "로그인"} />
-        <div>{userGrade === "general" ? "마이페이지" : userGrade === "admin" ? "관리자페이지" : "로그인"}</div>
+        <img
+          src={mypage}
+          alt={
+            userGrade === "general"
+              ? "마이페이지"
+              : userGrade === "admin"
+              ? "관리자페이지"
+              : "로그인"
+          }
+        />
+        <div>
+          {userGrade === "general"
+            ? "마이페이지"
+            : userGrade === "admin"
+            ? "관리자페이지"
+            : "로그인"}
+        </div>
       </div>
     );
   };
