@@ -119,7 +119,7 @@ export default function Login({ setIsLogin }) {
       const data = await response.data;
 
       if (response.status === 200) {
-        alert("개발용: 로그인 성공!");
+        console.log("로그인 성공!");
 
         const userInfomation = data;
 
@@ -136,14 +136,25 @@ export default function Login({ setIsLogin }) {
 
       // "error": "User not found with the given email"
       if (response.status === 404) {
-        alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
+        setModalMessage(
+          "등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요."
+        );
+        openModal();
+
+        // alert("등록되지 않은 이메일입니다. 이메일을 다시 확인해주세요.");
 
         return;
       }
 
       // "error": "Incorrect password"
       if (response.status === 401) {
-        alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
+        // alert("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요.");
+
+        setModalMessage(
+          "비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요."
+        );
+
+        openModal();
 
         return;
       }
@@ -152,9 +163,13 @@ export default function Login({ setIsLogin }) {
 
       // return;
     } catch (error) {
-      alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+      // alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
 
-      console.log(error);
+      // console.log(error);
+
+      setModalMessage("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+      openModal();
 
       return;
     }

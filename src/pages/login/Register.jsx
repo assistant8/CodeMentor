@@ -17,6 +17,7 @@ import { InputWithEditButton } from "../../components/inputs/InputWithEditButton
 import { LoginHeader } from "../../components/headers/LoginHeader";
 import { VioletButton } from "../../components/buttons/VioletButton.jsx";
 import { UserInput } from "../../components/inputs/UserInput";
+import { Modal } from "../../components/modal/index.jsx";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -45,6 +46,16 @@ export default function Register() {
   });
   const [showEditButtonState, setShowEditButtonState] = useState(false);
   const [step, setStep] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleOnChangeFormInput = (e) => {
     const inputName = e.target.name;
@@ -64,7 +75,9 @@ export default function Register() {
 
     if (step === 0) {
       if (!isEmailValid(email)) {
-        alert(validationMessage.email);
+        // alert(validationMessage.email);
+        setModalMessage(validationMessage.email);
+        openModal();
 
         focusRef.email.current.focus();
 
@@ -85,7 +98,8 @@ export default function Register() {
         // -> alert + return;
 
         if (response.status === 404) {
-          alert("개발용: 이메일 중복 검사 통과.");
+          // alert("개발용: 이메일 중복 검사 통과.");
+          console.log("개발용: 이메일 중복 검사 통과.");
         }
 
         if (response.status === 200) {
@@ -95,7 +109,10 @@ export default function Register() {
             return;
           }
 
-          alert("이미 가입된 이메일입니다.");
+          // alert("이미 가입된 이메일입니다.");
+
+          setModalMessage("이미 가입된 이메일입니다.");
+          openModal();
 
           return;
         }
@@ -111,7 +128,10 @@ export default function Register() {
         //   return;
         // }
       } catch (error) {
-        alert("서버와의 통신에 실패했습니다.");
+        // alert("서버와의 통신에 실패했습니다.");
+
+        setModalMessage("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+        openModal();
 
         console.log(error);
 
@@ -127,17 +147,21 @@ export default function Register() {
         // 인증 메일 발송 성공.
         // "message": "Verification email sent"
         if (response.status === 200) {
-          alert("인증 메일 발송 성공.");
+          // alert("인증 메일 발송 성공.");
+          console.log("인증 메일 발송 성공.");
           setStep(1);
 
           return;
         } else {
-          alert("인증 메일 발송 실패. 다시 시도해주세요.");
+          // alert("인증 메일 발송 실패. 다시 시도해주세요.");
+          console.log("인증 메일 발송 실패. 다시 시도해주세요.");
 
           return;
         }
       } catch (error) {
-        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+        // alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+        setModalMessage("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+        openModal();
 
         console.log(error);
 
@@ -147,7 +171,10 @@ export default function Register() {
 
     if (step === 1) {
       if (!isVerificationCodeValid(verificationCode)) {
-        alert(validationMessage.verificationCode);
+        // alert(validationMessage.verificationCode);
+
+        setModalMessage(validationMessage.verificationCode);
+        openModal();
 
         focusRef.verificationCode.current.focus();
 
@@ -158,9 +185,7 @@ export default function Register() {
         const response = await api.post(
           `/users/verify/?email=${email}&verificationCode=${verificationCode}`,
           {
-            validateStatus: (status) => {
-              return status < 500 || status === 400;
-            },
+            validateStatus: (status) => status < 500,
           }
         );
         const data = await response.data;
@@ -181,25 +206,35 @@ export default function Register() {
 
           // "error": "The verification code is invalid"
           if (errorMessage === "The verification code is invalid") {
-            alert(
+            // alert(
+            //   "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
+            // );
+
+            setModalMessage(
               "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
             );
+            openModal();
 
             return;
           }
 
-          alert(
+          console.log(
             `개발용: 등록되지 않은 에러 메세지: ${
               (response.data, errorMessage)
             }`
           );
         }
 
-        alert(`개발용: 등록되지 않은 에러 메세지: ${response.data}`);
+        console.log(`개발용: 등록되지 않은 에러 메세지: ${response.data}`);
 
         return;
       } catch (error) {
-        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+        // alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+        setModalMessage(
+          "인증 코드가 일치하지 않습니다. 인증 코드를 다시 확인해주세요."
+        );
+        openModal();
 
         console.log(error);
 
@@ -209,7 +244,9 @@ export default function Register() {
 
     if (step === 2) {
       if (!isPasswordValid(password)) {
-        alert(validationMessage.password);
+        // alert(validationMessage.password);
+        setModalMessage(validationMessage.password);
+        openModal();
 
         focusRef.password.current.focus();
 
@@ -217,7 +254,10 @@ export default function Register() {
       }
 
       if (!isPasswordConfirmValid(password, passwordConfirm)) {
-        alert(validationMessage.passwordConfirm);
+        // alert(validationMessage.passwordConfirm);
+
+        setModalMessage(validationMessage.passwordConfirm);
+        openModal();
 
         focusRef.passwordConfirm.current.focus();
 
@@ -237,28 +277,39 @@ export default function Register() {
         const data = await response.data;
 
         if (response.status === 201) {
-          alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
+          // alert("회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다.");
+
+          setModalMessage(
+            "회원 가입이 완료되었습니다. 프로필 설정 페이지로 이동합니다."
+          );
+          openModal();
 
           // 사용자 특정, 정보 수정을 위해 들고 프로필 설정 페이지로 넘어감.
           // -> 백엔드 로직상 userName만 변경하고 싶어도 password 필드를 반드시 알맞게 채워야 한다고 함.
-          navigate(PATH.LOGIN + "/create-profile", {
-            state: {
-              email,
-              password,
-            },
-          });
+
+          setTimeout(() => {
+            navigate(PATH.LOGIN + "/create-profile", {
+              state: {
+                email,
+                password,
+              },
+            });
+          }, 3000);
 
           return;
         }
 
-        alert(`개발용: 회원 가입 실패.`);
+        console.log(`개발용: 회원 가입 실패.`);
 
         console.log(
           `응답 코드: ${response.status}`,
           `응답 데이터: ${response.data}`
         );
       } catch (error) {
-        alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+        // alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+
+        setModalMessage("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
+        openModal();
 
         console.log(error);
       }
@@ -342,6 +393,11 @@ export default function Register() {
 
   return (
     <div className={styles.container_Register}>
+      <Modal
+        children={modalMessage}
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      />
       {/* <button
         onClick={async () => {
           try {
@@ -394,21 +450,21 @@ export default function Register() {
               editButton_onClick={async (e) => {
                 e.preventDefault();
 
-                try {
-                  const response = await api.post("/user/verify-cancle", {
-                    email,
-                  });
-                  const result = await response.data.result;
+                // setStep(0);
 
-                  // if (response.data.result === "발송된 인증 번호 폐기 성공.") {
-                  if (true) {
+                try {
+                  const response = await api.delete(
+                    `/users/profile/?email=${email}`
+                  );
+
+                  if (response.status === 200) {
+                    console.log(`${email} 회원 탈퇴 완료`);
                     setStep(0);
 
                     return;
                   }
                 } catch (error) {
-                  alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");
-
+                  console.log("회원 탈퇴 과정에서 에러");
                   console.log(error);
 
                   return;
