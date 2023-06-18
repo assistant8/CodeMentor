@@ -107,7 +107,7 @@ export default function Quiz() {
         ))}
       </div>
 
-      <CommentContainer />
+      {/* <CommentContainer /> */}
     </div>
   );
 }
@@ -322,6 +322,6 @@ const hintss = [
 export const maplevelToQuestion = {
   1: "문제 유형은 무엇인가요?", 
   2: "세부 유형 또는 고려해야할 부분은 무엇일까요?",
-  3: "필수적으로 사용해야하는 것은 무엇인가요?",
+  3: "이 유형에 대한 기본 논리를 알려드릴게요",
   4: "놓칠만한 테스트 케이스는 무엇이 있을까요?",
 }

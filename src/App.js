@@ -80,7 +80,7 @@ function App() {
       {isLogin && (
         <>
           <Route element={<AppLayout />}>
-            <Route path="/" element={<QuizList />} />
+            <Route path="/" element={<Home />} />
             <Route path={PATH.QUIZ + `/:quizId`} element={<Quiz />} />
             <Route path={PATH.QUIZLIST} element={<QuizList />} />
             <Route path={PATH.HOME} element={<Home />} />

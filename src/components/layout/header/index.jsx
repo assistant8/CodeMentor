@@ -11,7 +11,13 @@ const Header = () => {
   
   useEffect(() => {
     const pathname = location.pathname;
-    setTitle(() => mapPathnameToTitle[pathname]);
+    if(pathname.includes("/quiz/")) {
+      const id = pathname.split("/quiz")[1].slice(1)
+      setTitle(mapPathnameToTitle["/quiz"](id))
+      console.log("!!!", mapPathnameToTitle["/quiz"](id))
+      console.log("!??", id)
+    } else setTitle(() => mapPathnameToTitle[pathname]);
+
     // console.log("title", pathname)
     // console.log("mapPathnameToTitle[pathname]", mapPathnameToTitle[pathname])
   }, [location.pathname]);
