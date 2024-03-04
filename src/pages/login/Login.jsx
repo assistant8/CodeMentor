@@ -307,7 +307,7 @@ export default function Login({ setIsLogin }) {
       />
       {/* <div className={styles.topBar}>11:11</div> */}
       <div className={styles.wrapper_header}>
-        <LoginHeader children={"/*codeMentor*/"} />
+        <LoginHeader children={"/*CodeMentor*/"} />
       </div>
       <form>
         <div className={styles.wrapper_Inputs}>
